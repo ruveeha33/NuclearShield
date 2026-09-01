@@ -1,0 +1,23 @@
+{
+  "annotations": {"list": []},
+  "editable": false,
+  "graphTooltip": 1,
+  "panels": [
+    {"type":"stat","title":"Safety Integrity","gridPos":{"h":5,"w":6,"x":0,"y":0},"targets":[{"expr":"nuclearshield_safety_integrity_percent","refId":"A"}],"fieldConfig":{"defaults":{"unit":"percent","min":0,"max":100},"overrides":[]}},
+    {"type":"stat","title":"Active Alerts","gridPos":{"h":5,"w":6,"x":6,"y":0},"targets":[{"expr":"nuclearshield_active_alerts","refId":"A"}]},
+    {"type":"stat","title":"AI Anomaly Score","gridPos":{"h":5,"w":6,"x":12,"y":0},"targets":[{"expr":"nuclearshield_anomaly_score","refId":"A"}],"fieldConfig":{"defaults":{"min":0,"max":1},"overrides":[]}},
+    {"type":"stat","title":"Compliance Readiness","gridPos":{"h":5,"w":6,"x":18,"y":0},"targets":[{"expr":"nuclearshield_compliance_score_percent","refId":"A"}],"fieldConfig":{"defaults":{"unit":"percent","min":0,"max":100},"overrides":[]}},
+    {"type":"timeseries","title":"Synthetic Reactor Telemetry","gridPos":{"h":8,"w":12,"x":0,"y":5},"targets":[{"expr":"nuclearshield_reactor_power_percent","legendFormat":"Reactor power %","refId":"A"},{"expr":"nuclearshield_neutron_flux_percent","legendFormat":"Neutron flux %","refId":"B"}]},
+    {"type":"timeseries","title":"Thermal / Pressure Monitoring","gridPos":{"h":8,"w":12,"x":12,"y":5},"targets":[{"expr":"nuclearshield_coolant_temperature_celsius","legendFormat":"Coolant °C","refId":"A"},{"expr":"nuclearshield_primary_pressure_mpa","legendFormat":"Pressure MPa","refId":"B"}]},
+    {"type":"timeseries","title":"Physical-Cyber Risk Signals","gridPos":{"h":8,"w":24,"x":0,"y":13},"targets":[{"expr":"nuclearshield_access_risk_score","legendFormat":"Access risk","refId":"A"},{"expr":"nuclearshield_material_balance_delta","legendFormat":"MC&A variance","refId":"B"},{"expr":"nuclearshield_anomaly_score","legendFormat":"AI anomaly","refId":"C"}]}
+  ],
+  "refresh": "2s",
+  "schemaVersion": 39,
+  "tags": ["nuclearshield", "education", "ot-security"],
+  "templating": {"list": []},
+  "time": {"from": "now-15m", "to": "now"},
+  "timezone": "browser",
+  "title": "NuclearShield Facility Cybersecurity",
+  "uid": "nuclearshield-main",
+  "version": 1
+}
