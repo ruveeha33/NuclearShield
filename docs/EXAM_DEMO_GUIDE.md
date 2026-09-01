@@ -4,16 +4,18 @@ This guide is for the safe educational presentation of NuclearShield. All teleme
 
 ## Recommended live sequence
 
-1. Run `NuclearShield.bat` and choose **EXAM COMMAND MODE**.
-2. Use the pre-mission briefing to explain that the platform is defensive, read-only, and disconnected from real nuclear or OT systems.
-3. Point to the **Facility Core / Safety Envelope** and explain that it represents synthetic reactor and safety-I&C evidence rather than reactor control.
-4. Explain the **Protection Rings**: Enterprise, DMZ, OT-SCADA, Safety, PACS, and MC&A. Their purpose is to demonstrate defense-in-depth and separation of critical functions.
-5. Use **Command Assessment** to explain anomaly scoring, configuration drift, access risk, cyber-physical correlation, and why a high score results in human review rather than autonomous control.
-6. Use **Safeguards Watch** to explain material control and accounting (MC&A), physical security, access analytics, and reconciliation.
-7. Use **Assurance Board** to show how the demo records conceptual evidence mapping for IEC 62645, NRC RG 5.71, and IAEA guidance.
-8. Show the **Security Operations Ticker** as the audit-oriented event stream.
-9. Open Grafana to show historical/time-series observability, then Prometheus to explain where the local metrics come from.
-10. End by stating that NuclearShield performs no real PLC, SCADA, PACS, safety-system, reactor, or nuclear-material control action.
+1. Run `NuclearShield.bat` or `run_exam_demo.bat` to open the NuclearShield workstation entry screen.
+2. Start with **System Diagnostics** and explain that the project checks its local demonstration prerequisites before a session.
+3. Open **Architecture & Assurance** and explain the defense-in-depth model: Enterprise / SOC, Industrial DMZ, OT / SCADA monitoring, an independent Safety I&C assurance boundary, physical-security monitoring, MC&A safeguards, and human review.
+4. Explain the assurance gates: change review, automated verification, configuration control, safety-impact review, and evidence release. These are educational software-assurance concepts, not certification claims.
+5. Launch **Command Workstation**. The terminal command center is the operator-facing view, while Grafana is the monitoring-wall view. Prometheus supplies the local observability metrics.
+6. Point to the **Protected Safety Envelope** and explain that it represents synthetic safety and instrumentation evidence rather than plant control.
+7. Explain the **Protection Rings**: Enterprise, DMZ, OT-SCADA, Safety, Physical, and MC&A. Their purpose is to demonstrate separation of critical functions and defense in depth.
+8. Use **Command Assessment** to explain anomaly scoring, configuration drift, access risk, cyber-physical correlation, and why elevated conditions lead to human review instead of autonomous action.
+9. Use **Safeguards Watch** to explain material control and accounting (MC&A), physical-security evidence, access analytics, and reconciliation.
+10. Show the **Security Operations Ticker** as the audit-oriented event stream, then switch to Grafana to show the same synthetic evidence over time.
+11. End the terminal session with `Ctrl+C`. Show the defensive evidence report and the JSON/text files written under `reports/` when export is enabled.
+12. Run `stop.bat` after the demonstration to stop the local monitoring stack.
 
 ## Scenario choices
 
@@ -24,15 +26,33 @@ This guide is for the safe educational presentation of NuclearShield. All teleme
 - `insider-risk`: synthetic physical-access and insider-risk correlation.
 - `normal`: baseline monitoring state.
 
+## Civil and defense application context
+
+NuclearShield uses one defensive monitoring concept for two high-level contexts. In a civil context, the presentation can describe regulated power-generation or research facilities where cyber monitoring, independent safety assurance, safeguards, audit evidence, and controlled change management are important. In a defense context, the same principles can be described at a non-operational level for highly protected or regulated facilities where confidentiality, integrity, availability, physical security, material accountability, and strict human authorization are especially important.
+
+The project deliberately does not model classified procedures, real facility layouts, operational security processes, or any control capability. The civil/defense comparison is conceptual and governance-focused.
+
+## Implementation roadmap
+
+**Phase 1 — Synthetic baseline:** define the facility state model, safe classroom scenarios, terminal visualization, and reporting.
+
+**Phase 2 — Defensive analytics:** add anomaly scoring, cross-domain correlation, configuration-drift evidence, access-risk evidence, and safeguards reconciliation using synthetic data.
+
+**Phase 3 — Observability and assurance:** expose read-only metrics to Prometheus, visualize them in Grafana, add CI validation, configuration-control evidence, and human-review gates.
+
+**Phase 4 — Regulated-environment evaluation:** conceptually evaluate governance, assurance, evidence retention, validation, and organizational approval requirements before any real-world deployment discussion. NuclearShield itself remains a simulation and does not provide a real deployment procedure.
+
 ## Useful commands
 
 ```text
 python -m nuclearshield --self-check
 python -m nuclearshield --architecture
+python -m nuclearshield --assurance
+python -m nuclearshield --threat-context
 python -m nuclearshield --briefing --scenario combined
-python -m nuclearshield --briefing --monitoring --scenario combined
+python -m nuclearshield --briefing --monitoring --scenario combined --report --export-report
 ```
 
 ## Examiner-safe explanation
 
-NuclearShield is not a reactor-control product and is not a deployment guide for a real facility. It is an educational digital monitoring simulation showing how cybersecurity, safety integrity, physical security, safeguards, AI-assisted anomaly detection, observability, audit evidence, and human review can be presented together in a defense-in-depth architecture.
+NuclearShield is not a reactor-control product and is not a deployment guide for a real facility. It is an educational digital monitoring simulation showing how cybersecurity, safety integrity, physical security, safeguards, AI-assisted anomaly detection, observability, software assurance, audit evidence, and human review can be presented together in a defense-in-depth architecture.
