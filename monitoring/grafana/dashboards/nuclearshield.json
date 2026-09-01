@@ -3,21 +3,25 @@
   "editable": false,
   "graphTooltip": 1,
   "panels": [
-    {"type":"stat","title":"Safety Integrity","gridPos":{"h":5,"w":6,"x":0,"y":0},"targets":[{"expr":"nuclearshield_safety_integrity_percent","refId":"A"}],"fieldConfig":{"defaults":{"unit":"percent","min":0,"max":100},"overrides":[]}},
-    {"type":"stat","title":"Active Alerts","gridPos":{"h":5,"w":6,"x":6,"y":0},"targets":[{"expr":"nuclearshield_active_alerts","refId":"A"}]},
-    {"type":"stat","title":"AI Anomaly Score","gridPos":{"h":5,"w":6,"x":12,"y":0},"targets":[{"expr":"nuclearshield_anomaly_score","refId":"A"}],"fieldConfig":{"defaults":{"min":0,"max":1},"overrides":[]}},
-    {"type":"stat","title":"Compliance Readiness","gridPos":{"h":5,"w":6,"x":18,"y":0},"targets":[{"expr":"nuclearshield_compliance_score_percent","refId":"A"}],"fieldConfig":{"defaults":{"unit":"percent","min":0,"max":100},"overrides":[]}},
-    {"type":"timeseries","title":"Synthetic Reactor Telemetry","gridPos":{"h":8,"w":12,"x":0,"y":5},"targets":[{"expr":"nuclearshield_reactor_power_percent","legendFormat":"Reactor power %","refId":"A"},{"expr":"nuclearshield_neutron_flux_percent","legendFormat":"Neutron flux %","refId":"B"}]},
-    {"type":"timeseries","title":"Thermal / Pressure Monitoring","gridPos":{"h":8,"w":12,"x":12,"y":5},"targets":[{"expr":"nuclearshield_coolant_temperature_celsius","legendFormat":"Coolant °C","refId":"A"},{"expr":"nuclearshield_primary_pressure_mpa","legendFormat":"Pressure MPa","refId":"B"}]},
-    {"type":"timeseries","title":"Physical-Cyber Risk Signals","gridPos":{"h":8,"w":24,"x":0,"y":13},"targets":[{"expr":"nuclearshield_access_risk_score","legendFormat":"Access risk","refId":"A"},{"expr":"nuclearshield_material_balance_delta","legendFormat":"MC&A variance","refId":"B"},{"expr":"nuclearshield_anomaly_score","legendFormat":"AI anomaly","refId":"C"}]}
+    {"type":"stat","title":"Safety Integrity","gridPos":{"h":4,"w":4,"x":0,"y":0},"targets":[{"expr":"nuclearshield_safety_integrity_percent","refId":"A"}],"fieldConfig":{"defaults":{"unit":"percent","min":0,"max":100},"overrides":[]}},
+    {"type":"stat","title":"Instrumentation Integrity","gridPos":{"h":4,"w":4,"x":4,"y":0},"targets":[{"expr":"nuclearshield_instrumentation_integrity_percent","refId":"A"}],"fieldConfig":{"defaults":{"unit":"percent","min":0,"max":100},"overrides":[]}},
+    {"type":"stat","title":"Active Alerts","gridPos":{"h":4,"w":4,"x":8,"y":0},"targets":[{"expr":"nuclearshield_active_alerts","refId":"A"}]},
+    {"type":"stat","title":"AI Anomaly","gridPos":{"h":4,"w":4,"x":12,"y":0},"targets":[{"expr":"nuclearshield_anomaly_score * 100","refId":"A"}],"fieldConfig":{"defaults":{"unit":"percent","min":0,"max":100},"overrides":[]}},
+    {"type":"stat","title":"Compliance Readiness","gridPos":{"h":4,"w":4,"x":16,"y":0},"targets":[{"expr":"nuclearshield_compliance_score_percent","refId":"A"}],"fieldConfig":{"defaults":{"unit":"percent","min":0,"max":100},"overrides":[]}},
+    {"type":"stat","title":"Audit Evidence","gridPos":{"h":4,"w":4,"x":20,"y":0},"targets":[{"expr":"nuclearshield_audit_coverage_percent","refId":"A"}],"fieldConfig":{"defaults":{"unit":"percent","min":0,"max":100},"overrides":[]}},
+    {"type":"timeseries","title":"Synthetic Reactor & Neutron Signals","gridPos":{"h":8,"w":12,"x":0,"y":4},"targets":[{"expr":"nuclearshield_reactor_power_percent","legendFormat":"Reactor power %","refId":"A"},{"expr":"nuclearshield_neutron_flux_percent","legendFormat":"Neutron flux %","refId":"B"}]},
+    {"type":"timeseries","title":"Synthetic Thermal / Pressure Signals","gridPos":{"h":8,"w":12,"x":12,"y":4},"targets":[{"expr":"nuclearshield_coolant_temperature_celsius","legendFormat":"Coolant °C","refId":"A"},{"expr":"nuclearshield_primary_pressure_mpa","legendFormat":"Primary pressure MPa","refId":"B"}]},
+    {"type":"timeseries","title":"Cyber Risk Fusion","gridPos":{"h":8,"w":12,"x":0,"y":12},"targets":[{"expr":"nuclearshield_anomaly_score * 100","legendFormat":"AI anomaly %","refId":"A"},{"expr":"nuclearshield_configuration_drift_score * 100","legendFormat":"Config drift %","refId":"B"},{"expr":"nuclearshield_access_risk_score * 100","legendFormat":"Access risk %","refId":"C"},{"expr":"nuclearshield_cyber_physical_correlation * 100","legendFormat":"Cyber-physical correlation %","refId":"D"}]},
+    {"type":"timeseries","title":"Nuclear Material Safeguards","gridPos":{"h":8,"w":12,"x":12,"y":12},"targets":[{"expr":"nuclearshield_material_balance_delta","legendFormat":"MC&A variance","refId":"A"},{"expr":"nuclearshield_material_accounting_ok","legendFormat":"MC&A zone healthy","refId":"B"},{"expr":"nuclearshield_physical_security_ok","legendFormat":"Physical security healthy","refId":"C"}]},
+    {"type":"state-timeline","title":"Defense-in-Depth Zone Health","gridPos":{"h":7,"w":24,"x":0,"y":20},"targets":[{"expr":"nuclearshield_scada_zone_ok","legendFormat":"SCADA zone","refId":"A"},{"expr":"nuclearshield_safety_zone_ok","legendFormat":"Safety zone","refId":"B"},{"expr":"nuclearshield_data_diode_ok","legendFormat":"One-way gateway","refId":"C"},{"expr":"nuclearshield_physical_security_ok","legendFormat":"Physical security","refId":"D"},{"expr":"nuclearshield_material_accounting_ok","legendFormat":"MC&A safeguards","refId":"E"}]}
   ],
   "refresh": "2s",
   "schemaVersion": 39,
-  "tags": ["nuclearshield", "education", "ot-security"],
+  "tags": ["nuclearshield", "education", "ot-security", "safeguards"],
   "templating": {"list": []},
   "time": {"from": "now-15m", "to": "now"},
   "timezone": "browser",
-  "title": "NuclearShield Facility Cybersecurity",
+  "title": "NuclearShield — Nuclear Cyber Defense Operations",
   "uid": "nuclearshield-main",
-  "version": 1
+  "version": 2
 }
