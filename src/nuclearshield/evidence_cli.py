@@ -15,6 +15,7 @@ from rich.table import Table
 
 from .assurance import assurance_panel, threat_context_panel
 from .evidence import EvidencePackage, SUPPORTED_EXTENSIONS, analyze_files
+from .terminal_dashboard import render_command_center
 
 console = Console()
 GRAFANA_URL = "http://localhost:3000/d/nuclearshield-main"
@@ -143,7 +144,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--export-report", action="store_true"); parser.add_argument("--monitoring", action="store_true")
     parser.add_argument("--open-grafana", action="store_true"); parser.add_argument("--self-check", action="store_true")
     parser.add_argument("--architecture", action="store_true"); parser.add_argument("--assurance", action="store_true")
-    parser.add_argument("--threat-context", action="store_true"); return parser
+    parser.add_argument("--threat-context", action="store_true")
+    parser.add_argument("--command-center", action="store_true", help="render the full-screen colored terminal operations dashboard")
+    parser.add_argument("--details", action="store_true", help="show per-file technical detail panels after the command view")
+    return parser
 
 
 def main() -> None:
@@ -158,7 +162,14 @@ def main() -> None:
     try: package=analyze_files(args.files)
     except (FileNotFoundError,ValueError,RuntimeError,json.JSONDecodeError) as exc:
         console.print(f"[bold red]Evidence ingestion failed:[/bold red] {exc}"); raise SystemExit(2) from exc
-    console.print(render_package(package)); render_details(package)
+
+    if args.command_center:
+        render_command_center(package, console)
+    else:
+        console.print(render_package(package)); render_details(package)
+    if args.details and args.command_center:
+        render_details(package)
+
     if args.export_report:
         jp,tp=export_report(package); console.print(f"[cyan]Analysis exported:[/cyan] {jp.name} | {tp.name}")
     if args.monitoring or args.open_grafana:
