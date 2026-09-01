@@ -8,8 +8,8 @@ echo                     FACILITY PROTECTION COMMAND
 echo            Safe Defensive Nuclear Cybersecurity Simulation
 echo ========================================================================
 echo.
-echo  [1] EXAM COMMAND MODE    Terminal + briefing + Grafana + Prometheus
-echo  [2] TERMINAL COMMAND     Combined rotating defensive scenario
+echo  [1] EXAM COMMAND MODE    Terminal + Grafana + Prometheus + evidence report
+echo  [2] TERMINAL COMMAND     Combined scenario + end-of-session report
 echo  [3] SCADA WATCH          OT/SCADA anomaly demonstration
 echo  [4] SAFETY WATCH         Safety-I&C integrity demonstration
 echo  [5] SAFEGUARDS WATCH     MC&A / material security demonstration
@@ -26,12 +26,12 @@ call .venv\Scripts\activate
 python -m pip install --upgrade pip >nul
 pip install -r requirements.txt >nul
 
-if "%choice%"=="1" python -m nuclearshield --briefing --monitoring --scenario combined
-if "%choice%"=="2" python -m nuclearshield --briefing --scenario combined
-if "%choice%"=="3" python -m nuclearshield --briefing --scenario scada-anomaly
-if "%choice%"=="4" python -m nuclearshield --briefing --scenario safety-integrity
-if "%choice%"=="5" python -m nuclearshield --briefing --scenario material-variance
-if "%choice%"=="6" python -m nuclearshield --briefing --scenario insider-risk
+if "%choice%"=="1" python -m nuclearshield --briefing --monitoring --scenario combined --report --export-report
+if "%choice%"=="2" python -m nuclearshield --briefing --scenario combined --report
+if "%choice%"=="3" python -m nuclearshield --briefing --scenario scada-anomaly --report
+if "%choice%"=="4" python -m nuclearshield --briefing --scenario safety-integrity --report
+if "%choice%"=="5" python -m nuclearshield --briefing --scenario material-variance --report
+if "%choice%"=="6" python -m nuclearshield --briefing --scenario insider-risk --report
 if "%choice%"=="7" python -m nuclearshield --architecture
 if "%choice%"=="8" python -m nuclearshield --self-check
 
