@@ -30,5 +30,14 @@ jobs:
           python -m nuclearshield --architecture
           python -m nuclearshield --assurance
           python -m nuclearshield --threat-context
-      - name: Validate finite simulation and evidence export
-        run: python -m nuclearshield --scenario combined --samples 2 --refresh-rate 10 --windowed --report --export-report
+      - name: Validate file-driven evidence analysis and export
+        run: |
+          python - <<'PY'
+          import csv
+          with open('/tmp/evidence.csv', 'w', newline='') as f:
+              w = csv.writer(f)
+              w.writerow(['timestamp', 'network_connections', 'protocol_failures', 'configuration_drift'])
+              for i in range(40):
+                  w.writerow([f'2026-01-01T00:{i:02d}:00', 100+i, i % 3, i / 10])
+          PY
+          python -m nuclearshield --files /tmp/evidence.csv --export-report
