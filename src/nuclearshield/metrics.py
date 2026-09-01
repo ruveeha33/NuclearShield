@@ -20,6 +20,8 @@ METRICS = {
     "compliance": Gauge("nuclearshield_compliance_score_percent", "Compliance readiness score"),
     "audit": Gauge("nuclearshield_audit_coverage_percent", "Synthetic audit evidence coverage"),
     "alerts": Gauge("nuclearshield_active_alerts", "Number of active synthetic alerts"),
+    "enterprise_zone": Gauge("nuclearshield_enterprise_zone_ok", "Simulated enterprise/SOC zone health (1=healthy)"),
+    "dmz_zone": Gauge("nuclearshield_dmz_zone_ok", "Simulated industrial DMZ health (1=healthy)"),
     "data_diode": Gauge("nuclearshield_data_diode_ok", "Simulated data diode health (1=healthy)"),
     "scada_zone": Gauge("nuclearshield_scada_zone_ok", "Simulated SCADA zone health (1=healthy)"),
     "safety_zone": Gauge("nuclearshield_safety_zone_ok", "Simulated safety zone health (1=healthy)"),
@@ -48,6 +50,8 @@ def update_metrics(s: FacilityState) -> None:
     METRICS["compliance"].set(s.compliance_score_pct)
     METRICS["audit"].set(s.audit_coverage_pct)
     METRICS["alerts"].set(s.active_alerts)
+    METRICS["enterprise_zone"].set(1 if s.enterprise_zone_ok else 0)
+    METRICS["dmz_zone"].set(1 if s.dmz_zone_ok else 0)
     METRICS["data_diode"].set(1 if s.data_diode_ok else 0)
     METRICS["scada_zone"].set(1 if s.scada_zone_ok else 0)
     METRICS["safety_zone"].set(1 if s.safety_zone_ok else 0)
