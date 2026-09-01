@@ -23,5 +23,12 @@ jobs:
       - run: python -m compileall -q src
       - name: Validate Grafana dashboard JSON
         run: python -m json.tool monitoring/grafana/dashboards/nuclearshield.json > /dev/null
-      - name: Validate CLI imports
+      - name: Validate readiness command
         run: python -m nuclearshield --self-check
+      - name: Validate architecture and assurance modes
+        run: |
+          python -m nuclearshield --architecture
+          python -m nuclearshield --assurance
+          python -m nuclearshield --threat-context
+      - name: Validate finite simulation and evidence export
+        run: python -m nuclearshield --scenario combined --samples 2 --refresh-rate 10 --windowed --report --export-report
