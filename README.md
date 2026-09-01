@@ -2,48 +2,93 @@
 
 **Advanced Nuclear Facility Cybersecurity Platform — safe defensive educational simulation**
 
-NuclearShield is a terminal-first cybersecurity demonstration for Ruveeha Ashfaq's EduQual Level 6 AI Operations oral topic on nuclear-facility cybersecurity. It uses **synthetic data only** to demonstrate SCADA/OT protection, safety-system integrity, nuclear material safeguards, physical-cyber convergence, AI-driven anomaly detection, compliance evidence, and safety-preserving incident triage.
+NuclearShield is a terminal-first cybersecurity demonstration for an EduQual Level 6 AI Operations oral topic on nuclear-facility cybersecurity. It uses **synthetic data only** to demonstrate SCADA/OT protection, safety-system integrity, nuclear material safeguards, physical-cyber convergence, AI-assisted anomaly detection, compliance evidence, and safety-preserving incident triage.
 
 > **Safety boundary:** NuclearShield never connects to a real nuclear facility, reactor, PLC, SCADA network, safety instrument, PACS/access-control system, radiation instrument, or nuclear material accounting system. It contains no exploit tooling, destructive industrial commands, credential theft, persistence, evasion, or bypass procedures.
 
-## What makes this build different
+## NuclearShield experience
 
-The terminal UX uses the same *presentation philosophy* as the AquaSentinel exam console—live fullscreen layout, process/architecture strip, multi-column SOC panels, risk meter, event feed and safety footer—but the NuclearShield domain model, wording, scenarios, metrics, dashboards and logic are independently designed for nuclear cybersecurity.
+The project is designed as a distinct **facility-protection command console** rather than a generic monitoring screen. The terminal centers on the synthetic facility core and safety envelope, protection rings, command assessment, safeguards watch, assurance evidence, and a live security-operations ticker.
 
-## Terminal SOC dashboard
+The browser monitoring layer uses Prometheus plus a provisioned Grafana **Facility Protection Command** dashboard for safety, OT/SCADA, cyber-risk, safeguards, audit, and defense-in-depth evidence.
 
-The live console contains:
+## Fastest exam start — Windows
 
-- **Defense-in-depth digital facility map:** Enterprise/SOC → Industrial DMZ → OT/SCADA → independent Safety I&C, plus Physical Security and MC&A safeguards.
-- **Safety System Integrity:** synthetic reactor/safety telemetry, instrumentation integrity, firmware integrity.
-- **OT / SCADA Protection:** passive zone health, conceptual one-way gateway status, anomaly score and configuration drift.
-- **AI Risk Fusion & Decision:** combined network, access, configuration, material and cyber-physical risk with human-review decisions.
-- **Nuclear Material & Physical-Cyber:** MC&A reconciliation variance, physical access risk and safeguards status.
-- **Assurance Evidence:** IEC 62645, NRC RG 5.71 and IAEA guidance mapping indicators, audit coverage and compliance readiness.
-- **Active Event Feed:** classroom-safe synthetic security/safeguards events.
+Requirements:
 
-## Full exam demo — Windows
+- Windows 10/11
+- Python 3.10+
+- Docker Desktop only if Grafana and Prometheus are required
 
-Requirements: Python 3.10+ and Docker Desktop for Grafana/Prometheus.
-
-Double-click:
+From the project folder, double-click:
 
 ```bat
 NuclearShield.bat
 ```
 
-Choose **Full Exam Demo** to launch the terminal SOC and automatically start/open:
+Recommended exam option:
 
-- Grafana: `http://localhost:3000/d/nuclearshield-main`
-- Prometheus: `http://localhost:9090`
-- Prometheus metrics endpoint: `http://localhost:9108/metrics`
+```text
+[1] EXAM COMMAND MODE
+```
 
-Grafana local demo login: `admin` / `nuclearshield`.
+That launches the briefing, combined synthetic scenario, terminal command center, Prometheus metrics, and the local Grafana/Prometheus monitoring stack.
 
-For a one-click exam run:
+Grafana: `http://localhost:3000/d/nuclearshield-main`
+
+Prometheus: `http://localhost:9090`
+
+Metrics: `http://localhost:9108/metrics`
+
+Grafana demo login: `admin` / `nuclearshield`
+
+A direct one-click exam launcher is also available:
 
 ```bat
 run_exam_demo.bat
+```
+
+## Command modes
+
+| Launcher mode | Demonstrates |
+|---|---|
+| Exam Command Mode | complete rotating presentation scenario + browser monitoring |
+| Terminal Command | combined terminal-only facility defense simulation |
+| SCADA Watch | synthetic OT/SCADA anomaly monitoring |
+| Safety Watch | synthetic Safety-I&C integrity assurance |
+| Safeguards Watch | MC&A / nuclear-material security evidence |
+| Access Watch | insider-risk and physical-cyber correlation |
+| Architecture | conceptual defense-in-depth explanation |
+| System Self-Check | Python, package, Docker and project readiness checks |
+
+## Manual start
+
+Create and activate a virtual environment, then install dependencies:
+
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# Linux/macOS: source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+Run a terminal-only demonstration:
+
+```bash
+python -m nuclearshield --briefing --scenario combined
+```
+
+Run the full monitoring demonstration:
+
+```bash
+python -m nuclearshield --briefing --monitoring --scenario combined
+```
+
+Run the local readiness check:
+
+```bash
+python -m nuclearshield --self-check
 ```
 
 ## Scenario demonstrations
@@ -57,44 +102,85 @@ python -m nuclearshield --scenario material-variance
 python -m nuclearshield --scenario combined
 ```
 
-`combined` rotates through the classroom scenarios and is the recommended presentation mode.
+`combined` rotates through the classroom scenarios and is the recommended oral-presentation mode.
 
-## Monitoring stack
+## Terminal command center
 
-```bash
-python -m nuclearshield --monitoring --scenario combined
-```
+The live command console presents:
 
-Docker Compose provisions Prometheus and a NuclearShield Grafana dashboard. Grafana visualizes safety integrity, instrumentation integrity, reactor/safety signals, cyber-risk fusion, MC&A safeguards, compliance readiness, audit evidence, alerts and security-zone health.
+- **Facility Core / Safety Envelope** — synthetic plant telemetry, Safety-I&C integrity, instrumentation integrity, firmware integrity, and locked write-path status.
+- **Protection Rings** — Enterprise/SOC, Industrial DMZ, OT/SCADA, Safety, PACS/physical security, and MC&A safeguards.
+- **Command Assessment** — AI anomaly, configuration drift, insider/access risk, cyber-physical correlation, fused mission risk, and a human-review disposition.
+- **Safeguards Watch** — synthetic material-accounting reconciliation, physical-security posture, access analytics, and safeguards status.
+- **Assurance Board** — conceptual IEC 62645, NRC RG 5.71, and IAEA guidance evidence mapping, compliance readiness, and audit coverage.
+- **Security Operations Ticker** — live classroom-safe security and safeguards events.
 
-## Architecture view
+## Grafana Facility Protection Command
+
+Docker Compose provisions Prometheus and Grafana automatically. The Grafana dashboard is organized as a facility-protection board rather than a generic chart collection. It includes command status, safety envelope integrity, instrumentation integrity, cyber threat pressure, assurance readiness, firmware trust, MC&A variance, insider risk, cyber-physical correlation, plant/safety trends, safeguards evidence, and complete protection-ring health.
+
+Prometheus collects only locally generated synthetic NuclearShield metrics.
+
+## Architecture
 
 ```bash
 python -m nuclearshield --architecture
 ```
 
-The architecture is a **conceptual educational model**, not a real nuclear deployment blueprint. The simulator represents controlled monitoring paths and independent safety boundaries without giving operational instructions for real facilities.
+The architecture represents controlled monitoring paths, segmented trust zones, independent safety boundaries, physical-cyber correlation, safeguards evidence, and human review. It is a **conceptual educational model**, not a real nuclear deployment blueprint.
 
 ## Exam-topic mapping
 
 | Topic area | NuclearShield demonstration |
 |---|---|
-| Nuclear SCADA & I&C security | segmented zone health, passive monitoring, conceptual one-way evidence path |
+| Nuclear SCADA & I&C security | segmented protection rings, passive monitoring, conceptual one-way evidence path |
 | Safety-system integrity | continuous synthetic instrumentation, firmware and safety-integrity assurance |
 | Nuclear material security | MC&A reconciliation variance and safeguards review |
-| Physical-cyber convergence | synthetic badge/session risk correlated with cyber evidence |
+| Physical-cyber convergence | synthetic access risk correlated with cyber evidence |
 | AI-driven threat detection | IsolationForest-assisted anomaly scoring plus multi-domain risk fusion |
-| Automated incident response | **simulated** human-review / enhanced-monitoring decisions; no control actions |
-| DevSecOps | package metadata, tests, compile checks and GitHub Actions CI |
-| Regulatory compliance | conceptual IEC 62645, NRC RG 5.71 and IAEA guidance mapping with audit evidence |
-| Monitoring | live terminal SOC + Prometheus + provisioned Grafana dashboard |
+| Automated incident response | simulated monitoring / human-review decisions only; no control actions |
+| DevSecOps | packaging, tests, compile checks, JSON validation and GitHub Actions CI |
+| Regulatory compliance | conceptual IEC 62645, NRC RG 5.71 and IAEA evidence mapping |
+| Monitoring | terminal command center + Prometheus + provisioned Grafana dashboard |
 
-## Testing
+## Testing and validation
 
 ```bash
 pytest -q
 python -m compileall -q src
+python -m json.tool monitoring/grafana/dashboards/nuclearshield.json
+python -m nuclearshield --self-check
 ```
+
+GitHub Actions tests supported Python versions and validates the Grafana dashboard JSON.
+
+## Clean shutdown
+
+Exit the terminal with `Ctrl+C`.
+
+To stop Grafana and Prometheus on Windows:
+
+```bat
+stop.bat
+```
+
+On Linux/macOS:
+
+```bash
+./stop.sh
+```
+
+## Troubleshooting
+
+If the terminal runs but the browser dashboards do not, verify Docker Desktop is running and use **System Self-Check** from `NuclearShield.bat`.
+
+If port `3000`, `9090`, or `9108` is already occupied, stop the conflicting local service before restarting the demo.
+
+If Python dependencies are missing, rerun `NuclearShield.bat` or reinstall with `pip install -r requirements.txt` inside the project virtual environment.
+
+## Presentation guide
+
+See `docs/EXAM_DEMO_GUIDE.md` for the recommended oral-exam walkthrough and explanation sequence.
 
 ## Repository workflow
 
