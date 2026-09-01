@@ -5,25 +5,31 @@
   "panels": [
     {
       "type": "text",
-      "title": "NUCLEARSHIELD // CYBER DEFENSE COMMAND VIEW",
+      "title": "NUCLEARSHIELD // CYBER DEFENSE COMMAND CENTER",
       "gridPos": {"h": 4, "w": 24, "x": 0, "y": 0},
-      "options": {
-        "mode": "markdown",
-        "content": "# ⚛ NUCLEARSHIELD · CYBER DEFENSE COMMAND VIEW\n**LOCAL EVIDENCE • READ-ONLY • SCHEMA-DRIVEN**\n\n`EVIDENCE INGEST` → `SCHEMA PROFILING` → `AI ANOMALY ANALYSIS` → `CROSS-FILE RISK` → `HUMAN REVIEW`"
-      }
+      "options": {"mode": "markdown", "content": "# ⚛ N U C L E A R S H I E L D  //  CYBER DEFENSE COMMAND CENTER\n**LOCAL EVIDENCE • READ-ONLY • SCHEMA-DRIVEN • HUMAN-REVIEWED**\n\n`INGEST`  →  `PROFILE`  →  `INFER`  →  `AI ANOMALY ANALYSIS`  →  `CROSS-FILE RISK`  →  `REVIEW`"}
+    },
+    {
+      "type": "stat",
+      "title": "SYSTEM",
+      "description": "Shows ONLINE only when at least one evidence file is being exported to Prometheus.",
+      "gridPos": {"h": 5, "w": 3, "x": 0, "y": 4},
+      "targets": [{"expr": "nuclearshield_evidence_files > bool 0", "refId": "A"}],
+      "fieldConfig": {"defaults": {"mappings": [{"type": "value", "options": {"0": {"text": "STANDBY", "color": "dark-yellow"}, "1": {"text": "ONLINE", "color": "green"}}}], "color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "dark-yellow", "value": null}, {"color": "green", "value": 1}]}}, "overrides": []},
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "textMode": "value_and_name"}
     },
     {
       "type": "stat",
       "title": "EVIDENCE SOURCES",
-      "gridPos": {"h": 5, "w": 4, "x": 0, "y": 4},
+      "gridPos": {"h": 5, "w": 4, "x": 3, "y": 4},
       "targets": [{"expr": "nuclearshield_evidence_files", "refId": "A"}],
       "fieldConfig": {"defaults": {"color": {"mode": "fixed", "fixedColor": "blue"}}, "overrides": []},
-      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "textMode": "auto"}
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center"}
     },
     {
       "type": "stat",
       "title": "RECORDS INDEXED",
-      "gridPos": {"h": 5, "w": 5, "x": 4, "y": 4},
+      "gridPos": {"h": 5, "w": 4, "x": 7, "y": 4},
       "targets": [{"expr": "nuclearshield_evidence_rows", "refId": "A"}],
       "fieldConfig": {"defaults": {"color": {"mode": "fixed", "fixedColor": "purple"}}, "overrides": []},
       "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center"}
@@ -31,159 +37,104 @@
     {
       "type": "stat",
       "title": "CROSS-FILE RISK",
-      "gridPos": {"h": 5, "w": 5, "x": 9, "y": 4},
+      "gridPos": {"h": 5, "w": 5, "x": 11, "y": 4},
       "targets": [{"expr": "nuclearshield_evidence_risk_score", "refId": "A"}],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent",
-          "min": 0,
-          "max": 100,
-          "color": {"mode": "thresholds"},
-          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 40}, {"color": "orange", "value": 70}, {"color": "red", "value": 85}]}
-        },
-        "overrides": []
-      },
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 40}, {"color": "orange", "value": 70}, {"color": "red", "value": 85}]}}, "overrides": []},
       "options": {"colorMode": "background", "graphMode": "area", "justifyMode": "center"}
     },
     {
       "type": "stat",
       "title": "ANOMALY FLAGS",
-      "gridPos": {"h": 5, "w": 5, "x": 14, "y": 4},
+      "gridPos": {"h": 5, "w": 4, "x": 16, "y": 4},
       "targets": [{"expr": "sum(nuclearshield_dataset_anomaly_flags)", "refId": "A"}],
-      "fieldConfig": {
-        "defaults": {"color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 1}, {"color": "orange", "value": 100}, {"color": "red", "value": 250}]}},
-        "overrides": []
-      },
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 1}, {"color": "orange", "value": 100}, {"color": "red", "value": 250}]}}, "overrides": []},
       "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center"}
     },
     {
       "type": "stat",
       "title": "DATA QUALITY",
-      "description": "100 minus average missing-data percentage across loaded evidence.",
-      "gridPos": {"h": 5, "w": 5, "x": 19, "y": 4},
+      "gridPos": {"h": 5, "w": 4, "x": 20, "y": 4},
       "targets": [{"expr": "100 - avg(nuclearshield_dataset_missing_pct)", "refId": "A"}],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent",
-          "min": 0,
-          "max": 100,
-          "color": {"mode": "thresholds"},
-          "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "orange", "value": 80}, {"color": "yellow", "value": 90}, {"color": "green", "value": 98}]}
-        },
-        "overrides": []
-      },
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "orange", "value": 80}, {"color": "yellow", "value": 90}, {"color": "green", "value": 98}]}}, "overrides": []},
       "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center"}
     },
     {
       "type": "gauge",
-      "title": "THREAT / ANOMALY PRESSURE",
-      "gridPos": {"h": 9, "w": 8, "x": 0, "y": 9},
+      "title": "GLOBAL ANOMALY PRESSURE",
+      "description": "Aggregate pressure derived from the currently loaded evidence set.",
+      "gridPos": {"h": 9, "w": 7, "x": 0, "y": 9},
       "targets": [{"expr": "nuclearshield_evidence_risk_score", "refId": "A"}],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent",
-          "min": 0,
-          "max": 100,
-          "color": {"mode": "thresholds"},
-          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 40}, {"color": "orange", "value": 70}, {"color": "red", "value": 85}]}
-        },
-        "overrides": []
-      },
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 40}, {"color": "orange", "value": 70}, {"color": "red", "value": 85}]}}, "overrides": []},
       "options": {"showThresholdLabels": true, "showThresholdMarkers": true}
     },
     {
       "type": "bargauge",
-      "title": "DOMAIN RISK // EVIDENCE SOURCES",
-      "gridPos": {"h": 9, "w": 8, "x": 8, "y": 9},
-      "targets": [{"expr": "nuclearshield_dataset_anomaly_score", "legendFormat": "{{domain}} · {{file}}", "refId": "A"}],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent",
-          "min": 0,
-          "max": 100,
-          "color": {"mode": "thresholds"},
-          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 40}, {"color": "orange", "value": 70}, {"color": "red", "value": 85}]}
-        },
-        "overrides": []
-      },
+      "title": "RISK RADAR // SOURCES",
+      "gridPos": {"h": 9, "w": 9, "x": 7, "y": 9},
+      "targets": [{"expr": "sort_desc(nuclearshield_dataset_anomaly_score)", "legendFormat": "{{domain}} · {{file}}", "refId": "A"}],
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 40}, {"color": "orange", "value": 70}, {"color": "red", "value": 85}]}}, "overrides": []},
       "options": {"displayMode": "gradient", "orientation": "horizontal", "showUnfilled": true}
     },
     {
       "type": "bargauge",
       "title": "DATA QUALITY // MISSINGNESS",
       "gridPos": {"h": 9, "w": 8, "x": 16, "y": 9},
-      "targets": [{"expr": "nuclearshield_dataset_missing_pct", "legendFormat": "{{domain}} · {{file}}", "refId": "A"}],
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent",
-          "min": 0,
-          "max": 100,
-          "color": {"mode": "thresholds"},
-          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 2}, {"color": "orange", "value": 10}, {"color": "red", "value": 25}]}
-        },
-        "overrides": []
-      },
+      "targets": [{"expr": "sort_desc(nuclearshield_dataset_missing_pct)", "legendFormat": "{{domain}} · {{file}}", "refId": "A"}],
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 2}, {"color": "orange", "value": 10}, {"color": "red", "value": 25}]}}, "overrides": []},
       "options": {"displayMode": "gradient", "orientation": "horizontal", "showUnfilled": true}
     },
     {
       "type": "timeseries",
-      "title": "LIVE EVIDENCE TELEMETRY // DISCOVERED NUMERIC FEATURES",
-      "description": "Series are created only from numeric fields actually discovered in loaded evidence. No fixed facility telemetry is fabricated.",
+      "title": "DISCOVERED NUMERIC EVIDENCE // LIVE VIEW",
+      "description": "Only numeric fields actually discovered in supplied evidence are rendered. No fixed plant telemetry is invented.",
       "gridPos": {"h": 11, "w": 16, "x": 0, "y": 18},
       "targets": [{"expr": "nuclearshield_feature_latest_value", "legendFormat": "{{domain}} · {{feature}}", "refId": "A"}],
-      "fieldConfig": {
-        "defaults": {"color": {"mode": "palette-classic"}, "custom": {"drawStyle": "line", "lineInterpolation": "smooth", "lineWidth": 2, "fillOpacity": 12, "gradientMode": "opacity", "showPoints": "auto", "spanNulls": true}},
-        "overrides": []
-      },
+      "fieldConfig": {"defaults": {"color": {"mode": "palette-classic"}, "custom": {"drawStyle": "line", "lineInterpolation": "smooth", "lineWidth": 2, "fillOpacity": 18, "gradientMode": "opacity", "showPoints": "auto", "spanNulls": true}}, "overrides": []},
       "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["lastNotNull", "min", "max"]}, "tooltip": {"mode": "multi", "sort": "desc"}}
     },
     {
       "type": "timeseries",
-      "title": "AI ANOMALY PRESSURE // BY DOMAIN",
+      "title": "AI ANOMALY SIGNAL // SOURCE TREND",
       "gridPos": {"h": 11, "w": 8, "x": 16, "y": 18},
-      "targets": [{"expr": "nuclearshield_dataset_anomaly_score", "legendFormat": "{{domain}}", "refId": "A"}],
-      "fieldConfig": {
-        "defaults": {"unit": "percent", "min": 0, "max": 100, "color": {"mode": "palette-classic"}, "custom": {"drawStyle": "line", "lineInterpolation": "smooth", "lineWidth": 3, "fillOpacity": 20, "gradientMode": "opacity", "showPoints": "never"}},
-        "overrides": []
-      },
+      "targets": [{"expr": "nuclearshield_dataset_anomaly_score", "legendFormat": "{{domain}} · {{file}}", "refId": "A"}],
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "color": {"mode": "palette-classic"}, "custom": {"drawStyle": "line", "lineInterpolation": "smooth", "lineWidth": 3, "fillOpacity": 25, "gradientMode": "opacity", "showPoints": "never"}}, "overrides": []},
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi", "sort": "desc"}}
+    },
+    {
+      "type": "bargauge",
+      "title": "TOP RISK SOURCES // PRIORITY QUEUE",
+      "description": "Highest anomaly-pressure evidence sources currently loaded.",
+      "gridPos": {"h": 9, "w": 8, "x": 0, "y": 29},
+      "targets": [{"expr": "topk(5, nuclearshield_dataset_anomaly_score)", "legendFormat": "{{domain}} · {{file}}", "refId": "A"}],
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 40}, {"color": "orange", "value": 70}, {"color": "red", "value": 85}]}}, "overrides": []},
+      "options": {"displayMode": "lcd", "orientation": "horizontal", "showUnfilled": true}
     },
     {
       "type": "table",
       "title": "EVIDENCE INVENTORY // ACTIVE ANALYSIS SET",
-      "gridPos": {"h": 9, "w": 12, "x": 0, "y": 29},
+      "gridPos": {"h": 9, "w": 8, "x": 8, "y": 29},
       "targets": [{"expr": "nuclearshield_dataset_rows", "legendFormat": "{{file}} · {{domain}}", "refId": "A", "instant": true}],
-      "fieldConfig": {"defaults": {"color": {"mode": "palette-classic"}}, "overrides": []},
       "options": {"showHeader": true, "cellHeight": "sm"}
     },
     {
       "type": "bargauge",
-      "title": "AI MODEL FLAGS // BY EVIDENCE SOURCE",
-      "gridPos": {"h": 9, "w": 12, "x": 12, "y": 29},
-      "targets": [{"expr": "nuclearshield_dataset_anomaly_flags", "legendFormat": "{{domain}} · {{file}}", "refId": "A"}],
-      "fieldConfig": {
-        "defaults": {"color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 1}, {"color": "orange", "value": 75}, {"color": "red", "value": 150}]}},
-        "overrides": []
-      },
+      "title": "AI MODEL FLAGS // SOURCE LOAD",
+      "gridPos": {"h": 9, "w": 8, "x": 16, "y": 29},
+      "targets": [{"expr": "sort_desc(nuclearshield_dataset_anomaly_flags)", "legendFormat": "{{domain}} · {{file}}", "refId": "A"}],
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 1}, {"color": "orange", "value": 75}, {"color": "red", "value": 150}]}}, "overrides": []},
       "options": {"displayMode": "lcd", "orientation": "horizontal", "showUnfilled": true}
     },
     {
       "type": "text",
       "title": "DEFENSE-IN-DEPTH ANALYSIS PATH",
-      "gridPos": {"h": 7, "w": 12, "x": 0, "y": 38},
-      "options": {
-        "mode": "markdown",
-        "content": "### ⚡ EVIDENCE-DRIVEN DEFENSE WORKFLOW\n`LOCAL FILES` → `SCHEMA INFERENCE` → `FEATURE DISCOVERY` → `ANOMALY MODEL`\n\n　　　　　　　　　　　　　　　↓\n\n`OT / SCADA` · `SAFETY / INTEGRITY` · `MC&A / SAFEGUARDS` · `ACCESS / IDENTITY`\n\n　　　　　　　　　　　　　　　↓\n\n**CROSS-FILE RISK ASSESSMENT → HUMAN REVIEW**"
-      }
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 38},
+      "options": {"mode": "markdown", "content": "### ⚡ ANALYSIS PIPELINE\n`LOCAL FILES` → `SCHEMA PROFILING` → `DOMAIN INFERENCE` → `FEATURE DISCOVERY`\n\n　　　　　　　　　↓\n\n`ANOMALY MODEL` → `SOURCE COMPARISON` → `RISK ASSESSMENT`\n\n　　　　　　　　　↓\n\n### **HUMAN REVIEW / EVIDENCE REPORT**\nThe board adapts to the files you supply; unsupported domains simply do not appear."}
     },
     {
       "type": "text",
       "title": "NUCLEARSHIELD SAFETY BOUNDARY",
-      "gridPos": {"h": 7, "w": 12, "x": 12, "y": 38},
-      "options": {
-        "mode": "markdown",
-        "content": "### 🛡 READ-ONLY DEFENSIVE ANALYSIS\n**CONTROL WRITE ACCESS: DISABLED**\n\nNo PLC commands · no reactor-control functions · no credential collection · no exploit chains · no malware · no persistence · no bypass procedures · no live nuclear-system connectivity.\n\n**No evidence → no metric → no fabricated finding. Human review remains final.**"
-      }
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 38},
+      "options": {"mode": "markdown", "content": "### 🛡 READ-ONLY DEFENSIVE ANALYSIS\n**CONTROL WRITE ACCESS: DISABLED**\n\nNo PLC commands · no reactor-control functions · no credential collection · no exploit chains · no malware · no persistence · no bypass procedures · no live nuclear-system connectivity.\n\n### **NO EVIDENCE → NO METRIC → NO FABRICATED FINDING**\nHuman review remains the final decision point."}
     }
   ],
   "refresh": "3s",
@@ -192,8 +143,8 @@
   "templating": {"list": []},
   "time": {"from": "now-15m", "to": "now"},
   "timezone": "browser",
-  "title": "NuclearShield — Cyber Defense Command View",
+  "title": "NuclearShield — Cyber Defense Command Center",
   "uid": "nuclearshield-main",
-  "version": 5,
+  "version": 6,
   "weekStart": ""
 }
