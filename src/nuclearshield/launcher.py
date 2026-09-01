@@ -32,8 +32,8 @@ def _status_panel() -> Panel:
 
 def _menu_panel() -> Panel:
     table=Table.grid(expand=True,padding=(0,1)); table.add_column(style="bold cyan",width=6); table.add_column()
-    table.add_row("[1]","[bold]LOAD + ANALYZE EVIDENCE[/bold]\n[dim]Analyze CSV, JSON, JSONL, or XLSX files[/dim]")
-    table.add_row("[2]","[bold]ANALYZE + OPEN MONITORING[/bold]\n[dim]Analyze files, start Prometheus/Grafana, and open Grafana[/dim]")
+    table.add_row("[1]","[bold]LOAD + OPEN TERMINAL COMMAND CENTER[/bold]\n[dim]Analyze evidence and open the colored NuclearShield operations dashboard[/dim]")
+    table.add_row("[2]","[bold]COMMAND CENTER + GRAFANA MONITORING[/bold]\n[dim]Analyze evidence, show terminal command center, start Prometheus/Grafana, and open Grafana[/dim]")
     table.add_row("[3]","[bold]OPEN GRAFANA[/bold]\n[dim]Open the local evidence dashboard in your browser[/dim]")
     table.add_row("[4]","[bold]OPEN PROMETHEUS[/bold]\n[dim]Open the local Prometheus query interface[/dim]")
     table.add_row("[5]","[bold]OPEN RAW METRICS[/bold]\n[dim]View the evidence metrics exported by this workstation[/dim]")
@@ -96,7 +96,7 @@ def _analyze(with_monitoring: bool=False) -> None:
     if not paths:
         console.print("[yellow]No valid files selected. Nothing was analyzed.[/yellow]"); return
     export=console.input("[cyan]Export JSON/TXT report after analysis? [Y/n] > [/cyan]").strip().lower()
-    args=["--files",*paths]
+    args=["--files",*paths,"--command-center"]
     if export not in {"n","no"}: args.append("--export-report")
     if with_monitoring: args.extend(["--monitoring","--open-grafana"])
     _run(*args)
