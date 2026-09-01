@@ -5,18 +5,19 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "nuclearshield"
 version = "1.0.0rc1"
-description = "Safe educational nuclear-facility cybersecurity monitoring simulation"
+description = "Schema-driven defensive nuclear-cyber evidence analysis workstation"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
   "rich>=13.7,<15",
   "prometheus-client>=0.20,<1",
   "scikit-learn>=1.4,<2",
-  "numpy>=1.26,<3"
+  "numpy>=1.26,<3",
+  "openpyxl>=3.1,<4"
 ]
 
 [project.scripts]
-nuclearshield = "nuclearshield.cli:main"
+nuclearshield = "nuclearshield.evidence_cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
