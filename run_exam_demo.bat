@@ -33,6 +33,6 @@ python -m nuclearshield --briefing --monitoring --scenario combined --refresh-ra
 echo.
 echo ========================================================================
 echo  DEMO COMPLETE - synthetic evidence is available in the reports folder.
-echo  Run stop_monitoring.bat when you are finished with Grafana/Prometheus.
+echo  Run stop.bat when you are finished with Grafana/Prometheus.
 echo ========================================================================
 pause
