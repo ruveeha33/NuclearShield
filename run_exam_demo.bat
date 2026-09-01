@@ -14,13 +14,19 @@ if not exist .venv (
 )
 
 call .venv\Scripts\activate
-python -c "import rich, sklearn, prometheus_client, numpy" >nul 2>&1
 if errorlevel 1 (
-  echo Installing NuclearShield dependencies...
+  echo [ERROR] Could not activate the NuclearShield virtual environment.
+  pause
+  exit /b 1
+)
+
+python -c "import nuclearshield, rich, sklearn, prometheus_client, numpy" >nul 2>&1
+if errorlevel 1 (
+  echo Installing NuclearShield and required dependencies...
   python -m pip install --upgrade pip >nul
-  pip install -r requirements.txt >nul
+  python -m pip install -e . >nul
   if errorlevel 1 (
-    echo [ERROR] NuclearShield dependencies could not be installed.
+    echo [ERROR] NuclearShield could not be installed into the virtual environment.
     pause
     exit /b 1
   )
