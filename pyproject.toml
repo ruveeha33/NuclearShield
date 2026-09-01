@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nuclearshield"
-version = "0.1.0"
+version = "1.0.0rc1"
 description = "Safe educational nuclear-facility cybersecurity monitoring simulation"
 readme = "README.md"
 requires-python = ">=3.10"
