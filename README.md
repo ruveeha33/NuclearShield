@@ -2,9 +2,11 @@
 
 **Advanced Nuclear Facility Cybersecurity Platform — safe defensive educational simulation**
 
-NuclearShield is a terminal-first cybersecurity demonstration for an EduQual Level 6 AI Operations oral topic on nuclear-facility cybersecurity. It uses **synthetic data only** to demonstrate SCADA/OT protection, safety-system integrity, nuclear material safeguards, physical-cyber convergence, AI-assisted anomaly detection, compliance evidence, and safety-preserving incident triage.
+Current development status: **v1.0.0rc1 on `develop`**. The release candidate is not yet promoted to `main`.
 
-> **Safety boundary:** NuclearShield never connects to a real nuclear facility, reactor, PLC, SCADA network, safety instrument, PACS/access-control system, radiation instrument, or nuclear material accounting system. It contains no exploit tooling, destructive industrial commands, credential theft, persistence, evasion, or bypass procedures.
+NuclearShield is a terminal-first cybersecurity demonstration for an EduQual Level 6 AI Operations oral topic on nuclear-facility cybersecurity. It uses **synthetic data only** to demonstrate SCADA/OT protection, safety-system integrity, nuclear material safeguards, physical-cyber convergence, AI-assisted anomaly detection, compliance evidence, nuclear-software assurance concepts, and safety-preserving incident triage.
+
+> **Safety boundary:** NuclearShield never connects to a real nuclear facility, reactor, PLC, SCADA network, safety instrument, physical-access system, radiation instrument, or nuclear material accounting system. It contains no exploit tooling, destructive industrial commands, credential theft, persistence, evasion, or bypass procedures.
 
 ## NuclearShield experience
 
@@ -32,7 +34,7 @@ Recommended exam option:
 [1] EXAM COMMAND MODE
 ```
 
-That launches the briefing, combined synthetic scenario, terminal command center, Prometheus metrics, and the local Grafana/Prometheus monitoring stack.
+That launches the briefing, combined synthetic scenario, terminal command center, Prometheus metrics, local Grafana/Prometheus monitoring stack, and an end-of-session evidence report.
 
 Grafana: `http://localhost:3000/d/nuclearshield-main`
 
@@ -52,14 +54,16 @@ run_exam_demo.bat
 
 | Launcher mode | Demonstrates |
 |---|---|
-| Exam Command Mode | complete rotating presentation scenario + browser monitoring |
-| Terminal Command | combined terminal-only facility defense simulation |
+| Exam Command Mode | complete rotating presentation scenario + browser monitoring + evidence export |
+| Terminal Command | combined terminal-only facility defense simulation + summary report |
 | SCADA Watch | synthetic OT/SCADA anomaly monitoring |
 | Safety Watch | synthetic Safety-I&C integrity assurance |
 | Safeguards Watch | MC&A / nuclear-material security evidence |
 | Access Watch | insider-risk and physical-cyber correlation |
 | Architecture | conceptual defense-in-depth explanation |
-| System Self-Check | Python, package, Docker and project readiness checks |
+| System Self-Check | Python, Docker and project readiness checks |
+| Assurance Gates | DevSecOps, configuration-control and evidence-gate model |
+| Threat Context | safe, high-level nuclear-sector defensive context |
 
 ## Manual start
 
@@ -79,16 +83,28 @@ Run a terminal-only demonstration:
 python -m nuclearshield --briefing --scenario combined
 ```
 
-Run the full monitoring demonstration:
+Run the full monitoring demonstration with a report and exported evidence:
 
 ```bash
-python -m nuclearshield --briefing --monitoring --scenario combined
+python -m nuclearshield --briefing --monitoring --scenario combined --report --export-report
 ```
 
 Run the local readiness check:
 
 ```bash
 python -m nuclearshield --self-check
+```
+
+Show the nuclear-software assurance gates:
+
+```bash
+python -m nuclearshield --assurance
+```
+
+Show the safe defensive threat context:
+
+```bash
+python -m nuclearshield --threat-context
 ```
 
 ## Scenario demonstrations
@@ -108,26 +124,36 @@ python -m nuclearshield --scenario combined
 
 The live command console presents:
 
-- **Facility Core / Safety Envelope** — synthetic plant telemetry, Safety-I&C integrity, instrumentation integrity, firmware integrity, and locked write-path status.
-- **Protection Rings** — Enterprise/SOC, Industrial DMZ, OT/SCADA, Safety, PACS/physical security, and MC&A safeguards.
-- **Command Assessment** — AI anomaly, configuration drift, insider/access risk, cyber-physical correlation, fused mission risk, and a human-review disposition.
+- **Facility Core / Safety Envelope** — synthetic plant telemetry, Safety-I&C integrity, instrumentation integrity, firmware integrity, and a disabled write path.
+- **Protection Rings** — Enterprise/SOC, Industrial DMZ, OT/SCADA, Safety, physical security, and MC&A safeguards.
+- **Command Assessment** — AI anomaly, configuration drift, insider/access risk, cyber-physical correlation, fused risk, and a human-review response posture.
 - **Safeguards Watch** — synthetic material-accounting reconciliation, physical-security posture, access analytics, and safeguards status.
-- **Assurance Board** — conceptual IEC 62645, NRC RG 5.71, and IAEA guidance evidence mapping, compliance readiness, and audit coverage.
+- **Assurance Board** — conceptual IEC 62645, NRC RG 5.71, and IAEA guidance mapping, compliance readiness, and audit coverage.
 - **Security Operations Ticker** — live classroom-safe security and safeguards events.
 
 ## Grafana Facility Protection Command
 
-Docker Compose provisions Prometheus and Grafana automatically. The Grafana dashboard is organized as a facility-protection board rather than a generic chart collection. It includes command status, safety envelope integrity, instrumentation integrity, cyber threat pressure, assurance readiness, firmware trust, MC&A variance, insider risk, cyber-physical correlation, plant/safety trends, safeguards evidence, and complete protection-ring health.
+Docker Compose provisions Prometheus and Grafana automatically. The Grafana dashboard is organized as a facility-protection board rather than a generic chart collection. It includes command status, safety envelope integrity, instrumentation integrity, cyber threat pressure, assurance readiness, firmware trust, MC&A variance, insider risk, cyber-physical correlation, plant/safety trends, safeguards evidence, and protection-ring health.
 
 Prometheus collects only locally generated synthetic NuclearShield metrics.
 
-## Architecture
+## Defensive evidence reporting
+
+Use `--report` to print an end-of-session examiner-friendly summary. Use `--export-report` to save both JSON and text evidence under `reports/`.
+
+The report includes final risk, response posture, alert count, safety and instrumentation integrity, anomaly/configuration evidence, MC&A variance, access risk, compliance readiness, audit coverage, key findings, and the explicit synthetic-system safety boundary.
+
+## Architecture and assurance views
 
 ```bash
 python -m nuclearshield --architecture
+python -m nuclearshield --assurance
+python -m nuclearshield --threat-context
 ```
 
-The architecture represents controlled monitoring paths, segmented trust zones, independent safety boundaries, physical-cyber correlation, safeguards evidence, and human review. It is a **conceptual educational model**, not a real nuclear deployment blueprint.
+The architecture represents controlled monitoring paths, segmented trust zones, independent safety boundaries, physical-cyber correlation, safeguards evidence, and human review. The assurance view demonstrates a five-gate educational lifecycle model for approved change, automated verification, configuration control, safety-impact review, and evidence release. The threat-context view remains high-level and defensive and contains no exploit procedures or live attack feed.
+
+These are **conceptual educational models**, not real nuclear deployment or certification blueprints.
 
 ## Exam-topic mapping
 
@@ -138,10 +164,15 @@ The architecture represents controlled monitoring paths, segmented trust zones, 
 | Nuclear material security | MC&A reconciliation variance and safeguards review |
 | Physical-cyber convergence | synthetic access risk correlated with cyber evidence |
 | AI-driven threat detection | IsolationForest-assisted anomaly scoring plus multi-domain risk fusion |
+| Nuclear-sector threat intelligence | safe defensive threat-context view; no live IOC or offensive feed |
 | Automated incident response | simulated monitoring / human-review decisions only; no control actions |
-| DevSecOps | packaging, tests, compile checks, JSON validation and GitHub Actions CI |
+| DevSecOps | assurance gates, packaging, tests, compile checks, JSON validation and GitHub Actions CI |
+| Configuration/change control | approved-baseline and configuration-drift evidence model |
 | Regulatory compliance | conceptual IEC 62645, NRC RG 5.71 and IAEA evidence mapping |
 | Monitoring | terminal command center + Prometheus + provisioned Grafana dashboard |
+| Audit/reporting | terminal evidence summary plus JSON/text export |
+
+For a requirement-by-requirement mapping, see `docs/TOPIC_132_REQUIREMENTS_MATRIX.md`.
 
 ## Testing and validation
 
@@ -150,9 +181,13 @@ pytest -q
 python -m compileall -q src
 python -m json.tool monitoring/grafana/dashboards/nuclearshield.json
 python -m nuclearshield --self-check
+python -m nuclearshield --architecture
+python -m nuclearshield --assurance
+python -m nuclearshield --threat-context
+python -m nuclearshield --scenario combined --samples 2 --refresh-rate 10 --windowed --report --export-report
 ```
 
-GitHub Actions tests supported Python versions and validates the Grafana dashboard JSON.
+GitHub Actions runs the release-candidate validation on Python 3.10 and 3.12. See `docs/RELEASE_CANDIDATE_CHECKLIST.md` for the promotion gate.
 
 ## Clean shutdown
 
@@ -178,9 +213,12 @@ If port `3000`, `9090`, or `9108` is already occupied, stop the conflicting loca
 
 If Python dependencies are missing, rerun `NuclearShield.bat` or reinstall with `pip install -r requirements.txt` inside the project virtual environment.
 
-## Presentation guide
+## Documentation
 
-See `docs/EXAM_DEMO_GUIDE.md` for the recommended oral-exam walkthrough and explanation sequence.
+- `docs/EXAM_DEMO_GUIDE.md` — recommended oral-exam walkthrough.
+- `docs/PROJECT_ARCHITECTURE.md` — implementation architecture and data flow.
+- `docs/TOPIC_132_REQUIREMENTS_MATRIX.md` — official-topic coverage matrix.
+- `docs/RELEASE_CANDIDATE_CHECKLIST.md` — automated and manual promotion gate.
 
 ## Repository workflow
 
