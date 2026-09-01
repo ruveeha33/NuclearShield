@@ -8,6 +8,7 @@ import time
 import webbrowser
 from pathlib import Path
 
+from rich import box
 from rich.console import Console
 from rich.live import Live
 from rich.panel import Panel
@@ -27,7 +28,7 @@ def _repo_root() -> Path:
 
 def start_monitoring_stack(open_web: bool = True) -> bool:
     if shutil.which("docker") is None:
-        console.print("[yellow]Docker not found.[/yellow] Terminal dashboard will still run.")
+        console.print("[yellow]Docker not found.[/yellow] Terminal command center will still run.")
         return False
     compose = _repo_root() / "docker-compose.yml"
     try:
@@ -59,7 +60,41 @@ def show_architecture() -> None:
         "HUMAN REVIEW → AUDIT → COMPLIANCE EVIDENCE",
         title="NuclearShield Defense-in-Depth Architecture",
         subtitle="Synthetic defensive learning lab — not a deployment blueprint",
+        box=box.DOUBLE,
     ))
+
+
+def show_briefing(scenario: str) -> None:
+    t = Table.grid(expand=True, padding=(0, 1))
+    t.add_column(style="bold cyan", width=21)
+    t.add_column()
+    t.add_row("MISSION", "Demonstrate layered nuclear-facility cyber defense using synthetic evidence only.")
+    t.add_row("SCENARIO", scenario.upper())
+    t.add_row("SAFETY", "No real reactor, PLC, SCADA, PACS, safety-I&C, or material system connectivity.")
+    t.add_row("DETECTION", "Rule-based state checks + IsolationForest-style anomaly scoring + cross-domain correlation.")
+    t.add_row("SAFEGUARDS", "MC&A variance and physical/access signals are simulated for educational review.")
+    t.add_row("OBSERVABILITY", "Terminal command center + Prometheus metrics + Grafana visualization.")
+    t.add_row("DECISION", "System is advisory; high-risk states escalate to HUMAN REVIEW.")
+    console.print(Panel(t, title="NUCLEARSHIELD // PRE-MISSION BRIEFING", border_style="cyan", box=box.DOUBLE))
+
+
+def system_check() -> int:
+    checks: list[tuple[str, bool, str]] = []
+    checks.append(("Python runtime", True, "available"))
+    checks.append(("Docker CLI", shutil.which("docker") is not None, "required only for Grafana/Prometheus"))
+    checks.append(("Compose file", (_repo_root() / "docker-compose.yml").exists(), "monitoring stack definition"))
+    checks.append(("Grafana provisioning", (_repo_root() / "monitoring" / "grafana").exists(), "local dashboard configuration"))
+    checks.append(("Prometheus config", (_repo_root() / "monitoring" / "prometheus.yml").exists(), "metrics scraper configuration"))
+
+    table = Table(title="NUCLEARSHIELD READINESS CHECK", box=box.SIMPLE_HEAVY)
+    table.add_column("Component")
+    table.add_column("State", justify="center")
+    table.add_column("Purpose")
+    for name, ok, detail in checks:
+        table.add_row(name, "[bold green]READY[/bold green]" if ok else "[yellow]OPTIONAL / MISSING[/yellow]", detail)
+    console.print(table)
+    console.print("[dim]Docker is optional for terminal-only exam mode; all facility signals remain synthetic.[/dim]")
+    return 0 if all(ok for name, ok, _ in checks if name != "Docker CLI") else 1
 
 
 def run_dashboard(
@@ -102,6 +137,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--seed", type=int, default=132, help="deterministic simulation seed")
     parser.add_argument("--windowed", action="store_true", help="do not use alternate-screen fullscreen mode")
     parser.add_argument("--architecture", action="store_true", help="print the conceptual architecture and exit")
+    parser.add_argument("--briefing", action="store_true", help="show the pre-mission exam briefing before launch")
+    parser.add_argument("--self-check", action="store_true", help="check local exam-demo prerequisites and exit")
     return parser
 
 
@@ -110,12 +147,18 @@ def main() -> None:
     if args.architecture:
         show_architecture()
         return
+    if args.self_check:
+        raise SystemExit(system_check())
+    if args.briefing:
+        show_briefing(args.scenario)
+        console.print("[dim]Starting command center in 2 seconds...[/dim]")
+        time.sleep(2.0)
 
     summary = Table.grid(padding=(0, 1))
-    summary.add_row("[bold cyan]NuclearShield[/bold cyan]", "Advanced Nuclear Facility Cybersecurity Platform")
+    summary.add_row("[bold cyan]NuclearShield[/bold cyan]", "Facility Protection Command")
     summary.add_row("Mode", "safe synthetic / defensive / read-only")
     summary.add_row("Scenario", args.scenario)
-    console.print(Panel(summary, title="STARTING DEFENSIVE LAB", box=None))
+    console.print(Panel(summary, title="COMMAND SESSION INITIALIZING", box=box.DOUBLE))
 
     if args.monitoring:
         start_monitoring_stack(open_web=not args.no_browser)
@@ -128,4 +171,4 @@ def main() -> None:
             fullscreen=not args.windowed,
         )
     except KeyboardInterrupt:
-        console.print("\n[green]NuclearShield stopped safely.[/green]")
+        console.print("\n[green]NuclearShield session closed safely.[/green]")
