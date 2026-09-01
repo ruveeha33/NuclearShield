@@ -174,11 +174,9 @@ def main() -> None:
         jp,tp=export_report(package); console.print(f"[cyan]Analysis exported:[/cyan] {jp.name} | {tp.name}")
     if args.monitoring or args.open_grafana:
         if start_monitoring(package, open_browser=args.open_grafana) == 0:
-            console.print("[dim]Keep this terminal open while viewing live evidence metrics. Press Ctrl+C to stop the local metrics session.[/dim]")
-            try:
-                import time
-                while True: time.sleep(3600)
-            except KeyboardInterrupt: console.print("\n[dim]Evidence metrics session stopped.[/dim]")
+            console.print("[dim]Keep this terminal open while viewing live evidence metrics.[/dim]")
+            console.input("[bold cyan]Press Enter to stop the local metrics session and return to NuclearShield > [/bold cyan]")
+            console.print("[dim]Evidence metrics session stopped cleanly.[/dim]")
 
 
 if __name__ == "__main__": main()
