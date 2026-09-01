@@ -14,6 +14,7 @@ console = Console()
 GRAFANA_URL = "http://localhost:3000/d/nuclearshield-main"
 PROMETHEUS_URL = "http://localhost:9090"
 METRICS_URL = "http://localhost:9108/metrics"
+SUPPORTED = {".csv", ".json", ".jsonl", ".xlsx"}
 
 
 def _repo_root() -> Path:
@@ -53,19 +54,47 @@ def _run(*args: str) -> int:
     return subprocess.call([sys.executable,"-m","nuclearshield",*args],cwd=_repo_root())
 
 
+def _clean_path(value: str) -> str:
+    return value.strip().strip('"').strip("'").strip()
+
+
 def _collect_paths() -> list[str]:
-    console.print("\n[bold]Evidence selection[/bold]"); console.print("[dim]Enter file paths separated by semicolons. Paste as many supported files as you need.[/dim]")
-    raw=console.input("[bold cyan]Files > [/bold cyan]").strip(); paths=[]
-    for item in raw.split(";") if raw else []:
-        cleaned=item.strip().strip('"').strip("'")
-        if cleaned: paths.append(cleaned)
+    console.print("\n[bold]Evidence selection[/bold]")
+    console.print("[dim]Add one file at a time. You can also paste several paths separated by semicolons.[/dim]")
+    console.print("[dim]You may drag a file from File Explorer into this window. Press Enter on an empty line when finished.[/dim]\n")
+    paths: list[str] = []
+    item_no = 1
+    while True:
+        raw = console.input(f"[bold cyan]File {item_no} > [/bold cyan]").strip()
+        if not raw:
+            break
+        candidates = [_clean_path(item) for item in raw.split(";") if _clean_path(item)]
+        for cleaned in candidates:
+            candidate = Path(cleaned).expanduser()
+            if not candidate.exists():
+                console.print(f"[red]NOT FOUND[/red]  {cleaned}")
+                console.print("[dim]Check the path. Do not use the example text 'YourName'; use your real Windows user folder or drag the file here.[/dim]")
+                continue
+            if not candidate.is_file():
+                console.print(f"[yellow]SKIPPED[/yellow]  {cleaned}  [dim](not a file)[/dim]")
+                continue
+            if candidate.suffix.lower() not in SUPPORTED:
+                console.print(f"[yellow]SKIPPED[/yellow]  {candidate.name}  [dim](unsupported format)[/dim]")
+                continue
+            resolved = str(candidate.resolve())
+            if resolved not in paths:
+                paths.append(resolved)
+                console.print(f"[green]ADDED[/green]  {candidate.name}")
+                item_no += 1
+    if paths:
+        console.print(f"\n[bold green]{len(paths)} evidence file(s) ready.[/bold green]")
     return paths
 
 
 def _analyze(with_monitoring: bool=False) -> None:
     paths=_collect_paths()
     if not paths:
-        console.print("[yellow]No files selected. Nothing was analyzed.[/yellow]"); return
+        console.print("[yellow]No valid files selected. Nothing was analyzed.[/yellow]"); return
     export=console.input("[cyan]Export JSON/TXT report after analysis? [Y/n] > [/cyan]").strip().lower()
     args=["--files",*paths]
     if export not in {"n","no"}: args.append("--export-report")
