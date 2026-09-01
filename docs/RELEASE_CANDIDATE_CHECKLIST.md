@@ -15,6 +15,7 @@ This checklist is intentionally conservative. `main` must not be updated until r
 - [x] End-of-session evidence report and JSON/text export.
 - [x] Architecture, assurance-gate and defensive threat-context views.
 - [x] Prometheus metrics and provisioned Grafana dashboard.
+- [x] Professional Rich workstation entry screen.
 - [x] Windows exam launcher and monitoring shutdown scripts.
 
 ## Safety checks
@@ -28,27 +29,30 @@ This checklist is intentionally conservative. `main` must not be updated until r
 
 ## Release validation
 
-GitHub Actions must pass before promoting this candidate to v1.0.0:
+GitHub Actions validation completed successfully for the release candidate before this documentation polish:
 
-- [ ] Python 3.10 tests pass.
-- [ ] Python 3.12 tests pass.
-- [ ] Package compile check passes.
-- [ ] Grafana JSON validates.
-- [ ] Readiness command executes.
-- [ ] Architecture / assurance / threat-context CLI smoke tests execute.
-- [ ] Finite combined simulation completes and exports evidence.
+- [x] Python 3.10 tests pass.
+- [x] Python 3.12 tests pass.
+- [x] Package compile check passes.
+- [x] Grafana JSON validates.
+- [x] Readiness command executes.
+- [x] Architecture / assurance / threat-context CLI smoke tests execute.
+- [x] Finite combined simulation completes and exports evidence.
+
+Any subsequent source or dashboard change must trigger and pass CI again before final promotion.
 
 ## Manual exam-machine validation
 
 Run these on the Windows machine that will be used for the oral examination:
 
-1. `NuclearShield.bat` → **SYSTEM SELF-CHECK**.
-2. `run_exam_demo.bat` and confirm the terminal opens correctly.
-3. Confirm Grafana opens at port 3000 and Prometheus at port 9090 when Docker Desktop is available.
-4. Let the combined scenario rotate long enough to demonstrate multiple domains.
-5. End the session with `Ctrl+C` and confirm the defensive evidence report appears.
-6. Confirm report files are created under `reports/`.
-7. Run `stop.bat` after the demonstration.
+1. Double-click `NuclearShield.bat` and confirm the professional workstation entry screen renders correctly.
+2. Choose **Run System Diagnostics** and confirm the required local checks pass.
+3. Choose **Launch Command Workstation** and confirm the existing terminal command center opens correctly.
+4. Confirm Grafana opens at port 3000 and Prometheus at port 9090 when Docker Desktop is available.
+5. Let the combined scenario rotate long enough to demonstrate multiple domains.
+6. End the session with `Ctrl+C` and confirm the defensive evidence report appears.
+7. Confirm report files are created under `reports/`.
+8. Run `stop.bat` after the demonstration.
 
 ## Promotion rule
 
