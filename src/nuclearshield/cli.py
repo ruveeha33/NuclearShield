@@ -17,6 +17,7 @@ from rich.table import Table
 from .dashboard import render_dashboard
 from .metrics import start_metrics_server, update_metrics
 from .model import FacilityState
+from .reporting import report_panel, save_report
 from .simulator import FacilitySimulator, SCENARIOS
 
 console = Console()
@@ -103,7 +104,7 @@ def run_dashboard(
     samples: int = 0,
     seed: int | None = None,
     fullscreen: bool = True,
-) -> None:
+) -> FacilityState:
     state = FacilityState(scenario=scenario)
     state.add_event("NuclearShield synthetic monitoring session started", "SYSTEM")
     simulator = FacilitySimulator(scenario=scenario, seed=seed)
@@ -111,20 +112,24 @@ def run_dashboard(
     refresh_rate = max(1.0, min(refresh_rate, 10.0))
     delay = 1.0 / refresh_rate
 
-    with Live(
-        render_dashboard(state),
-        refresh_per_second=refresh_rate,
-        screen=fullscreen,
-        transient=False,
-        vertical_overflow="crop",
-    ) as live:
-        i = 0
-        while samples <= 0 or i < samples:
-            simulator.step(state)
-            update_metrics(state)
-            live.update(render_dashboard(state), refresh=True)
-            time.sleep(delay)
-            i += 1
+    try:
+        with Live(
+            render_dashboard(state),
+            refresh_per_second=refresh_rate,
+            screen=fullscreen,
+            transient=False,
+            vertical_overflow="crop",
+        ) as live:
+            i = 0
+            while samples <= 0 or i < samples:
+                simulator.step(state)
+                update_metrics(state)
+                live.update(render_dashboard(state), refresh=True)
+                time.sleep(delay)
+                i += 1
+    except KeyboardInterrupt:
+        state.add_event("Operator ended synthetic monitoring session", "SYSTEM")
+    return state
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -139,6 +144,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--architecture", action="store_true", help="print the conceptual architecture and exit")
     parser.add_argument("--briefing", action="store_true", help="show the pre-mission exam briefing before launch")
     parser.add_argument("--self-check", action="store_true", help="check local exam-demo prerequisites and exit")
+    parser.add_argument("--report", action="store_true", help="show an end-of-session defensive evidence report")
+    parser.add_argument("--export-report", action="store_true", help="save JSON and text evidence reports under reports/")
     return parser
 
 
@@ -162,13 +169,17 @@ def main() -> None:
 
     if args.monitoring:
         start_monitoring_stack(open_web=not args.no_browser)
-    try:
-        run_dashboard(
-            scenario=args.scenario,
-            refresh_rate=args.refresh_rate,
-            samples=max(0, args.samples),
-            seed=args.seed,
-            fullscreen=not args.windowed,
-        )
-    except KeyboardInterrupt:
-        console.print("\n[green]NuclearShield session closed safely.[/green]")
+
+    state = run_dashboard(
+        scenario=args.scenario,
+        refresh_rate=args.refresh_rate,
+        samples=max(0, args.samples),
+        seed=args.seed,
+        fullscreen=not args.windowed,
+    )
+    console.print("\n[green]NuclearShield session closed safely.[/green]")
+    if args.report or args.export_report:
+        console.print(report_panel(state))
+    if args.export_report:
+        json_path, txt_path = save_report(state, _repo_root() / "reports")
+        console.print(f"[cyan]Evidence exported:[/cyan] {json_path.name}  |  {txt_path.name}")
