@@ -1,0 +1,64 @@
+services:
+  nuclearshield:
+    build: .
+    ports: ["${APP_PORT:-8000}:8000"]
+    environment:
+      NUCLEARSHIELD_DATA_DIR: /app/data
+      NUCLEARSHIELD_DEMO_MODE: "true"
+      PROMETHEUS_URL: http://prometheus:9090
+      GRAFANA_URL: http://grafana:3000
+      PUBLIC_APP_PORT: ${APP_PORT:-8000}
+      PUBLIC_PROMETHEUS_PORT: ${PROMETHEUS_PORT:-9090}
+      PUBLIC_GRAFANA_PORT: ${GRAFANA_PORT:-3000}
+    volumes:
+      - shield-data:/app/data
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: ["ALL"]
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    pull_policy: ${MONITORING_PULL_POLICY:-never}
+    command: ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.path=/prometheus"]
+    ports: ["${PROMETHEUS_PORT:-9090}:9090"]
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    depends_on:
+      nuclearshield:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9090/-/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    pull_policy: ${MONITORING_PULL_POLICY:-never}
+    ports: ["${GRAFANA_PORT:-3000}:3000"]
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-nuclearshield-demo}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:3000/api/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  shield-data:
+  prometheus-data:
+  grafana-data:

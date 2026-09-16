@@ -1,0 +1,17 @@
+flowchart TB
+  E[Untrusted uploaded evidence] -->|10 MB and 50000 record limits| V[Normalization and validation]
+  V -->|CSV or JSON only| A[Analyzer]
+  A -->|parameterized write| S[(SQLite audit store)]
+  A --> R[Escaped HTML report]
+  A --> M[Prometheus metrics]
+  subgraph Boundary[Application trust boundary]
+    V
+    A
+    S
+    R
+    M
+  end
+  C[No command endpoints]:::safe
+  N[No plant network connection]:::safe
+  H[Human and safety authorization]:::safe
+  classDef safe fill:#d8efe8,stroke:#1d5a50,color:#0a1715

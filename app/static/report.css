@@ -1,0 +1,34 @@
+/* Specific selectors keep these rules effective alongside the report theme. */
+html body { overflow-wrap: anywhere; word-break: normal; }
+body main, body header, body footer { min-width: 0; max-width: 100%; }
+body main { width: min(100%, 1250px); }
+body .cards { grid-template-columns: minmax(0, 2fr) repeat(4, minmax(0, 1fr)); }
+body .cards > *, body .finding-head > *, body dl > *, body .method-grid > * { min-width: 0; }
+body .finding-head { align-items: flex-start; }
+body .finding-head > div { flex: 1 1 0; }
+body .tag { flex: 0 0 auto; white-space: nowrap; word-break: normal; overflow-wrap: normal; line-height: 1.4; font-size: 12px; }
+body .classification { flex-shrink: 0; max-width: 100%; white-space: normal; }
+body table { width: 100%; table-layout: fixed; }
+body table th, body table td { max-width: none; overflow-wrap: anywhere; word-break: normal; }
+body dd, body h3, body code { overflow-wrap: anywhere; word-break: normal; }
+body dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+body .table-wrap { max-width: 100%; }
+@media screen and (max-width: 850px) {
+  body .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body dl { grid-template-columns: 1fr; }
+  body .table-wrap table:has(thead) { min-width: 720px; }
+}
+@page { size: A4; margin: 12mm; }
+@media print {
+  body header { padding: 16px; }
+  body main { padding: 12px 0; }
+  body .table-wrap { overflow: visible; }
+  body table { font-size: 9pt; }
+  body th, body td { padding: 5px; }
+  body .tag { font-size: 8pt; padding: 3px; letter-spacing: 0; }
+  body .finding-card { break-inside: auto; padding: 14px; }
+  body .finding-head, body dl > div, body .measure { break-inside: avoid; }
+  body h2, body h3 { break-after: avoid; }
+  body thead { display: table-header-group; }
+  body tr { break-inside: avoid; }
+}

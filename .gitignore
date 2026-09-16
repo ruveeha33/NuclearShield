@@ -1,0 +1,10 @@
+__pycache__/
+.pytest_cache/
+.venv/
+*.pyc
+*.egg-info/
+data/*.db
+!data/.gitkeep
+.env
+work-test-data/
+.runtime-ports.env

@@ -1,0 +1,25 @@
+event_id,timestamp,event_type,source,value,baseline,authorized,integrity,context
+NET-001,2026-08-19T09:00:00Z,network,fictional-zeek-sensor,12,10,true,valid,synthetic passive connection count
+NET-002,2026-08-19T09:01:00Z,network,fictional-suricata-sensor,41,10,true,valid,synthetic connection burst
+INT-001,2026-08-19T09:02:00Z,integrity,fictional-safety-validator,hash-b,hash-a,true,mismatch,synthetic firmware baseline mismatch
+ACC-001,2026-08-19T09:03:00Z,access,fictional-pacs,1,1,false,valid,synthetic entry without work authorization
+MAT-001,2026-08-19T09:04:00Z,material,fictional-mca-ledger,100.1,100,true,valid,synthetic accounting balance
+RAD-001,2026-08-19T09:05:00Z,radiation,fictional-portal,15,10,true,valid,synthetic elevated portal count
+CHG-001,2026-08-19T09:06:00Z,change,fictional-change-control,approved,approved,true,valid,synthetic signed release
+NET-003,2026-08-19T09:07:00Z,network,fictional-zeek-sensor,9,10,true,valid,synthetic normal connection count
+NET-004,2026-08-19T09:08:00Z,network,fictional-zeek-sensor,11,10,true,valid,synthetic normal connection count
+NET-005,2026-08-19T09:09:00Z,network,fictional-zeek-sensor,10,10,true,valid,synthetic normal connection count
+NET-006,2026-08-19T09:10:00Z,network,fictional-zeek-sensor,12,10,true,valid,synthetic normal connection count
+NET-007,2026-08-19T09:11:00Z,network,fictional-zeek-sensor,95,10,true,valid,synthetic statistical outlier
+INT-002,2026-08-19T09:12:00Z,integrity,fictional-safety-validator,hash-a,hash-a,true,valid,synthetic approved baseline
+INT-003,2026-08-19T09:13:00Z,integrity,fictional-safety-validator,hash-a,hash-a,true,valid,synthetic approved baseline
+ACC-002,2026-08-19T09:14:00Z,access,fictional-pacs,1,1,true,valid,synthetic authorized entry
+ACC-003,2026-08-19T09:15:00Z,access,fictional-pacs,1,1,true,valid,synthetic authorized exit
+MAT-002,2026-08-19T09:16:00Z,material,fictional-mca-ledger,99.9,100,true,valid,synthetic accounting balance
+MAT-003,2026-08-19T09:17:00Z,material,fictional-mca-ledger,100,100,true,valid,synthetic accounting balance
+RAD-002,2026-08-19T09:18:00Z,radiation,fictional-portal,10,10,true,valid,synthetic nominal portal count
+RAD-003,2026-08-19T09:19:00Z,radiation,fictional-portal,11,10,true,valid,synthetic nominal portal count
+RAD-004,2026-08-19T09:20:00Z,radiation,fictional-portal,9,10,true,valid,synthetic nominal portal count
+RAD-005,2026-08-19T09:21:00Z,radiation,fictional-portal,10,10,true,valid,synthetic nominal portal count
+RAD-006,2026-08-19T09:22:00Z,radiation,fictional-portal,65,10,true,valid,synthetic statistical outlier
+CHG-002,2026-08-19T09:23:00Z,change,fictional-change-control,unsigned,approved,false,mismatch,synthetic unapproved change

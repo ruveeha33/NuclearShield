@@ -1,0 +1,15 @@
+flowchart TD
+  A[Passive synthetic evidence sources] --> B[CSV or JSON transfer]
+  B --> C{Schema and size validation}
+  C -->|reject| X[Rejected counter and user-safe error]
+  C -->|accept| D[SHA-256 evidence digest]
+  D --> E[Baseline deviation and authorization rules]
+  E --> F[Explainable severity score]
+  F --> G[Human and safety review]
+  G --> H{Approved procedure?}
+  H -->|no| I[Preserve evidence and escalate]
+  H -->|yes| J[External approved containment process]
+  J --> K[Validated recovery baseline]
+  D --> L[Audit record]
+  F --> M[HTML report]
+

@@ -1,0 +1,28 @@
+{
+  "annotations":{"list":[]},"editable":true,"schemaVersion":41,
+  "tags":["synthetic","nuclear-cyber","defensive"],"timezone":"browser",
+  "title":"NuclearShield Detailed Evidence Assurance","uid":"nuclearshield","version":4,"refresh":"5s",
+  "time":{"from":"now-1h","to":"now"},"templating":{"list":[]},
+  "panels":[
+    {"id":1,"type":"stat","title":"API availability","gridPos":{"h":5,"w":4,"x":0,"y":0},"targets":[{"expr":"up{job=\"nuclearshield\"}","refId":"A"}]},
+    {"id":2,"type":"stat","title":"Accepted files","gridPos":{"h":5,"w":4,"x":4,"y":0},"targets":[{"expr":"sum(nuclearshield_ingestions_total{result=\"accepted\"})","refId":"A"}]},
+    {"id":3,"type":"stat","title":"Rejected files","gridPos":{"h":5,"w":4,"x":8,"y":0},"targets":[{"expr":"sum(nuclearshield_ingestions_total{result=\"rejected\"})","refId":"A"}]},
+    {"id":4,"type":"stat","title":"Processed records","gridPos":{"h":5,"w":4,"x":12,"y":0},"targets":[{"expr":"sum(nuclearshield_events_processed_total)","refId":"A"}]},
+    {"id":5,"type":"stat","title":"Rejected rows","gridPos":{"h":5,"w":4,"x":16,"y":0},"targets":[{"expr":"sum(nuclearshield_rows_rejected_total)","refId":"A"}]},
+    {"id":6,"type":"stat","title":"Analysis p95","gridPos":{"h":5,"w":4,"x":20,"y":0},"fieldConfig":{"defaults":{"unit":"s"}},"targets":[{"expr":"histogram_quantile(0.95,sum by(le)(rate(nuclearshield_analysis_duration_seconds_bucket[5m])))","refId":"A"}]},
+    {"id":7,"type":"timeseries","title":"Evidence ingestion rate","gridPos":{"h":8,"w":12,"x":0,"y":5},"targets":[{"expr":"sum by(result)(rate(nuclearshield_ingestions_total[5m]))","legendFormat":"{{result}}","refId":"A"}]},
+    {"id":8,"type":"bargauge","title":"Latest findings by severity","gridPos":{"h":8,"w":6,"x":12,"y":5},"targets":[{"expr":"nuclearshield_findings","legendFormat":"{{severity}}","refId":"A"}]},
+    {"id":9,"type":"bargauge","title":"Records by evidence domain","gridPos":{"h":8,"w":6,"x":18,"y":5},"targets":[{"expr":"sum by(event_type)(nuclearshield_events_processed_total)","legendFormat":"{{event_type}}","refId":"A"}]},
+    {"id":10,"type":"timeseries","title":"HTTP request rate","gridPos":{"h":8,"w":12,"x":0,"y":13},"targets":[{"expr":"sum by(path,status)(rate(nuclearshield_http_requests_total[5m]))","legendFormat":"{{path}} {{status}}","refId":"A"}]},
+    {"id":11,"type":"timeseries","title":"HTTP p95 latency","gridPos":{"h":8,"w":12,"x":12,"y":13},"fieldConfig":{"defaults":{"unit":"s"}},"targets":[{"expr":"histogram_quantile(0.95,sum by(le,path)(rate(nuclearshield_http_request_duration_seconds_bucket[5m])))","legendFormat":"{{path}}","refId":"A"}]},
+    {"id":12,"type":"timeseries","title":"Analysis duration","gridPos":{"h":8,"w":12,"x":0,"y":21},"fieldConfig":{"defaults":{"unit":"s"}},"targets":[{"expr":"rate(nuclearshield_analysis_duration_seconds_sum[5m])/rate(nuclearshield_analysis_duration_seconds_count[5m])","legendFormat":"mean","refId":"A"}]},
+    {"id":13,"type":"timeseries","title":"Upload volume","description":"Bytes received by the read-only evidence ingestion endpoint.","gridPos":{"h":8,"w":12,"x":12,"y":21},"fieldConfig":{"defaults":{"unit":"bytes"}},"targets":[{"expr":"rate(nuclearshield_upload_bytes_sum[5m])","legendFormat":"bytes/sec","refId":"A"}]},
+    {"id":14,"type":"bargauge","title":"Latest findings by detection engine","description":"Shows which explainable engine contributed to findings in the latest uploaded analysis.","gridPos":{"h":8,"w":8,"x":0,"y":29},"targets":[{"expr":"nuclearshield_findings_by_engine","legendFormat":"{{engine}}","refId":"A"}]},
+    {"id":15,"type":"piechart","title":"Cumulative evidence-domain distribution","description":"All accepted synthetic records processed since the service started.","gridPos":{"h":8,"w":8,"x":8,"y":29},"targets":[{"expr":"sum by(event_type)(nuclearshield_events_processed_total)","legendFormat":"{{event_type}}","refId":"A"}]},
+    {"id":16,"type":"timeseries","title":"Rejected HTTP responses","description":"Application responses with 4xx or 5xx status for troubleshooting and recovery demonstration.","gridPos":{"h":8,"w":8,"x":16,"y":29},"targets":[{"expr":"sum by(path,status)(rate(nuclearshield_http_requests_total{status=~\"4..|5..\"}[5m]))","legendFormat":"{{path}} {{status}}","refId":"A"}]},
+    {"id":17,"type":"table","title":"Current severity evidence","description":"Latest finding gauges with exact severity labels and values.","gridPos":{"h":8,"w":12,"x":0,"y":37},"targets":[{"expr":"nuclearshield_findings","legendFormat":"{{severity}}","refId":"A","format":"table","instant":true}]},
+    {"id":18,"type":"table","title":"Current engine evidence","description":"Exact latest-analysis engine contribution counts for examiner walkthrough.","gridPos":{"h":8,"w":12,"x":12,"y":37},"targets":[{"expr":"nuclearshield_findings_by_engine","legendFormat":"{{engine}}","refId":"A","format":"table","instant":true}]},
+    {"id":19,"type":"timeseries","title":"Analysis throughput","description":"Accepted evidence records processed by domain per five-minute interval.","gridPos":{"h":8,"w":12,"x":0,"y":45},"targets":[{"expr":"sum by(event_type)(increase(nuclearshield_events_processed_total[5m]))","legendFormat":"{{event_type}}","refId":"A"}]},
+    {"id":20,"type":"timeseries","title":"Service recovery timeline","description":"A value of 1 means Prometheus can scrape NuclearShield; 0 demonstrates outage and recovery.","gridPos":{"h":8,"w":12,"x":12,"y":45},"targets":[{"expr":"up{job=\"nuclearshield\"}","legendFormat":"NuclearShield availability","refId":"A"}]}
+  ]
+}

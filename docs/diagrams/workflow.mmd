@@ -1,0 +1,17 @@
+sequenceDiagram
+  actor Student
+  participant UI as NuclearShield UI
+  participant API as Evidence API
+  participant Analyzer
+  participant Audit
+  Student->>UI: Choose synthetic evidence
+  UI->>API: POST read-only CSV or JSON
+  API->>API: Validate and hash
+  API->>Analyzer: Analyze declared baselines
+  Analyzer-->>API: Explained findings
+  API->>Audit: Append evidence digest and summary
+  API-->>UI: Render findings
+  Student->>UI: Open HTML report
+  UI->>API: GET report
+  API-->>Student: Synthetic safeguards report
+

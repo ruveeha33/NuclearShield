@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title">
+  <title id="title">Nuclear safety symbol</title>
+  <rect x="3" y="3" width="42" height="42" rx="9" fill="#102d28"/>
+  <circle cx="24" cy="24" r="17.5" fill="none" stroke="#63b7a7" stroke-width="2"/>
+  <g fill="#63b7a7">
+    <path d="M21.2 18.5 15 8.7A18 18 0 0 1 33 8.7l-6.2 9.8a7 7 0 0 0-5.6 0Z"/>
+    <path d="M21.2 18.5 15 8.7A18 18 0 0 1 33 8.7l-6.2 9.8a7 7 0 0 0-5.6 0Z" transform="rotate(120 24 24)"/>
+    <path d="M21.2 18.5 15 8.7A18 18 0 0 1 33 8.7l-6.2 9.8a7 7 0 0 0-5.6 0Z" transform="rotate(240 24 24)"/>
+  </g>
+  <circle cx="24" cy="24" r="4.2" fill="#d7a449"/>
+</svg>
