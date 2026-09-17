@@ -119,7 +119,7 @@ if (-not $portsReady) {
 Write-Host "Ports are available."
 Write-Host "Starting NuclearShield, Prometheus and Grafana from cached images..."
 
-docker compose up --build --pull never --force-recreate -d
+docker compose up --build --pull missing --force-recreate -d
 
 if ($LASTEXITCODE -ne 0) {
     throw "Docker Compose could not start NuclearShield. Run 'docker compose ps -a' and 'docker compose logs' for details."

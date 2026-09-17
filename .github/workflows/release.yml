@@ -1,0 +1,99 @@
+name: Build NuclearShield Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build Cross-Platform Packages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine version
+        id: version
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            echo "version=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=development" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Prepare common package
+        shell: bash
+        run: |
+          mkdir -p dist/common/NuclearShield
+
+          cp -R app dist/common/NuclearShield/
+          cp -R monitoring dist/common/NuclearShield/
+          cp -R sample-data dist/common/NuclearShield/
+
+          cp Dockerfile dist/common/NuclearShield/
+          cp docker-compose.yml dist/common/NuclearShield/
+          cp .env.example dist/common/NuclearShield/
+          cp README.md dist/common/NuclearShield/
+          cp QUICK-START.md dist/common/NuclearShield/
+          cp LICENSE dist/common/NuclearShield/
+
+          cp start-nuclearshield.ps1 dist/common/NuclearShield/
+          cp Start-NuclearShield.bat dist/common/NuclearShield/
+          cp Stop-NuclearShield.bat dist/common/NuclearShield/
+          cp start-nuclearshield.sh dist/common/NuclearShield/
+          cp stop-nuclearshield.sh dist/common/NuclearShield/
+
+      - name: Build Windows package
+        shell: bash
+        run: |
+          mkdir -p dist/windows
+          cp -R dist/common/NuclearShield dist/windows/
+          cd dist/windows
+          zip -r "../NuclearShield-${{ steps.version.outputs.version }}-Windows.zip" NuclearShield
+
+      - name: Build macOS package
+        shell: bash
+        run: |
+          mkdir -p dist/macos
+          cp -R dist/common/NuclearShield dist/macos/
+          chmod +x dist/macos/NuclearShield/start-nuclearshield.sh
+          chmod +x dist/macos/NuclearShield/stop-nuclearshield.sh
+          tar -czf "dist/NuclearShield-${{ steps.version.outputs.version }}-macOS.tar.gz" -C dist/macos NuclearShield
+
+      - name: Build Linux package
+        shell: bash
+        run: |
+          mkdir -p dist/linux
+          cp -R dist/common/NuclearShield dist/linux/
+          chmod +x dist/linux/NuclearShield/start-nuclearshield.sh
+          chmod +x dist/linux/NuclearShield/stop-nuclearshield.sh
+          tar -czf "dist/NuclearShield-${{ steps.version.outputs.version }}-Linux.tar.gz" -C dist/linux NuclearShield
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: NuclearShield-${{ steps.version.outputs.version }}
+          path: |
+            dist/NuclearShield-${{ steps.version.outputs.version }}-Windows.zip
+            dist/NuclearShield-${{ steps.version.outputs.version }}-macOS.tar.gz
+            dist/NuclearShield-${{ steps.version.outputs.version }}-Linux.tar.gz
+
+      - name: Publish GitHub Release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            "dist/NuclearShield-${{ steps.version.outputs.version }}-Windows.zip" \
+            "dist/NuclearShield-${{ steps.version.outputs.version }}-macOS.tar.gz" \
+            "dist/NuclearShield-${{ steps.version.outputs.version }}-Linux.tar.gz" \
+            --title "NuclearShield ${GITHUB_REF_NAME}" \
+            --generate-notes
