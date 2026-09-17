@@ -9,7 +9,7 @@ NuclearShield is a defensive, read-only, evidence-driven cybersecurity assurance
 
 ---
 
-## ✨ What NuclearShield Demonstrates
+##  What NuclearShield Demonstrates
 
 - Read-only CSV and JSON evidence ingestion
 - SHA-256 provenance and evidence validation
