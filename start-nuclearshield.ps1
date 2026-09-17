@@ -39,6 +39,10 @@ $appPort = if ($settings["APP_PORT"]) { [int]$settings["APP_PORT"] } else { 8000
 $prometheusPort = if ($settings["PROMETHEUS_PORT"]) { [int]$settings["PROMETHEUS_PORT"] } else { 9090 }
 $grafanaPort = if ($settings["GRAFANA_PORT"]) { [int]$settings["GRAFANA_PORT"] } else { 3000 }
 
+Write-Host "Stopping any existing NuclearShield containers for this checkout..."
+docker compose down --remove-orphans
+if ($LASTEXITCODE -ne 0) { throw "Could not stop the existing NuclearShield Compose stack." }
+
 function Test-HostPort {
     param(
         [int]$Port,
