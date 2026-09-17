@@ -11,21 +11,21 @@ NuclearShield is a defensive, read-only, evidence-driven cybersecurity assurance
 
 ## ✨ What NuclearShield Demonstrates
 
-- 🛡️ Read-only CSV and JSON evidence ingestion
-- 🔐 SHA-256 provenance and evidence validation
-- 🌐 Zeek/Suricata-style passive network evidence
-- ⚙️ SCADA and industrial-control evidence views
-- 🧩 Integrity and authorization checks
-- 📊 Explainable statistical anomaly detection
-- 🔗 Actor, asset, and time-window correlation
-- ☢️ Material and radiation evidence handling
-- 📑 Detailed in-browser safeguards reports
-- 📈 Prometheus metrics
-- 📉 Provisioned Grafana monitoring dashboard
-- 🧾 Append-only demonstration audit records
-- 🐳 Docker-based reproducible deployment
-- 🔄 CI/CD and static security-analysis workflow
-- 🗺️ Editable architecture and workflow diagrams
+- Read-only CSV and JSON evidence ingestion
+- SHA-256 provenance and evidence validation
+- Zeek/Suricata-style passive network evidence
+- SCADA and industrial-control evidence views
+- Integrity and authorization checks
+- Explainable statistical anomaly detection
+- Actor, asset, and time-window correlation
+- Material and radiation evidence handling
+- Detailed in-browser safeguards reports
+- Prometheus metrics
+- Provisioned Grafana monitoring dashboard
+- Append-only demonstration audit records
+- Docker-based reproducible deployment
+- CI/CD and static security-analysis workflow
+- Editable architecture and workflow diagrams
 
 ---
 
@@ -505,52 +505,3 @@ The student remains responsible for understanding, validating, presenting, and d
 The AI-assisted detection path is intended to remain transparent and explainable rather than acting as an autonomous nuclear decision system.
 
 ---
-
-# 💫 About Me
-
-I’m **Ruveeha Ashfaq**, Co-Founder of **HR-Presents**.
-
-I work across **DevOps, cloud, cybersecurity, automation, and secure software development**. At HR-Presents, I help shape ideas, support product development, and contribute to the journey behind **AegisLog AI** and **Sentrix**.
-
-I’m studying at **Al Nafi International College** and strengthening my skills through hands-on work with Linux, Python, Docker, CI/CD, cloud platforms, monitoring, and security tooling.
-
-My learning journey includes **AWS Cloud Practitioner training**, **AWS Generative AI Practitioner training**, and preparation across the core domains of **ISC2 Certified in Cybersecurity (CC)**.
-
----
-
-## 🌐 Connect
-
-- **LinkedIn:** Ruveeha Ashfaq
-- **GitHub:** `ruveeha33`
-- **Organization:** HR-Presents
-
----
-
-## 💻 Tech Stack
-
-`Python` · `Flask` · `FastAPI` · `Bash` · `Linux` · `Docker` · `Git` · `GitHub Actions` · `AWS` · `Jira` · `Prometheus` · `Grafana` · `Cybersecurity` · `DevOps` · `CI/CD`
-
----
-
-## 🚀 Selected Work
-
-- ☢️ **NuclearShield**
-- 🛡️ **AegisLog AI**
-- 🔎 **Sentrix**
-- 📊 **AI Log Analyzer**
-- 🐍 **Python Quality Platform**
-- ☁️ **AWS Cloud Practitioner Journey**
-- 🔐 **Cybersecurity Training**
-
----
-
-## 👩‍💻 Author
-
-**Ruveeha Ashfaq**  
-Co-Founder, **HR-Presents**
-
-Built as a defensive, read-only cybersecurity assurance project with a strong emphasis on explainability, evidence integrity, monitoring, and safety boundaries.
-
----
-
-⭐ If NuclearShield helps you explore defensive cybersecurity, DevSecOps, monitoring, or evidence-driven assurance, consider starring the repository.
