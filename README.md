@@ -18,7 +18,7 @@ NuclearShield is a GitHub-ready implementation of an **Advanced Nuclear Facility
 
 ## Fastest complete setup with Docker
 
-Prerequisites: Git, Docker Desktop, Docker Compose, and free ports 8000, 9090 and 3000.
+Prerequisites: Git, Docker Desktop and Docker Compose. The default local ports are NuclearShield 8000, Prometheus 9090, and Grafana 3000. The launcher checks Docker Engine availability and configured host ports before startup. Host ports can be changed in .env using APP_PORT, PROMETHEUS_PORT, and GRAFANA_PORT.
 
 ```powershell
 git clone https://github.com/ruveeha33/NuclearShield.git
