@@ -1,51 +1,253 @@
-# NuclearShield
+# ☢️ NuclearShield
 
-NuclearShield is a GitHub-ready implementation of an **Advanced Nuclear Facility Cybersecurity Platform with SCADA Protection, Safety System Integrity, and Nuclear Material Security for Civil and Defense Applications**. It demonstrates how a safety-preserving assurance platform can ingest passive evidence, identify explainable anomalies, correlate cyber/physical/material records, retain an audit trail, generate an HTML safeguards report, and expose health metrics to Prometheus and Grafana.
+> **Advanced Nuclear Facility Cybersecurity Platform with SCADA Protection, Safety System Integrity, and Nuclear Material Security for Civil and Defense Applications**
 
-> **Safety boundary:** Every included record is fictional and labeled synthetic. NuclearShield cannot send commands and must never connect to a real nuclear, SCADA, I&C, safety, physical-access or material-accounting environment.
+NuclearShield is a defensive, read-only, evidence-driven cybersecurity assurance workstation designed to demonstrate how passive evidence can be ingested, validated, analyzed, correlated, monitored, and reported without sending commands to operational technology.
 
-## What you can demonstrate
+> ⚠️ **Safety Boundary**  
+> Every included record is fictional and labeled synthetic. NuclearShield must never be connected to a real nuclear, SCADA, I&C, safety, physical-access, or material-accounting environment.
 
-- A premium responsive dashboard with original floating facility artwork.
-- Read-only CSV/JSON evidence ingestion with validation and SHA-256 provenance.
-- Zeek/Suricata-style passive network records, integrity records, access events, MC&A/radiation evidence and change records.
-- Five explainable detection paths: baseline rules, authorization checks, integrity validation, robust statistical anomaly scoring and actor/asset correlation.
-- A detailed Sentrix-inspired in-browser HTML report covering what was detected, which evidence source detected it, the detection method, recommended measures, decision authority, compliance mapping and append-only demo audit records.
-- Persistent multi-file history with dataset switching and dedicated Ingestion, Overview, SCADA, Integrity, Material, AI Detection, DevSecOps, Compliance, Reports, Monitoring and Audit views.
-- Prometheus metrics and a provisioned Grafana dashboard with working local links.
-- Editable Mermaid architecture, data-flow, workflow and security diagrams.
-- Level 6 trade-offs, failure/recovery and oral-exam runbook.
+---
 
-## Fastest complete setup with Docker
+## ✨ What NuclearShield Demonstrates
 
-Prerequisites: Git, Docker Desktop and Docker Compose. The default local ports are NuclearShield 8000, Prometheus 9090, and Grafana 3000. The launcher checks Docker Engine availability and configured host ports before startup. Host ports can be changed in .env using APP_PORT, PROMETHEUS_PORT, and GRAFANA_PORT.
+- 🛡️ Read-only CSV and JSON evidence ingestion
+- 🔐 SHA-256 provenance and evidence validation
+- 🌐 Zeek/Suricata-style passive network evidence
+- ⚙️ SCADA and industrial-control evidence views
+- 🧩 Integrity and authorization checks
+- 📊 Explainable statistical anomaly detection
+- 🔗 Actor, asset, and time-window correlation
+- ☢️ Material and radiation evidence handling
+- 📑 Detailed in-browser safeguards reports
+- 📈 Prometheus metrics
+- 📉 Provisioned Grafana monitoring dashboard
+- 🧾 Append-only demonstration audit records
+- 🐳 Docker-based reproducible deployment
+- 🔄 CI/CD and static security-analysis workflow
+- 🗺️ Editable architecture and workflow diagrams
+
+---
+
+## 🚀 Quick Start — Windows + Docker
+
+### 1️⃣ Prerequisites
+
+Install:
+
+- Git
+- Docker Desktop
+- Docker Compose
+
+Make sure **Docker Desktop is running** before starting NuclearShield.
+
+Default host ports:
+
+| Service | Default Port |
+|---|---:|
+| NuclearShield | `8000` |
+| Prometheus | `9090` |
+| Grafana | `3000` |
+
+The ports can be changed in `.env` if another local application already uses them.
+
+---
+
+### 2️⃣ Clone NuclearShield
+
+Open **PowerShell**:
 
 ```powershell
+cd $HOME\Documents
 git clone https://github.com/ruveeha33/NuclearShield.git
 cd NuclearShield
-Copy-Item .env.example .env
-powershell -ExecutionPolicy Bypass -File .\\start-nuclearshield.ps1
 ```
 
-The launcher rebuilds and recreates the containers from cached images, waits for the
-application health check, and opens NuclearShield automatically. It uses
-`--pull never`, so it does not download Docker images.
+If you already cloned the repository:
 
-Open:
+```powershell
+cd $HOME\Documents\NuclearShield
+git pull origin main
+```
 
-- Web application: <http://localhost:8000>
-- HTML report: <http://localhost:8000/api/report>
-- Prometheus targets: <http://localhost:9090/targets>
-- Prometheus prepared query: <http://localhost:9090/query?g0.expr=up%7Bjob%3D%22nuclearshield%22%7D&g0.show_tree=0&g0.tab=table>
-- Grafana dashboard: <http://localhost:3000/d/nuclearshield/nuclearshield-evidence-assurance>
+If your clone is stored somewhere else, simply `cd` into that NuclearShield directory.
 
-Grafana demo login defaults to `admin` / `nuclearshield-demo`. Change it in `.env` before using the stack outside a private local demonstration.
+---
 
-On the web application, open **Ingestion** and select **Analyze 24-row synthetic demonstration**. Prometheus begins collecting metrics automatically. The Grafana data source and twenty-panel dashboard are provisioned during startup. The Monitoring page includes direct links to targets, Grafana, raw metrics and prepared example queries.
+### 3️⃣ Create the Local Environment File
 
-The **Monitoring** page checks the actual Prometheus and Grafana service health from inside the Docker network. If either service is unavailable it reports that state instead of displaying a false success.
+```powershell
+Copy-Item .env.example .env
+```
 
-If an older Grafana image previously failed to download, run:
+The default configuration includes:
+
+```env
+APP_PORT=8000
+PROMETHEUS_PORT=9090
+GRAFANA_PORT=3000
+
+GRAFANA_ADMIN_USER=admin
+GRAFANA_ADMIN_PASSWORD=nuclearshield-demo
+```
+
+If port `8000`, `9090`, or `3000` is already being used, edit `.env` and assign a different host port.
+
+Example:
+
+```env
+APP_PORT=8001
+PROMETHEUS_PORT=9091
+GRAFANA_PORT=3001
+```
+
+---
+
+### 4️⃣ Start NuclearShield
+
+Run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\start-nuclearshield.ps1
+```
+
+The launcher:
+
+1. Checks that Docker is installed.
+2. Verifies that the Docker Engine is running.
+3. Creates `.env` from `.env.example` when necessary.
+4. Reads the configured host ports.
+5. Checks those ports for conflicts.
+6. Reports the owning Windows process or Docker container when possible.
+7. Starts NuclearShield, Prometheus, and Grafana.
+8. Waits for the NuclearShield API health check.
+9. Opens NuclearShield automatically in your browser.
+
+Normal launcher startup uses cached images with `--pull never`.
+
+---
+
+## 🌐 Open the Services
+
+With the default ports:
+
+| Service | Address |
+|---|---|
+| NuclearShield | `http://localhost:8000` |
+| HTML Report | `http://localhost:8000/api/report` |
+| Prometheus | `http://localhost:9090` |
+| Prometheus Targets | `http://localhost:9090/targets` |
+| Grafana | `http://localhost:3000` |
+
+Grafana demonstration login:
+
+```text
+Username: admin
+Password: nuclearshield-demo
+```
+
+Change the Grafana password in `.env` before using the stack outside a private local demonstration.
+
+---
+
+## 🧪 Run the Synthetic Demonstration
+
+After NuclearShield opens:
+
+1. Open **Ingestion**.
+2. Select **Analyze 24-row synthetic demonstration**.
+3. Allow the evidence pipeline to process the dataset.
+4. Review the Overview and domain-specific evidence views.
+5. Open **AI Detection** for explainable anomaly results.
+6. Open **Reports** for detailed detection evidence.
+7. Open **Monitoring** for Prometheus and Grafana access.
+8. Open **Audit** for demonstration traceability.
+
+Prometheus collects metrics automatically after the stack is running.
+
+The Grafana data source and NuclearShield dashboard are provisioned during startup.
+
+---
+
+## 🧯 Port Conflict Troubleshooting
+
+To see the running containers:
+
+```powershell
+docker ps
+```
+
+To inspect the NuclearShield Compose stack:
+
+```powershell
+docker compose ps
+```
+
+To identify a Windows process using port `8000`:
+
+```powershell
+Get-NetTCPConnection -LocalPort 8000 -State Listen
+```
+
+For Prometheus:
+
+```powershell
+Get-NetTCPConnection -LocalPort 9090 -State Listen
+```
+
+For Grafana:
+
+```powershell
+Get-NetTCPConnection -LocalPort 3000 -State Listen
+```
+
+If another legitimate application needs the port, do **not** terminate it unnecessarily. Change the corresponding port in `.env` instead.
+
+---
+
+## 🐳 Docker Commands
+
+### Check container status
+
+```powershell
+docker compose ps
+```
+
+### View logs
+
+```powershell
+docker compose logs
+```
+
+### Follow logs live
+
+```powershell
+docker compose logs -f
+```
+
+### Stop NuclearShield
+
+```powershell
+docker compose down
+```
+
+### Start again
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\start-nuclearshield.ps1
+```
+
+### Rebuild manually
+
+```powershell
+docker compose up --build --pull never --force-recreate -d
+```
+
+---
+
+## 📥 Prometheus / Grafana Image Recovery
+
+If the required Prometheus or Grafana image is not available locally:
 
 ```powershell
 docker compose down
@@ -54,21 +256,23 @@ docker compose up --build -d
 docker compose ps
 ```
 
-Stop the stack:
+This intentionally downloads the required monitoring images.
 
-```powershell
-docker compose down
-```
+---
 
-Remove the local demo volumes only when you intentionally want to erase audit and monitoring data:
+## 🗑️ Reset Local Demonstration Data
+
+Only run this when you intentionally want to remove the Docker volumes containing local demonstration and monitoring data:
 
 ```powershell
 docker compose down --volumes
 ```
 
-## Run without Docker
+---
 
-This starts the website and API only. Prometheus and Grafana require the Docker path above.
+## 🐍 Run Without Docker
+
+This starts the NuclearShield website/API directly. Prometheus and Grafana still require the Docker deployment path.
 
 ```powershell
 py -3.12 -m venv .venv
@@ -79,43 +283,274 @@ $env:NUCLEARSHIELD_DATA_DIR = "$PWD\data"
 uvicorn app.main:app --reload
 ```
 
-In another terminal:
+Open:
+
+```text
+http://localhost:8000
+```
+
+---
+
+## 🧪 Development Checks
+
+Activate the virtual environment:
 
 ```powershell
-cd NuclearShield
 .venv\Scripts\Activate.ps1
+```
+
+Run tests:
+
+```powershell
 pytest -q
+```
+
+Run Ruff:
+
+```powershell
 ruff check app tests
+```
+
+Run Bandit:
+
+```powershell
 bandit -q -r app -x app/static
 ```
 
-## Evidence schema
+---
 
-CSV and JSON files use a flexible adapter. It recognizes common alternatives for ID, timestamp, source, observed value, baseline, actor and asset, generates safe row IDs when absent, and infers one of six evidence domains where necessary. Optional authorization, integrity and signature fields enrich scoring. Every accepted and rejected row is counted. The demonstration limit is 10 MB and 50,000 records per file.
-
-For the strongest analysis, provide `event_id`, `timestamp`, `event_type`, `source`, `value`, `baseline`, `authorized`, `integrity`, `actor` and `asset`. Robust peer-group anomaly scoring activates when an evidence domain contains at least five numeric records.
-
-The analyzer treats declared evidence as untrusted input. It reports deviations; it does not assert that an event represents a real plant condition.
-
-## Repository map
+## 🔄 Evidence Workflow
 
 ```text
-app/                 FastAPI API, analyzer, audit store and responsive frontend
-sample-data/         Fictional evidence used in the oral demonstration
-monitoring/          Prometheus and provisioned Grafana configuration
-docs/diagrams/       Editable Mermaid architecture, data-flow, workflow and security diagrams
-docs/DEMO.md         End-to-end oral demonstration and failure/recovery sequence
-docs/DECISIONS.md    Level 6 architecture rationale and trade-offs
-tests/               Analyzer and API safety-boundary tests
-.github/workflows/   Test, lint and static security-analysis gates
+Synthetic CSV / JSON Evidence
+            │
+            ▼
+      Evidence Ingestion
+            │
+            ▼
+   Validation + Provenance
+            │
+            ▼
+   Domain Classification
+            │
+            ▼
+ ┌─────────────────────────┐
+ │ Deterministic Rules     │
+ │ Authorization Checks    │
+ │ Integrity Validation    │
+ │ Statistical Detection   │
+ │ Evidence Correlation    │
+ └─────────────────────────┘
+            │
+            ▼
+   Explainable Findings
+            │
+      ┌─────┴─────┐
+      ▼           ▼
+   Reports     Monitoring
+                 │
+           ┌─────┴─────┐
+           ▼           ▼
+       Prometheus    Grafana
 ```
 
-## Responsible AI disclosure
+---
 
-AI assisted with code, documentation and original artwork generation. The student remains responsible for understanding, validating and defending every design choice. The AI-assisted path uses transparent median/MAD peer-group anomaly detection, combines it with deterministic rules and correlations, and exposes confidence and contributors. It does not represent a validated nuclear ML model.
+## 🧠 Detection Approach
 
-## Scope and limitations
+NuclearShield uses explainable detection paths including:
 
-This project maps evidence themes to IEC 62645, NRC RG 5.71 and IAEA guidance. It does not reproduce those standards, certify compliance, validate a physical data diode, implement a production SIEM, or replace qualified safety, safeguards, cyber or regulatory authorities.
+- Baseline deviation rules
+- Authorization validation
+- Integrity checks
+- Robust peer-group statistical anomaly scoring
+- Actor/asset correlation
 
-Use [docs/REQUIREMENTS-MAP.md](docs/REQUIREMENTS-MAP.md) to trace requirements and [docs/DEMO.md](docs/DEMO.md) for the presentation walkthrough.
+The AI-assisted analysis path uses transparent statistical methods such as median/MAD peer-group anomaly detection together with deterministic rules and correlations.
+
+NuclearShield reports **evidence deviations**. It does not claim that a detected event represents an actual nuclear-plant condition.
+
+---
+
+## 📂 Evidence Schema
+
+CSV and JSON evidence can include fields such as:
+
+```text
+event_id
+timestamp
+event_type
+source
+value
+baseline
+authorized
+integrity
+actor
+asset
+```
+
+The adapter recognizes common field alternatives and can infer evidence domains where appropriate.
+
+Every accepted and rejected row is counted.
+
+Demonstration limits:
+
+- Maximum file size: **10 MB**
+- Maximum records per file: **50,000**
+
+---
+
+## 🏗️ Repository Structure
+
+```text
+NuclearShield/
+│
+├── app/                  # FastAPI application, analyzer and frontend
+├── sample-data/          # Fictional synthetic demonstration evidence
+├── monitoring/           # Prometheus and Grafana configuration
+├── docs/                 # Project documentation and diagrams
+├── tests/                # Analyzer and API safety-boundary tests
+├── .github/workflows/    # CI/CD and security-analysis gates
+├── Dockerfile
+├── docker-compose.yml
+├── .env.example
+├── start-nuclearshield.ps1
+└── README.md
+```
+
+---
+
+## 🔐 Security Design
+
+The Docker deployment applies defensive restrictions to the NuclearShield application container, including:
+
+- Read-only container filesystem
+- Dedicated persistent evidence volume
+- Temporary `/tmp` filesystem
+- `no-new-privileges`
+- Dropped Linux capabilities
+- Non-root application user
+- Application health checks
+- Synthetic evidence boundary
+- No operational control capability
+
+NuclearShield is designed for **demonstration, education, evidence analysis, and defensive assurance** — not plant operation.
+
+---
+
+## 📊 Monitoring
+
+Prometheus collects NuclearShield health and application metrics.
+
+Grafana provides the provisioned monitoring dashboard.
+
+The NuclearShield **Monitoring** page checks the actual service health of Prometheus and Grafana from inside the Docker network rather than displaying a static success state.
+
+---
+
+## 📑 Reports
+
+NuclearShield provides a detailed HTML safeguards report containing:
+
+- Executive summary
+- Detection results
+- Evidence source
+- Detection methodology
+- Record-level evidence
+- Correlation information
+- SHA-256 provenance
+- Recommended defensive measures
+- Decision authority
+- Compliance mapping
+- Audit traceability
+- Safety and methodology limitations
+
+---
+
+## ⚠️ Responsible Use
+
+NuclearShield is a defensive educational and assurance platform.
+
+It must **not** be used to:
+
+- Control nuclear equipment
+- Send commands to SCADA/PLC/I&C systems
+- Modify safety systems
+- Operate physical-access systems
+- Operate material-accounting systems
+- Represent synthetic evidence as real plant telemetry
+
+All included demonstration evidence is fictional and synthetic.
+
+---
+
+## 📚 Standards & Scope
+
+The project maps evidence themes to areas discussed in:
+
+- IEC 62645
+- NRC Regulatory Guide 5.71
+- IAEA cybersecurity guidance
+
+This project does **not** claim regulatory certification or compliance and does not replace qualified safety, safeguards, cybersecurity, or regulatory authorities.
+
+---
+
+## 🤖 Responsible AI Disclosure
+
+AI assisted with parts of the code, documentation, and original visual development.
+
+The student remains responsible for understanding, validating, presenting, and defending the project's design decisions.
+
+The AI-assisted detection path is intended to remain transparent and explainable rather than acting as an autonomous nuclear decision system.
+
+---
+
+# 💫 About Me
+
+I’m **Ruveeha Ashfaq**, Co-Founder of **HR-Presents**.
+
+I work across **DevOps, cloud, cybersecurity, automation, and secure software development**. At HR-Presents, I help shape ideas, support product development, and contribute to the journey behind **AegisLog AI** and **Sentrix**.
+
+I’m studying at **Al Nafi International College** and strengthening my skills through hands-on work with Linux, Python, Docker, CI/CD, cloud platforms, monitoring, and security tooling.
+
+My learning journey includes **AWS Cloud Practitioner training**, **AWS Generative AI Practitioner training**, and preparation across the core domains of **ISC2 Certified in Cybersecurity (CC)**.
+
+---
+
+## 🌐 Connect
+
+- **LinkedIn:** Ruveeha Ashfaq
+- **GitHub:** `ruveeha33`
+- **Organization:** HR-Presents
+
+---
+
+## 💻 Tech Stack
+
+`Python` · `Flask` · `FastAPI` · `Bash` · `Linux` · `Docker` · `Git` · `GitHub Actions` · `AWS` · `Jira` · `Prometheus` · `Grafana` · `Cybersecurity` · `DevOps` · `CI/CD`
+
+---
+
+## 🚀 Selected Work
+
+- ☢️ **NuclearShield**
+- 🛡️ **AegisLog AI**
+- 🔎 **Sentrix**
+- 📊 **AI Log Analyzer**
+- 🐍 **Python Quality Platform**
+- ☁️ **AWS Cloud Practitioner Journey**
+- 🔐 **Cybersecurity Training**
+
+---
+
+## 👩‍💻 Author
+
+**Ruveeha Ashfaq**  
+Co-Founder, **HR-Presents**
+
+Built as a defensive, read-only cybersecurity assurance project with a strong emphasis on explainability, evidence integrity, monitoring, and safety boundaries.
+
+---
+
+⭐ If NuclearShield helps you explore defensive cybersecurity, DevSecOps, monitoring, or evidence-driven assurance, consider starring the repository.
