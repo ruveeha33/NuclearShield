@@ -14,7 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, Gauge, Histogram, generate_latest
 
 from .analyzer import analyze, build_summary, digest, finding_dicts, parse_evidence
-from .store import append_audit, delete_analysis, get_analysis, list_analyses, recent_audit, save_analysis
+from .store import append_audit, get_analysis, list_analyses, recent_audit, save_analysis
 
 ROOT = Path(__file__).resolve().parent
 app = FastAPI(title="NuclearShield", version="1.0.0")
@@ -166,14 +166,6 @@ def analysis_detail(analysis_id: str) -> dict:
     return analysis
 
 
-@app.delete("/api/analyses/{analysis_id}")
-def remove_analysis(analysis_id: str) -> dict:
-    deleted = delete_analysis(analysis_id)
-    if not deleted:
-        raise HTTPException(status_code=404, detail="Analysis not found")
-    return deleted
-
-
 @app.get("/api/detections")
 def detections(
     analysis_id: str | None = None, event_type: str | None = None, severity: str | None = None
@@ -259,9 +251,6 @@ def platform_status() -> dict:
         except (URLError, TimeoutError, OSError):
             return "unavailable"
 
-    app_port = os.getenv("PUBLIC_APP_PORT", "8000")
-    prometheus_port = os.getenv("PUBLIC_PROMETHEUS_PORT", "9090")
-    grafana_port = os.getenv("PUBLIC_GRAFANA_PORT", "3000")
     return {
         "api": "healthy",
         "database": "healthy",
@@ -274,11 +263,6 @@ def platform_status() -> dict:
         ),
         "control_capability": "none",
         "synthetic_mode": True,
-        "public_urls": {
-            "application": f"http://localhost:{app_port}",
-            "prometheus": f"http://localhost:{prometheus_port}",
-            "grafana": f"http://localhost:{grafana_port}",
-        },
     }
 
 

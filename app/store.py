@@ -136,17 +136,3 @@ def get_analysis(analysis_id: str | None = None) -> dict | None:
         "finding_count": row["finding_count"],
         **payload,
     }
-
-
-def delete_analysis(analysis_id: str) -> dict | None:
-    selected = get_analysis(analysis_id)
-    if not selected:
-        return None
-    with connect() as connection:
-        connection.execute("DELETE FROM analyses WHERE id = ?", (analysis_id,))
-    append_audit(
-        "analysis_deleted",
-        selected["digest"],
-        {"analysis_id": analysis_id, "filename": selected["filename"]},
-    )
-    return {"deleted": True, "id": analysis_id, "filename": selected["filename"]}

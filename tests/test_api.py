@@ -44,17 +44,6 @@ def test_upload_persists_analysis_and_populates_dynamic_views(tmp_path, monkeypa
     assert "Zeek/Suricata-style passive network evidence" in report.text
 
 
-def test_analysis_can_be_deleted_while_audit_is_retained(tmp_path, monkeypatch):
-    monkeypatch.setenv("NUCLEARSHIELD_DATA_DIR", str(tmp_path))
-    raw = b"event_id,event_type,value,baseline\nDELETE-1,network,50,10\n"
-    created = client.post("/api/ingest", files={"file": ("delete.csv", raw)}).json()
-    response = client.delete(f"/api/analyses/{created['analysis_id']}")
-    assert response.status_code == 200
-    assert client.get(f"/api/analyses/{created['analysis_id']}").status_code == 404
-    audit = client.get("/api/audit?search=analysis_deleted").json()
-    assert audit[0]["action"] == "analysis_deleted"
-
-
 def test_platform_status_is_truthful():
     response = client.get("/api/platform-status")
     assert response.status_code == 200

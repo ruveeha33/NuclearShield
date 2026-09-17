@@ -43,15 +43,3 @@ def test_service_health_uses_configured_hosts(monkeypatch):
     status = TestClient(app).get("/api/platform-status").json()
     assert status["prometheus"] == "healthy"
     assert urls == ["http://prometheus:9090/-/ready", "http://grafana:3000/api/health"]
-
-
-def test_public_monitoring_urls_use_selected_ports(monkeypatch):
-    monkeypatch.setenv("PUBLIC_APP_PORT", "8012")
-    monkeypatch.setenv("PUBLIC_PROMETHEUS_PORT", "9102")
-    monkeypatch.setenv("PUBLIC_GRAFANA_PORT", "3012")
-    status = TestClient(app).get("/api/platform-status").json()
-    assert status["public_urls"] == {
-        "application": "http://localhost:8012",
-        "prometheus": "http://localhost:9102",
-        "grafana": "http://localhost:3012",
-    }
