@@ -1,7 +1,8 @@
-services:
+﻿services:
   nuclearshield:
     build: .
-    ports: ["8000:8000"]
+    ports:
+      - "${APP_PORT:-8000}:8000"
     environment:
       NUCLEARSHIELD_DATA_DIR: /app/data
       NUCLEARSHIELD_DEMO_MODE: "true"
@@ -19,7 +20,8 @@ services:
     image: prom/prometheus:latest
     pull_policy: never
     command: ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.path=/prometheus"]
-    ports: ["9090:9090"]
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
@@ -36,7 +38,8 @@ services:
   grafana:
     image: grafana/grafana:latest
     pull_policy: never
-    ports: ["3000:3000"]
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
     environment:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-nuclearshield-demo}
