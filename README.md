@@ -11,21 +11,75 @@ NuclearShield is a defensive, read-only, evidence-driven cybersecurity assurance
 
 ##  What NuclearShield Demonstrates
 
-- Read-only CSV and JSON evidence ingestion
-- SHA-256 provenance and evidence validation
-- Zeek/Suricata-style passive network evidence
-- SCADA and industrial-control evidence views
-- Integrity and authorization checks
-- Explainable statistical anomaly detection
-- Actor, asset, and time-window correlation
-- Material and radiation evidence handling
-- Detailed in-browser safeguards reports
-- Prometheus metrics
-- Provisioned Grafana monitoring dashboard
-- Append-only demonstration audit records
-- Docker-based reproducible deployment
-- CI/CD and static security-analysis workflow
-- Editable architecture and workflow diagrams
+- 🛡️ Read-only CSV and JSON evidence ingestion
+- 🔐 SHA-256 provenance and evidence validation
+- 🌐 Zeek/Suricata-style passive network evidence
+- ⚙️ SCADA and industrial-control evidence views
+- 🧩 Integrity and authorization checks
+- 📊 Explainable statistical anomaly detection
+- 🔗 Actor, asset, and time-window correlation
+- ☢️ Material and radiation evidence handling
+- 📑 Detailed in-browser safeguards reports
+- 📈 Prometheus metrics
+- 📉 Provisioned Grafana monitoring dashboard
+- 🧾 Append-only demonstration audit records
+- 🐳 Docker-based reproducible deployment
+- 🔄 CI/CD and static security-analysis workflow
+- 🗺️ Editable architecture and workflow diagrams
+
+---
+
+## 🏛️ NuclearShield Architecture & Assurance Model
+
+The diagrams below present the defensive architecture and assurance concepts that guide NuclearShield. They describe a **read-only, evidence-driven demonstration model**: monitoring and analysis must not create an operational control path into nuclear, SCADA, I&C, safety, physical-access, or material-accounting systems.
+
+### 1. Shared Platform Architecture
+
+<p align="center">
+  <img src="docs/images/nuclearshield-platform-architecture.png" alt="NuclearShield shared platform architecture" width="950">
+</p>
+
+The shared architecture separates enterprise, industrial DMZ, nuclear OT/SCADA, independent safety systems, and material-security functions into distinct trust zones. Controlled conduits limit required communication between zones, while safety evidence is designed to leave independent safety systems through a one-way path rather than creating an inbound command route. The model brings cyber, physical, material, monitoring, and compliance evidence together for accountable defensive assurance.
+
+### 2. SCADA & I&C Protection
+
+<p align="center">
+  <img src="docs/images/scada-ic-protection.png" alt="SCADA and I&C protection architecture" width="950">
+</p>
+
+The SCADA and I&C model removes the uncontrolled path from corporate IT into nuclear OT. Enterprise access terminates through an industrial DMZ containing controlled services such as hardened jump hosts, historian replicas, patch staging, and passive monitoring. A controlled gateway separates the DMZ from OT, while independent safety-system evidence follows a unidirectional monitoring path. This supports visibility without unnecessarily injecting commands into sensitive plant processes.
+
+### 3. Safety-System Integrity
+
+<p align="center">
+  <img src="docs/images/safety-system-integrity.png" alt="Independent safety-system integrity assurance" width="950">
+</p>
+
+Safety-system assurance remains independent, deterministic, and fail-safe. The model baselines approved logic, firmware, configuration, and related evidence; observes changes; verifies deviations; and routes response through approved procedures. Cybersecurity monitoring is treated as an assurance function rather than a control function so that it does not weaken deterministic behavior, availability, or the independent safety role.
+
+### 4. Material Security & Safeguards
+
+<p align="center">
+  <img src="docs/images/material-security-safeguards.png" alt="Material security and safeguards correlation model" width="950">
+</p>
+
+The safeguards model correlates physical security, cybersecurity, and Material Accounting & Control evidence instead of treating them as isolated signals. Identity, authorization, access events, device activity, material identification, movement, accounting, and radiation-related evidence can contribute context to a safeguards investigation. NuclearShield demonstrates this correlation using fictional synthetic evidence only; it does not operate real access-control or material-accounting systems.
+
+### 5. AI-Assisted Threat Detection
+
+<p align="center">
+  <img src="docs/images/ai-threat-detection.png" alt="AI-assisted threat detection and safety-preserving response workflow" width="950">
+</p>
+
+AI-assisted analysis is positioned as an adviser, not an autonomous nuclear decision authority. Evidence from network, system, user, device, threat-intelligence, and physical-security sources can be enriched with operational and safety context before anomaly, policy, misuse, and correlation checks are applied. Model validation and drift monitoring support explainability, while containment or recovery decisions remain subject to human and safety authorization.
+
+### 6. DevSecOps & Continuous Assurance
+
+<p align="center">
+  <img src="docs/images/devsecops-continuous-assurance.png" alt="DevSecOps and continuous assurance lifecycle" width="950">
+</p>
+
+The DevSecOps model treats change as an evidence-gated lifecycle: plan, code, build, test, approve, deploy, and operate. Safety-impact review, peer review, reproducible builds, static analysis, formal verification, two-person approval, verified maintenance windows, rollback planning, monitoring, and audit evidence support controlled delivery. Automation improves repeatability and traceability but does not replace qualified human authority.
 
 ---
 
@@ -505,3 +559,52 @@ The student remains responsible for understanding, validating, presenting, and d
 The AI-assisted detection path is intended to remain transparent and explainable rather than acting as an autonomous nuclear decision system.
 
 ---
+
+# 💫 About Me
+
+I’m **Ruveeha Ashfaq**, Co-Founder of **HR-Presents**.
+
+I work across **DevOps, cloud, cybersecurity, automation, and secure software development**. At HR-Presents, I help shape ideas, support product development, and contribute to the journey behind **AegisLog AI** and **Sentrix**.
+
+I’m studying at **Al Nafi International College** and strengthening my skills through hands-on work with Linux, Python, Docker, CI/CD, cloud platforms, monitoring, and security tooling.
+
+My learning journey includes **AWS Cloud Practitioner training**, **AWS Generative AI Practitioner training**, and preparation across the core domains of **ISC2 Certified in Cybersecurity (CC)**.
+
+---
+
+## 🌐 Connect
+
+- **LinkedIn:** Ruveeha Ashfaq
+- **GitHub:** `ruveeha33`
+- **Organization:** HR-Presents
+
+---
+
+## 💻 Tech Stack
+
+`Python` · `Flask` · `FastAPI` · `Bash` · `Linux` · `Docker` · `Git` · `GitHub Actions` · `AWS` · `Jira` · `Prometheus` · `Grafana` · `Cybersecurity` · `DevOps` · `CI/CD`
+
+---
+
+## 🚀 Selected Work
+
+- ☢️ **NuclearShield**
+- 🛡️ **AegisLog AI**
+- 🔎 **Sentrix**
+- 📊 **AI Log Analyzer**
+- 🐍 **Python Quality Platform**
+- ☁️ **AWS Cloud Practitioner Journey**
+- 🔐 **Cybersecurity Training**
+
+---
+
+## 👩‍💻 Author
+
+**Ruveeha Ashfaq**  
+Co-Founder, **HR-Presents**
+
+Built as a defensive, read-only cybersecurity assurance project with a strong emphasis on explainability, evidence integrity, monitoring, and safety boundaries.
+
+---
+
+⭐ If NuclearShield helps you explore defensive cybersecurity, DevSecOps, monitoring, or evidence-driven assurance, consider starring the repository.
