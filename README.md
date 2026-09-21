@@ -8,7 +8,7 @@
 
 **Defensive · Read-Only · Evidence-Driven · Explainable · Auditable**
 
-**Version 1.0.8 — Final Visual & Platform Audit**
+**Version 1.0.8**
 
 NuclearShield is a defensive cybersecurity assurance workstation that transforms passive security evidence into explainable findings, correlations, monitoring intelligence, reports, and auditable human decisions — without sending commands to operational technology.
 
@@ -81,7 +81,7 @@ The launcher automatically:
 - starts Docker Desktop when available but not ready;
 - validates Docker Compose;
 - detects port conflicts;
-- selects safe alternative ports when necessary;
+- selects available alternative ports when necessary;
 - builds the NuclearShield application;
 - starts Prometheus and Grafana;
 - waits for application health;
@@ -114,27 +114,27 @@ flowchart LR
 
 NuclearShield does not turn a detection directly into an operational action.
 
-Instead, it preserves the separation between:
-
-**machine-assisted analysis** and **human authority**.
+Instead, it preserves the separation between **machine-assisted analysis** and **human authority**.
 
 ---
 
 # 🧠 How NuclearShield Works
+
+NuclearShield processes passive evidence through a controlled assurance pipeline.
 
 ```mermaid
 flowchart TD
 
     INPUT["PASSIVE EVIDENCE SOURCES"]
 
-    INPUT --> NET["Network Evidence"]
-    INPUT --> INT["Integrity Evidence"]
-    INPUT --> ACC["Access Evidence"]
-    INPUT --> MAT["Material Evidence"]
-    INPUT --> RAD["Radiation Evidence"]
-    INPUT --> CHG["Change Evidence"]
+    INPUT --> NET["Network"]
+    INPUT --> INT["Integrity"]
+    INPUT --> ACC["Access"]
+    INPUT --> MAT["Material"]
+    INPUT --> RAD["Radiation"]
+    INPUT --> CHG["Change"]
 
-    NET --> INGEST["Evidence Ingestion Layer"]
+    NET --> INGEST["Evidence Ingestion"]
     INT --> INGEST
     ACC --> INGEST
     MAT --> INGEST
@@ -143,14 +143,14 @@ flowchart TD
 
     INGEST --> VALIDATE["Validation & Normalization"]
     VALIDATE --> HASH["SHA-256 Provenance"]
-    HASH --> CLASSIFY["Evidence Domain Classification"]
+    HASH --> CLASSIFY["Domain Classification"]
 
     CLASSIFY --> ENGINE["Detection & Correlation Engine"]
 
     ENGINE --> RULES["Deterministic Rules"]
     ENGINE --> AUTH["Authorization Checks"]
     ENGINE --> INTEGRITY["Integrity Validation"]
-    ENGINE --> STATS["Robust Statistical Analysis"]
+    ENGINE --> STATS["Statistical Analysis"]
     ENGINE --> CORR["Cross-Record Correlation"]
 
     RULES --> FINDINGS["Explainable Findings"]
@@ -159,17 +159,14 @@ flowchart TD
     STATS --> FINDINGS
     CORR --> FINDINGS
 
-    FINDINGS --> HUMAN["Human Review / Decision Authority"]
+    FINDINGS --> HUMAN["Human Review"]
 
     HUMAN --> REPORT["Assurance Reports"]
     HUMAN --> AUDIT["Audit Trail"]
-    HUMAN --> MONITOR["Monitoring & Metrics"]
-
-    MONITOR --> PROM["Prometheus"]
-    MONITOR --> GRAF["Grafana"]
-    MONITOR --> ZEEK["Zeek-Style Evidence"]
-    MONITOR --> SURI["Suricata-Style Evidence"]
+    HUMAN --> MONITOR["Monitoring"]
 ```
+
+The analytical engine produces **reviewable evidence**, not autonomous operational actions.
 
 ---
 
@@ -199,26 +196,106 @@ The platform focuses on **defensible evidence**, not autonomous operational resp
 
 # 🏗️ Platform Architecture
 
+NuclearShield uses a layered architecture separating the interface, application services, evidence pipeline, assurance engine, persistence, outputs, and observability.
+
 ```mermaid
 flowchart LR
-    U["Analyst"] --> UI["NuclearShield UI"]
-    UI --> API["FastAPI"]
-    API --> CORE["Assurance Engine"]
-    CORE --> STORE["Analysis Store"]
 
-    STORE --> REP["Reports"]
-    STORE --> AUD["Audit"]
+    USER["👤 Analyst"]
 
-    API --> MET["Metrics"]
-    MET --> PROM["Prometheus"]
-    PROM --> GRAF["Grafana"]
+    subgraph FRONT["Interface"]
+        UI["NuclearShield UI"]
+        UPLOAD["Evidence Upload"]
+        WORK["Workspaces"]
+    end
+
+    subgraph APP["Application"]
+        API["FastAPI"]
+        VALID["Validation"]
+        ROUTES["API Services"]
+    end
+
+    subgraph PROCESS["Evidence Pipeline"]
+        PARSE["Parser"]
+        NORM["Normalization"]
+        HASH["SHA-256 Provenance"]
+        CLASS["Classification"]
+    end
+
+    subgraph ENGINE["Assurance Engine"]
+        RULE["Rules"]
+        AUTH["Authorization"]
+        INT["Integrity"]
+        STAT["Statistics"]
+        CORR["Correlation"]
+        EXP["Explainability"]
+    end
+
+    subgraph DATA["Persistence"]
+        STORE["Analysis Store"]
+        HISTORY["History"]
+        AUDIT["Audit"]
+    end
+
+    subgraph OUTPUT["Outputs"]
+        REPORT["Reports"]
+        DASH["Dashboards"]
+        REVIEW["Human Review"]
+    end
+
+    USER --> UI
+    UI --> UPLOAD
+    UI --> WORK
+
+    UPLOAD --> API
+    WORK --> API
+
+    API --> VALID
+    VALID --> ROUTES
+
+    ROUTES --> PARSE
+    PARSE --> NORM
+    NORM --> HASH
+    HASH --> CLASS
+
+    CLASS --> RULE
+    CLASS --> AUTH
+    CLASS --> INT
+    CLASS --> STAT
+
+    RULE --> CORR
+    AUTH --> CORR
+    INT --> CORR
+    STAT --> CORR
+
+    CORR --> EXP
+
+    EXP --> STORE
+    STORE --> HISTORY
+    STORE --> AUDIT
+
+    STORE --> REPORT
+    STORE --> DASH
+
+    REPORT --> REVIEW
+    DASH --> REVIEW
+
+    REVIEW --> USER
 ```
 
-The platform keeps the major responsibilities separated while maintaining a compact architecture:
+### Architecture Layers
 
-**Interface → API → Assurance Engine → Evidence Storage → Reports / Audit**
+| Layer | Responsibility |
+|---|---|
+| **Interface** | Evidence upload, dashboards and analyst workspaces |
+| **Application** | FastAPI routes, validation and request handling |
+| **Evidence Pipeline** | Parsing, normalization, provenance and classification |
+| **Assurance Engine** | Rules, authorization, integrity, statistics and correlation |
+| **Explainability** | Converts analytical results into reviewable findings |
+| **Persistence** | Analysis history and audit information |
+| **Outputs** | Reports, dashboards and human review |
 
-Monitoring remains independently observable through **Prometheus and Grafana**.
+> NuclearShield stops at **decision support**. Findings are presented to the analyst rather than converted into operational control actions.
 
 ---
 
@@ -256,12 +333,14 @@ Domain Classification
 Analysis
 ```
 
-The demonstration limits are:
+### Demonstration Limits
 
 ```text
 Maximum file size : 10 MB
 Maximum records   : 50,000
 ```
+
+Uploaded evidence is treated as untrusted input.
 
 ---
 
@@ -295,17 +374,74 @@ radiation
 change
 ```
 
-Evidence is treated as **untrusted input**.
-
 A finding represents an analytical result — not proof that a real-world nuclear or industrial event occurred.
 
 ---
 
-# 🔎 Explainable Detection Engine
+# 🔎 Detection & Correlation Architecture
 
-NuclearShield avoids unexplained alert generation.
+NuclearShield combines transparent deterministic checks, integrity and authorization analysis, statistical analysis, and correlation.
 
-A finding can contain:
+```mermaid
+flowchart LR
+
+    EVID["Normalized Evidence"]
+        --> DOMAIN["Domain Classification"]
+
+    DOMAIN --> RULES["Deterministic Rules"]
+    DOMAIN --> AUTH["Authorization Checks"]
+    DOMAIN --> INT["Integrity Validation"]
+    DOMAIN --> STAT["Robust Statistics"]
+
+    RULES --> CORR["Correlation Engine"]
+    AUTH --> CORR
+    INT --> CORR
+    STAT --> CORR
+
+    CORR --> FIND["Finding Construction"]
+
+    FIND --> SEV["Severity"]
+    FIND --> CONF["Confidence"]
+    FIND --> REASON["Reasons"]
+    FIND --> CONTRIB["Contributors"]
+    FIND --> RELATED["Related Events"]
+
+    SEV --> EXPLAIN["Explainable Finding"]
+    CONF --> EXPLAIN
+    REASON --> EXPLAIN
+    CONTRIB --> EXPLAIN
+    RELATED --> EXPLAIN
+
+    EXPLAIN --> HUMAN["👤 Human Review"]
+```
+
+A finding can therefore preserve both the analytical result and the evidence explaining how that result was reached.
+
+### Deterministic Rules
+
+Known evidence conditions are evaluated through transparent logic.
+
+### Authorization Checks
+
+Evidence can be evaluated for declared authorization state.
+
+### Integrity Validation
+
+Integrity-oriented records can be checked for declared mismatches or validation failures.
+
+### Robust Statistical Analysis
+
+Where sufficient peer-group numeric evidence exists, NuclearShield can use robust anomaly analysis.
+
+Statistical analysis is used as **decision-support evidence**, not proof of malicious activity.
+
+### Correlation
+
+Related records can be associated through shared evidence characteristics such as actors, assets, and event relationships.
+
+### Explainable Findings
+
+A finding can expose:
 
 ```text
 Event ID
@@ -318,29 +454,9 @@ Related Events
 Human Authorization Requirement
 ```
 
-The platform combines several defensive detection paths.
+**Detection does not equal autonomous action.**
 
-### Deterministic Rules
-
-Known evidence conditions are evaluated through transparent logic.
-
-### Authorization Checks
-
-Evidence can be evaluated for declared authorization state.
-
-### Integrity Validation
-
-Integrity-related records can be checked for declared mismatches or validation failures.
-
-### Robust Statistical Analysis
-
-Where sufficient peer-group numeric evidence exists, NuclearShield can use robust anomaly analysis.
-
-The platform uses statistical analysis as **decision-support evidence**, not as proof of malicious activity.
-
-### Correlation
-
-Related records can be associated through shared evidence characteristics such as actors, assets, and event relationships.
+The output remains decision-support information for human review.
 
 ---
 
@@ -348,13 +464,13 @@ Related records can be associated through shared evidence characteristics such a
 
 NuclearShield includes passive network-security evidence support inspired by common Zeek and Suricata evidence formats.
 
-### Zeek-style evidence
+### Zeek-Style Evidence
 
 ```text
 sample-data/06-zeek-conn-synthetic.log
 ```
 
-### Suricata-style evidence
+### Suricata-Style Evidence
 
 ```text
 sample-data/07-suricata-eve-synthetic.jsonl
@@ -473,6 +589,7 @@ Reports include:
 - confidence;
 - evidence;
 - detection method;
+- related evidence;
 - recommended measures;
 - decision authority;
 - evidence mapping; and
@@ -511,25 +628,46 @@ The audit system is designed so that deleting an analyzed-file record does not s
 
 # 📊 Monitoring Architecture
 
+NuclearShield separates **application observability** from **passive cybersecurity evidence**.
+
 ```mermaid
 flowchart LR
 
-    NS["NuclearShield"] --> METRICS["/metrics"]
+    APP["☢️ NuclearShield"]
 
-    METRICS --> PROM["Prometheus"]
+    APP --> HEALTH["Health API"]
+    APP --> MET["/metrics"]
 
-    PROM --> TARGETS["Target Health"]
-    PROM --> GRAF["Grafana"]
+    PROM["📊 Prometheus"]
+    PROM -->|Scrapes| MET
 
-    GRAF --> DASH["NuclearShield Dashboard"]
+    GRAF["📈 Grafana"]
+    GRAF -->|Queries| PROM
 
-    NS --> STATUS["Platform Health API"]
+    PROM --> TARGET["Target Health"]
+    GRAF --> DASH["Monitoring Dashboard"]
 
-    STATUS --> PHEALTH["Prometheus Health"]
-    STATUS --> GHEALTH["Grafana Health"]
+    ZEEK["Zeek Evidence"]
+    SURI["Suricata Evidence"]
+
+    ZEEK --> MON["Monitoring Workspace"]
+    SURI --> MON
+
+    HEALTH --> MON
+    TARGET --> MON
+    DASH --> MON
+
+    MON --> USER["👤 Analyst"]
 ```
 
-NuclearShield checks actual service health.
+### Two Different Monitoring Roles
+
+| Area | Purpose |
+|---|---|
+| **Prometheus / Grafana** | Application observability, metrics and service health |
+| **Zeek / Suricata Evidence** | Passive cybersecurity evidence analysis |
+
+Neither represents fabricated live nuclear-process telemetry.
 
 If Prometheus or Grafana is unavailable, NuclearShield reports the service as unavailable rather than displaying a false healthy state.
 
@@ -557,61 +695,84 @@ Selected ports are recorded in:
 
 ---
 
-# 🐳 Docker Architecture
+# 🐳 Docker & Deployment Architecture
 
-The complete platform runs as three connected Docker Compose services:
+NuclearShield is deployed through Docker Compose as an application and observability stack.
 
 ```mermaid
 flowchart LR
-    B["Browser"] --> N["☢️ NuclearShield"]
-    N --> P["📊 Prometheus"]
-    P --> G["📈 Grafana"]
 
-    B --> P
-    B --> G
+    USER["🌐 Browser"]
+
+    APP["☢️ NuclearShield<br/>FastAPI<br/>:8000"]
+
+    DATA["Persistent<br/>Application Data"]
+
+    PROM["📊 Prometheus<br/>:9090"]
+
+    GRAF["📈 Grafana<br/>:3000"]
+
+    USER -->|Application| APP
+    USER -->|Metrics UI| PROM
+    USER -->|Dashboards| GRAF
+
+    APP -->|Reads / Writes| DATA
+
+    PROM -->|Scrapes /metrics| APP
+
+    GRAF -->|Queries| PROM
 ```
 
-| Service | Role | Preferred Port |
+### Service Relationships
+
+```text
+                         ┌─────────────────────────┐
+                         │        Browser          │
+                         └────────────┬────────────┘
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    │                 │                 │
+                    ▼                 ▼                 ▼
+          NuclearShield :8000  Prometheus :9090   Grafana :3000
+                    ▲                 ▲                 │
+                    │                 │                 │
+                    │       scrapes /metrics           │
+                    └─────────────────┘                 │
+                                      ▲                 │
+                                      └──── queries ────┘
+
+          NuclearShield
+                │
+                ▼
+       Persistent App Data
+```
+
+| Component | Responsibility | Preferred Port |
 |---|---|---:|
-| **NuclearShield** | FastAPI assurance platform | `8000` |
-| **Prometheus** | Metrics and target monitoring | `9090` |
-| **Grafana** | Monitoring visualization | `3000` |
-
-Start manually:
-
-```powershell
-docker compose up --build -d
-```
-
-Check:
-
-```powershell
-docker compose ps
-```
-
-Logs:
-
-```powershell
-docker compose logs -f
-```
-
-Stop:
-
-```powershell
-docker compose down
-```
-
-Remove demonstration volumes only when intentionally clearing persistent demo data:
-
-```powershell
-docker compose down --volumes
-```
+| **NuclearShield** | Main FastAPI assurance application | `8000` |
+| **Prometheus** | Scrapes and stores application metrics | `9090` |
+| **Grafana** | Queries Prometheus and visualizes monitoring data | `3000` |
 
 ---
 
-# 🔌 Intelligent Port Handling
+# ⚡ Startup Architecture
 
-The Windows launcher checks:
+The Windows launcher automates the local deployment process.
+
+```mermaid
+flowchart LR
+    START["START-NUCLEARSHIELD.cmd"]
+    --> PS["PowerShell Launcher"]
+    --> DOCKER["Docker Engine Check"]
+    --> COMPOSE["Compose Check"]
+    --> PORTS["Port Selection"]
+    --> BUILD["Build / Start Stack"]
+    --> HEALTH["Health Checks"]
+    --> READY["Platform Ready"]
+    --> OPEN["Open Browser"]
+```
+
+The launcher prefers:
 
 ```text
 8000 → NuclearShield
@@ -619,70 +780,53 @@ The Windows launcher checks:
 3000 → Grafana
 ```
 
-If another application already owns one of these ports, NuclearShield does **not** kill that application.
+If a preferred port is unavailable, the launcher selects an available alternative rather than terminating an unrelated process.
 
-Instead:
+Runtime-selected ports are stored in:
 
 ```text
-Preferred Port
-      ↓
-Availability Check
-      ↓
-Occupied?
-  ↙         ↘
-No           Yes
-↓             ↓
-Use It     Find Next Free Port
-              ↓
-         Save Runtime Port
+.runtime-ports.env
 ```
-
-This helps NuclearShield coexist safely with other local Docker and development environments.
 
 ---
 
-# 🧪 Testing
+# 🐳 Manual Docker Commands
 
-For local development testing with Python 3.12:
+Start the complete stack:
 
 ```powershell
-py -3.12 -m venv .venv
+docker compose up --build -d
 ```
 
-Activate:
+Check service status:
 
 ```powershell
-.venv\Scripts\Activate.ps1
+docker compose ps
 ```
 
-Install:
+View logs:
 
 ```powershell
-python -m pip install --upgrade pip
-pip install -e ".[dev]"
+docker compose logs -f
 ```
 
-Run tests:
+Stop NuclearShield:
 
 ```powershell
-pytest -q
+docker compose down
 ```
 
-Lint:
+To intentionally remove local demonstration volumes:
 
 ```powershell
-ruff check app tests
-```
-
-Static security analysis:
-
-```powershell
-bandit -q -r app -x app/static
+docker compose down --volumes
 ```
 
 ---
 
 # 🔁 DevSecOps Pipeline
+
+NuclearShield includes automated software-quality and security gates.
 
 ```mermaid
 flowchart LR
@@ -711,6 +855,47 @@ The workflow is stored in:
 
 ---
 
+# 🧪 Testing
+
+For local development testing with Python 3.12:
+
+```powershell
+py -3.12 -m venv .venv
+```
+
+Activate:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Install:
+
+```powershell
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+```
+
+Run automated tests:
+
+```powershell
+pytest -q
+```
+
+Run linting:
+
+```powershell
+ruff check app tests
+```
+
+Run static security analysis:
+
+```powershell
+bandit -q -r app -x app/static
+```
+
+---
+
 # 📁 Repository Structure
 
 ```text
@@ -720,6 +905,7 @@ NuclearShield/
 │   ├── main.py
 │   ├── analyzer.py
 │   ├── store.py
+│   │
 │   └── static/
 │       ├── app.js
 │       ├── styles.css
@@ -760,7 +946,7 @@ NuclearShield/
 
 NuclearShield intentionally excludes operational control capability.
 
-The project does **not** provide:
+### NuclearShield does not provide:
 
 ```text
 ✗ Plant-control commands
@@ -774,7 +960,7 @@ The project does **not** provide:
 ✗ Safety-system manipulation
 ```
 
-NuclearShield is designed around:
+### NuclearShield is designed around:
 
 ```text
 ✓ Passive evidence
