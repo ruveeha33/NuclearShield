@@ -1,0 +1,8 @@
+{
+  "records": [
+    {"uid":"QUALITY-001","datetime":"2026-09-05T12:00:00Z","host":"synthetic-network-sensor","count":"10","reference":"10","protocol":"modbus-demo"},
+    {"uid":"QUALITY-002","datetime":"2026-09-05T12:01:00Z","host":"synthetic-network-sensor","count":"55","reference":"10","protocol":"modbus-demo"},
+    {},
+    {"uid":"QUALITY-003","datetime":"2026-09-05T12:02:00Z","device":"synthetic-badge-reader","status":"open","expected":"closed","permitted":"no","badge_id":"badge-demo"}
+  ]
+}

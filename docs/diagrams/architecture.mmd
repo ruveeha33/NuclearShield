@@ -1,0 +1,37 @@
+flowchart LR
+  subgraph Z1[Zone 1 - Enterprise]
+    U[Students and reviewers]
+  end
+  subgraph Z2[Zone 2 - Security DMZ]
+    J[Hardened jump-host concept]
+    H[Historian replica concept]
+  end
+  subgraph Z3[Zone 3 - Nuclear OT]
+    TAP[Passive mirrored evidence]
+    PS[Zeek and Suricata style records]
+  end
+  subgraph Z4[Zone 4 - Independent safety]
+    RPS[Safety logic and firmware baselines]
+    D{{Unidirectional evidence gateway}}
+  end
+  subgraph Z5[Zone 5 - Safeguards]
+    PACS[PACS and IAM evidence]
+    MCA[MC&A and radiation evidence]
+  end
+  subgraph A[Assurance platform - no control capability]
+    API[Validation and evidence hashing]
+    ANA[Explainable anomaly analysis]
+    AUD[Append-only audit records]
+    REP[HTML safeguards report]
+    MON[Prometheus and Grafana]
+  end
+  U -->|approved reporting request| J
+  J --> H
+  TAP --> PS -->|offline evidence file| API
+  RPS --> D -->|one-way evidence only| API
+  PACS -->|offline evidence file| API
+  MCA -->|offline evidence file| API
+  API --> ANA --> AUD --> REP
+  API --> MON
+  ANA -.->|review recommendation only| U
+

@@ -1,0 +1,9 @@
+id,time,sensor,reading,expected,category,user,device,approved,signature_status,description
+FLEX-001,2026-09-02T09:00:00Z,synthetic-zeek,20,20,network,user-blue,demo-server,yes,valid,alternative column names
+FLEX-002,2026-09-02T09:01:00Z,synthetic-zeek,19,20,network,user-blue,demo-server,yes,valid,alternative column names
+FLEX-003,2026-09-02T09:02:00Z,synthetic-zeek,21,20,network,user-blue,demo-server,yes,valid,alternative column names
+FLEX-004,2026-09-02T09:03:00Z,synthetic-zeek,20,20,network,user-blue,demo-server,yes,valid,alternative column names
+FLEX-005,2026-09-02T09:04:00Z,synthetic-zeek,22,20,network,user-blue,demo-server,yes,valid,alternative column names
+FLEX-006,2026-09-02T09:05:00Z,synthetic-zeek,160,20,network,user-blue,demo-server,yes,valid,robust statistical outlier
+FLEX-007,2026-09-02T09:06:00Z,synthetic-badge-reader,open,closed,access,user-red,demo-door,no,valid,unauthorized access state
+FLEX-008,2026-09-02T09:07:00Z,synthetic-firmware-check,version-b,version-a,integrity,engineer-blue,demo-controller,yes,mismatch,integrity mismatch

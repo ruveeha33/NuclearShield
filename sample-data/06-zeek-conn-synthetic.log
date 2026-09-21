@@ -1,0 +1,5 @@
+#separator \x09
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	service	orig_bytes	resp_bytes
+1710000000.0	C-SYN-001	10.20.1.10	49152	10.30.4.20	502	tcp	modbus	420	810
+1710000005.0	C-SYN-002	10.20.1.11	49153	10.30.4.21	102	tcp	iso_cotp	280	530
+1710000010.0	C-SYN-003	10.20.1.10	49154	10.30.4.20	502	tcp	modbus	4700	920

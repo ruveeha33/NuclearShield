@@ -1,0 +1,20 @@
+event_id,timestamp,event_type,source,value,baseline,authorized,integrity,actor,asset,context
+NET-101,2026-09-01T08:00:00Z,network,synthetic-zeek,10,10,true,valid,operator-a,training-hmi,normal passive connection count
+NET-102,2026-09-01T08:01:00Z,network,synthetic-zeek,11,10,true,valid,operator-a,training-hmi,normal passive connection count
+NET-103,2026-09-01T08:02:00Z,network,synthetic-zeek,9,10,true,valid,operator-a,training-hmi,normal passive connection count
+NET-104,2026-09-01T08:03:00Z,network,synthetic-zeek,10,10,true,valid,operator-a,training-hmi,normal passive connection count
+NET-105,2026-09-01T08:04:00Z,network,synthetic-zeek,12,10,true,valid,operator-a,training-hmi,normal passive connection count
+NET-106,2026-09-01T08:05:00Z,network,synthetic-suricata,92,10,true,valid,badge-red,training-hmi,synthetic network outlier after access anomaly
+ACC-101,2026-09-01T07:58:00Z,access,synthetic-pacs,open,open,false,valid,badge-red,training-hmi,synthetic entry without approved work order
+INT-101,2026-09-01T08:06:00Z,integrity,synthetic-safety-validator,hash-b,hash-a,true,mismatch,engineer-a,safety-test-rack,synthetic signed baseline mismatch
+INT-102,2026-09-01T08:07:00Z,integrity,synthetic-safety-validator,hash-a,hash-a,true,valid,engineer-a,safety-test-rack,synthetic valid baseline
+MAT-101,2026-09-01T08:08:00Z,material,synthetic-mca-ledger,100,100,true,valid,custodian-a,training-vault,synthetic balanced inventory
+MAT-102,2026-09-01T08:09:00Z,material,synthetic-mca-ledger,72,100,true,valid,badge-red,training-vault,synthetic accounting discrepancy
+RAD-101,2026-09-01T08:10:00Z,radiation,synthetic-portal,10,10,true,valid,custodian-a,training-portal,normal synthetic count
+RAD-102,2026-09-01T08:11:00Z,radiation,synthetic-portal,11,10,true,valid,custodian-a,training-portal,normal synthetic count
+RAD-103,2026-09-01T08:12:00Z,radiation,synthetic-portal,9,10,true,valid,custodian-a,training-portal,normal synthetic count
+RAD-104,2026-09-01T08:13:00Z,radiation,synthetic-portal,10,10,true,valid,custodian-a,training-portal,normal synthetic count
+RAD-105,2026-09-01T08:14:00Z,radiation,synthetic-portal,12,10,true,valid,custodian-a,training-portal,normal synthetic count
+RAD-106,2026-09-01T08:15:00Z,radiation,synthetic-portal,80,10,true,valid,badge-red,training-portal,synthetic radiation outlier
+CHG-101,2026-09-01T08:16:00Z,change,synthetic-change-control,unsigned,approved,false,mismatch,badge-red,training-hmi,synthetic unapproved configuration
+CHG-102,2026-09-01T08:17:00Z,change,synthetic-change-control,approved,approved,true,valid,engineer-a,safety-test-rack,synthetic approved release

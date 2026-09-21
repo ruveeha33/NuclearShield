@@ -1,0 +1,9 @@
+{
+  "events": [
+    {"event_id":"JSON-ACC-01","timestamp":"2026-09-04T11:00:00Z","event_type":"access","source":"synthetic-pacs","value":"open","baseline":"closed","authorized":"false","integrity":"valid","actor":"insider-demo","asset":"demo-vault"},
+    {"event_id":"JSON-MAT-01","timestamp":"2026-09-04T11:01:00Z","event_type":"material","source":"synthetic-mca","value":65,"baseline":100,"authorized":"true","integrity":"valid","actor":"insider-demo","asset":"demo-vault"},
+    {"event_id":"JSON-RAD-01","timestamp":"2026-09-04T11:02:00Z","event_type":"radiation","source":"synthetic-portal","value":45,"baseline":10,"authorized":"true","integrity":"valid","actor":"insider-demo","asset":"demo-vault"},
+    {"event_id":"JSON-CHG-01","timestamp":"2026-09-04T11:03:00Z","event_type":"change","source":"synthetic-change-control","value":"unsigned","baseline":"approved","authorized":"false","integrity":"mismatch","actor":"insider-demo","asset":"demo-vault"},
+    {"event_id":"JSON-INT-01","timestamp":"2026-09-04T11:04:00Z","event_type":"integrity","source":"synthetic-validator","value":"digest-b","baseline":"digest-a","authorized":"true","integrity":"mismatch","actor":"engineer-demo","asset":"demo-safety-rack"}
+  ]
+}

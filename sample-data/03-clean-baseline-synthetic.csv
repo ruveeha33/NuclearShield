@@ -1,0 +1,8 @@
+event_id,timestamp,event_type,source,value,baseline,authorized,integrity,actor,asset,context
+CLEAN-001,2026-09-03T10:00:00Z,network,synthetic-zeek,10,10,true,valid,user-a,demo-host,clean record
+CLEAN-002,2026-09-03T10:01:00Z,network,synthetic-zeek,10,10,true,valid,user-a,demo-host,clean record
+CLEAN-003,2026-09-03T10:02:00Z,integrity,synthetic-validator,hash-a,hash-a,true,valid,engineer-a,demo-controller,clean record
+CLEAN-004,2026-09-03T10:03:00Z,access,synthetic-pacs,approved,approved,true,valid,user-a,demo-door,clean record
+CLEAN-005,2026-09-03T10:04:00Z,material,synthetic-mca,100,100,true,valid,custodian-a,demo-vault,clean record
+CLEAN-006,2026-09-03T10:05:00Z,radiation,synthetic-portal,10,10,true,valid,custodian-a,demo-portal,clean record
+CLEAN-007,2026-09-03T10:06:00Z,change,synthetic-change-control,approved,approved,true,valid,engineer-a,demo-controller,clean record
