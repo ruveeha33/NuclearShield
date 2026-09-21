@@ -8,3 +8,4 @@ data/*.db
 .env
 work-test-data/
 .runtime-ports.env
+launcher-diagnostics.log
