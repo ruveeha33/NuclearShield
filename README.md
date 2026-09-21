@@ -1,140 +1,341 @@
+<div align="center">
+
+<img src="app/static/assets/nuclearshield-logo.svg" alt="NuclearShield Logo" width="170">
+
+# ☢️ NuclearShield
+
+### Advanced Nuclear Cybersecurity Assurance Platform
+
+**Defensive · Read-Only · Evidence-Driven · Explainable · Auditable**
+
+**Version 1.0.8 — Final Visual & Platform Audit**
+
+NuclearShield is a defensive cybersecurity assurance workstation that transforms passive security evidence into explainable findings, correlations, monitoring intelligence, reports, and auditable human decisions — without sending commands to operational technology.
+
+<br>
+
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)
+![Prometheus](https://img.shields.io/badge/Prometheus-Monitoring-E6522C)
+![Grafana](https://img.shields.io/badge/Grafana-Visualization-F46800)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Version](https://img.shields.io/badge/Release-v1.0.8-orange)
+
+</div>
+
+---
+
+## 🛡️ Safety Authority
+
+> **NuclearShield is a defensive, read-only educational demonstrator.**
+>
+> Every included record is fictional and synthetic.
+>
+> NuclearShield has **no plant-control capability** and must never be connected to a real nuclear facility, SCADA/I&C network, safety system, physical-access system, nuclear material-accounting system, or production operational environment.
+
+### READ-ONLY BOUNDARY
+
+**Observe → Verify → Analyze → Explain → Report**
+
+**Human authority remains the final decision boundary.**
+
+---
+
+# 🚀 Quick Start
+
+## Requirements
+
+Before running NuclearShield, install:
+
+- Git
+- Docker Desktop
+- Docker Compose v2
+- Windows 10/11
+- Modern web browser
+
+Clone the repository:
+
+```powershell
+git clone https://github.com/ruveeha33/NuclearShield.git
+cd NuclearShield
+```
+
+### Windows — Recommended
+
+Double-click:
+
+```text
+START-NUCLEARSHIELD.cmd
+```
+
+Or run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\start-nuclearshield.ps1
+```
+
+The launcher automatically:
+
+- checks Docker;
+- starts Docker Desktop when available but not ready;
+- validates Docker Compose;
+- detects port conflicts;
+- selects safe alternative ports when necessary;
+- builds the NuclearShield application;
+- starts Prometheus and Grafana;
+- waits for application health;
+- displays the active URLs; and
+- opens NuclearShield in the browser.
+
+No unrelated process is terminated just to reclaim a preferred port.
+
+---
+
 # 🔄 NuclearShield Workflow
 
-NuclearShield follows a controlled **evidence-to-decision** workflow. Passive evidence is validated and analyzed before findings are presented for human review.
+NuclearShield follows an **evidence-to-decision** model.
 
 ```mermaid
 flowchart LR
-
-    A["Evidence"] ==> B["Ingestion"]
-    B ==> C["Validation"]
-    C ==> D["Analysis"]
-    D ==> E["Correlation"]
-    E ==> F["Explainable Findings"]
-    F ==> G["Human Review"]
-
-    G --> H["Reports"]
-    G --> I["Audit"]
-    G --> J["Monitoring"]
+    A["📁 Evidence"] --> B["📥 Ingestion"]
+    B --> C["✓ Validation"]
+    C --> D["🔐 Provenance"]
+    D --> E["⚙️ Analysis"]
+    E --> F["🔗 Correlation"]
+    F --> G["🔎 Explainable Findings"]
+    G --> H["👤 Human Review"]
+    H --> I["📄 Report"]
+    H --> J["📜 Audit"]
+    H --> K["📊 Monitoring"]
 ```
 
 ### Evidence → Analysis → Explanation → Human Decision
 
-NuclearShield does not convert a detection directly into an operational action.
+NuclearShield does not turn a detection directly into an operational action.
 
-The platform deliberately preserves the separation between **machine-assisted analysis** and **human decision authority**.
+Instead, it preserves the separation between:
+
+**machine-assisted analysis** and **human authority**.
 
 ---
 
 # 🧠 How NuclearShield Works
 
-NuclearShield transforms passive defensive evidence into explainable assurance information through a structured analytical pipeline.
-
 ```mermaid
-flowchart LR
+flowchart TD
 
-    A["PASSIVE EVIDENCE<br/>Network · Integrity · Access<br/>Material · Radiation · Change"]
+    INPUT["PASSIVE EVIDENCE SOURCES"]
 
-    B["INGESTION & VALIDATION<br/>Parse · Validate · Normalize"]
+    INPUT --> NET["Network Evidence"]
+    INPUT --> INT["Integrity Evidence"]
+    INPUT --> ACC["Access Evidence"]
+    INPUT --> MAT["Material Evidence"]
+    INPUT --> RAD["Radiation Evidence"]
+    INPUT --> CHG["Change Evidence"]
 
-    C["PROVENANCE<br/>SHA-256 · Domain Classification"]
+    NET --> INGEST["Evidence Ingestion Layer"]
+    INT --> INGEST
+    ACC --> INGEST
+    MAT --> INGEST
+    RAD --> INGEST
+    CHG --> INGEST
 
-    D["ASSURANCE ANALYSIS<br/>Rules · Authorization<br/>Integrity · Statistics"]
+    INGEST --> VALIDATE["Validation & Normalization"]
+    VALIDATE --> HASH["SHA-256 Provenance"]
+    HASH --> CLASSIFY["Evidence Domain Classification"]
 
-    E["CORRELATION<br/>Events · Actors · Assets"]
+    CLASSIFY --> ENGINE["Detection & Correlation Engine"]
 
-    F["EXPLAINABLE FINDINGS<br/>Severity · Confidence · Reasons"]
+    ENGINE --> RULES["Deterministic Rules"]
+    ENGINE --> AUTH["Authorization Checks"]
+    ENGINE --> INTEGRITY["Integrity Validation"]
+    ENGINE --> STATS["Robust Statistical Analysis"]
+    ENGINE --> CORR["Cross-Record Correlation"]
 
-    G["HUMAN AUTHORITY<br/>Review · Interpret · Decide"]
+    RULES --> FINDINGS["Explainable Findings"]
+    AUTH --> FINDINGS
+    INTEGRITY --> FINDINGS
+    STATS --> FINDINGS
+    CORR --> FINDINGS
 
-    H["ASSURANCE OUTPUTS<br/>Reports · Audit · Monitoring"]
+    FINDINGS --> HUMAN["Human Review / Decision Authority"]
 
-    A ==> B ==> C ==> D ==> E ==> F ==> G ==> H
+    HUMAN --> REPORT["Assurance Reports"]
+    HUMAN --> AUDIT["Audit Trail"]
+    HUMAN --> MONITOR["Monitoring & Metrics"]
+
+    MONITOR --> PROM["Prometheus"]
+    MONITOR --> GRAF["Grafana"]
+    MONITOR --> ZEEK["Zeek-Style Evidence"]
+    MONITOR --> SURI["Suricata-Style Evidence"]
 ```
 
-The pipeline maintains traceability from the original evidence through validation, provenance, analysis, correlation, findings, and final human review.
+---
+
+# 🎯 What NuclearShield Does
+
+NuclearShield turns passive defensive evidence into a structured assurance workflow.
+
+It is designed to answer:
+
+> **What happened?**
+
+> **Which evidence supports it?**
+
+> **Why was it detected?**
+
+> **How confident is the analysis?**
+
+> **What events are related?**
+
+> **What should be reviewed next?**
+
+> **Who retains decision authority?**
+
+The platform focuses on **defensible evidence**, not autonomous operational response.
 
 ---
 
 # 🏗️ Platform Architecture
 
-NuclearShield uses a layered architecture that separates presentation, application services, evidence processing, analytical logic, persistence, assurance outputs, and human decision authority.
-
 ```mermaid
-flowchart LR
+flowchart TB
 
-    A["ANALYST<br/>Browser · Evidence Upload"]
+    USER["Analyst / Authorized Reviewer"]
 
-    B["PRESENTATION LAYER<br/>UI · Workspaces · Reports"]
+    subgraph UI["NUCLEARSHIELD INTERFACE"]
+        DASH["Overview"]
+        ING["Ingestion"]
+        SCADA["SCADA"]
+        INTEGRITYUI["Integrity"]
+        MATERIAL["Material"]
+        AI["AI Detection"]
+        DEV["DevSecOps"]
+        COMP["Compliance"]
+        REP["Reports"]
+        MON["Monitoring"]
+        AUD["Audit"]
+    end
 
-    C["APPLICATION LAYER<br/>FastAPI · APIs · Validation"]
+    USER --> UI
 
-    D["EVIDENCE PIPELINE<br/>Normalize · Provenance · Classify"]
+    UI --> API["FastAPI Application Layer"]
 
-    E["ASSURANCE ENGINE<br/>Rules · Integrity · Statistics · Correlation"]
+    subgraph CORE["ASSURANCE ENGINE"]
+        PARSER["Evidence Parser"]
+        NORMALIZER["Normalizer"]
+        ANALYZER["Detection Engine"]
+        CORRELATOR["Correlation Engine"]
+        EXPLAIN["Explanation Layer"]
+    end
 
-    F["PERSISTENCE LAYER<br/>Analyses · History · Audit"]
+    API --> PARSER
+    PARSER --> NORMALIZER
+    NORMALIZER --> ANALYZER
+    ANALYZER --> CORRELATOR
+    CORRELATOR --> EXPLAIN
 
-    G["ASSURANCE OUTPUTS<br/>Findings · Reports · Dashboards"]
+    EXPLAIN --> STORE["Persistent Analysis Store"]
+    STORE --> REPORTING["Report Engine"]
+    STORE --> AUDITSTORE["Audit History"]
 
-    H["HUMAN AUTHORITY<br/>Review · Decision"]
+    API --> METRICS["/metrics"]
 
-    A ==> B ==> C ==> D ==> E ==> F ==> G ==> H
+    METRICS --> PROM["Prometheus"]
+    PROM --> GRAFANA["Grafana"]
+
+    REPORTING --> USER
+    AUDITSTORE --> USER
+    GRAFANA --> USER
 ```
-
-### Architecture Responsibilities
-
-| Layer | Primary Responsibility |
-|---|---|
-| **Analyst** | Provides evidence and reviews assurance results |
-| **Presentation Layer** | User interface, workspaces and reports |
-| **Application Layer** | FastAPI routes, validation and application services |
-| **Evidence Pipeline** | Normalization, provenance and domain classification |
-| **Assurance Engine** | Detection rules, integrity analysis, statistics and correlation |
-| **Persistence Layer** | Analyses, history and audit information |
-| **Assurance Outputs** | Explainable findings, reports and dashboards |
-| **Human Authority** | Interpretation, review and final decision |
-
-The architecture intentionally terminates at **human authority** rather than an operational-control interface.
-
-NuclearShield therefore supports analysis and assurance without introducing a path for autonomous plant control.
 
 ---
 
-# 🔎 Detection & Correlation Architecture
+# 📥 Evidence Ingestion
 
-The assurance engine combines multiple analytical methods rather than relying on a single opaque detection mechanism.
+NuclearShield accepts passive defensive evidence in:
 
-```mermaid
-flowchart LR
+| Format | Support |
+|---|---|
+| CSV | ✅ |
+| JSON | ✅ |
+| JSONL | ✅ |
+| NDJSON | ✅ |
+| Zeek ASCII `.log` | ✅ |
 
-    A["NORMALIZED EVIDENCE<br/>Validated · Classified"]
+Zeek `.log` evidence requires a `#fields` header.
 
-    B["DETECTION METHODS<br/>Rules · Authorization<br/>Integrity · Statistics"]
+The ingestion layer performs:
 
-    C["CORRELATION ENGINE<br/>Actors · Assets · Events"]
-
-    D["FINDING CONSTRUCTION<br/>Severity · Confidence<br/>Reasons · Related Events"]
-
-    E["EXPLAINABILITY<br/>Evidence · Method · Context"]
-
-    F["HUMAN REVIEW<br/>Assessment · Decision"]
-
-    A ==> B ==> C ==> D ==> E ==> F
+```text
+Upload
+   ↓
+File Validation
+   ↓
+Schema Adaptation
+   ↓
+Normalization
+   ↓
+Record Validation
+   ↓
+SHA-256 Provenance
+   ↓
+Domain Classification
+   ↓
+Analysis
 ```
 
-### Detection Methods
+The demonstration limits are:
 
-NuclearShield can combine:
+```text
+Maximum file size : 10 MB
+Maximum records   : 50,000
+```
 
-- deterministic rules;
-- authorization checks;
-- integrity validation;
-- robust statistical analysis; and
-- cross-record correlation.
+---
 
-### Finding Construction
+# 🧩 Flexible Evidence Schema
 
-A finding can preserve analytical information such as:
+NuclearShield recognizes common field alternatives rather than requiring every source to use exactly the same schema.
+
+For the strongest analysis, evidence can include:
+
+```text
+event_id
+timestamp
+event_type
+source
+value
+baseline
+authorized
+integrity
+actor
+asset
+```
+
+Supported evidence domains include:
+
+```text
+network
+integrity
+access
+material
+radiation
+change
+```
+
+Evidence is treated as **untrusted input**.
+
+A finding represents an analytical result — not proof that a real-world nuclear or industrial event occurred.
+
+---
+
+# 🔎 Explainable Detection Engine
+
+NuclearShield avoids unexplained alert generation.
+
+A finding can contain:
 
 ```text
 Event ID
@@ -147,166 +348,609 @@ Related Events
 Human Authorization Requirement
 ```
 
-### Explainability
+The platform combines several defensive detection paths.
 
-The objective is not simply to produce an alert.
+### Deterministic Rules
 
-NuclearShield preserves information describing **why the finding exists, which evidence contributed to it, and what analytical method produced it**.
+Known evidence conditions are evaluated through transparent logic.
 
-The resulting finding remains decision-support information for human review.
+### Authorization Checks
+
+Evidence can be evaluated for declared authorization state.
+
+### Integrity Validation
+
+Integrity-related records can be checked for declared mismatches or validation failures.
+
+### Robust Statistical Analysis
+
+Where sufficient peer-group numeric evidence exists, NuclearShield can use robust anomaly analysis.
+
+The platform uses statistical analysis as **decision-support evidence**, not as proof of malicious activity.
+
+### Correlation
+
+Related records can be associated through shared evidence characteristics such as actors, assets, and event relationships.
+
+---
+
+# 🌐 Zeek & Suricata Evidence
+
+NuclearShield includes passive network-security evidence support inspired by common Zeek and Suricata evidence formats.
+
+### Zeek-style evidence
+
+```text
+sample-data/06-zeek-conn-synthetic.log
+```
+
+### Suricata-style evidence
+
+```text
+sample-data/07-suricata-eve-synthetic.jsonl
+```
+
+The Monitoring workspace presents evidence-driven sensor consoles.
+
+These consoles do **not** claim to represent live nuclear-facility telemetry.
+
+They display uploaded or synthetic defensive evidence only.
+
+---
+
+# 🖥️ NuclearShield Workspaces
+
+## 📊 Overview
+
+Provides the high-level assurance picture:
+
+- analyzed evidence;
+- finding counts;
+- severity information;
+- evidence-domain information;
+- recent analyses; and
+- platform status.
+
+---
+
+## 📥 Ingestion
+
+The entry point for evidence analysis.
+
+Users can:
+
+- upload supported evidence;
+- inspect ingestion results;
+- use the built-in synthetic demonstration; and
+- create a persistent analysis record.
+
+---
+
+## ⚙️ SCADA
+
+Provides a defensive view of industrial-control-oriented evidence.
+
+The workspace is **passive and read-only**.
+
+It does not:
+
+- write PLC logic;
+- issue SCADA commands;
+- modify set points;
+- manipulate field devices; or
+- control physical processes.
+
+---
+
+## 🔐 Integrity
+
+Surfaces integrity-oriented evidence and associated detection results.
+
+The purpose is to support review of declared integrity state rather than automatically change system configuration.
+
+---
+
+## ☢️ Material
+
+Provides synthetic safeguards-oriented evidence views for educational analysis.
+
+No real nuclear-material records are included.
+
+---
+
+## 🧠 AI Detection
+
+Displays explainable findings and their analytical context.
+
+The emphasis is:
+
+**why the finding exists**, not simply that an alert was generated.
+
+---
+
+## 🛠️ DevSecOps
+
+Represents software-assurance and quality-gate information associated with the NuclearShield development lifecycle.
+
+The repository includes:
+
+- automated tests;
+- linting;
+- static security analysis; and
+- GitHub Actions CI.
+
+---
+
+## 📋 Compliance
+
+Provides evidence-oriented framework mappings.
+
+These mappings help demonstrate how collected evidence may be organized against assurance themes.
+
+They are **not certification or compliance attestation**.
+
+---
+
+## 📄 Reports
+
+Transforms analysis results into a structured assurance report.
+
+Reports include:
+
+- analysis context;
+- findings;
+- severity;
+- confidence;
+- evidence;
+- detection method;
+- recommended measures;
+- decision authority;
+- evidence mapping; and
+- audit-oriented context.
+
+Reports can be:
+
+- viewed in-browser;
+- printed; or
+- downloaded as HTML.
+
+The downloaded report embeds NuclearShield branding for offline viewing.
+
+---
+
+## 📡 Monitoring
+
+Provides platform and passive security-monitoring visibility through:
+
+- Prometheus
+- Grafana
+- NuclearShield metrics
+- Zeek-style evidence
+- Suricata-style evidence
+- platform health information
+
+---
+
+## 📜 Audit
+
+Maintains traceable platform activity.
+
+The audit system is designed so that deleting an analyzed-file record does not silently erase the associated audit history.
 
 ---
 
 # 📊 Monitoring Architecture
 
-NuclearShield separates **application observability** from **passive cybersecurity evidence**.
-
 ```mermaid
 flowchart LR
 
-    A["NUCLEARSHIELD<br/>Health API · /metrics"]
+    NS["NuclearShield"] --> METRICS["/metrics"]
 
-    B["PROMETHEUS<br/>Metrics · Target Health"]
+    METRICS --> PROM["Prometheus"]
 
-    C["GRAFANA<br/>Dashboards · Visualization"]
+    PROM --> TARGETS["Target Health"]
+    PROM --> GRAF["Grafana"]
 
-    D["PASSIVE SECURITY EVIDENCE<br/>Zeek · Suricata"]
+    GRAF --> DASH["NuclearShield Dashboard"]
 
-    E["MONITORING WORKSPACE<br/>Health · Evidence · Status"]
+    NS --> STATUS["Platform Health API"]
 
-    F["ANALYST<br/>Observe · Investigate"]
-
-    B -->|"scrapes /metrics"| A
-    C -->|"queries"| B
-
-    A ==> E
-    B --> E
-    C --> E
-    D ==> E
-
-    E ==> F
+    STATUS --> PHEALTH["Prometheus Health"]
+    STATUS --> GHEALTH["Grafana Health"]
 ```
 
-### Observability
+NuclearShield checks actual service health.
 
-**Prometheus** collects application metrics and target-health information exposed by NuclearShield.
-
-**Grafana** queries Prometheus and provides monitoring visualization.
-
-### Passive Security Evidence
-
-Zeek-style and Suricata-style records represent passive defensive cybersecurity evidence.
-
-They are analytically distinct from Prometheus application metrics.
-
-### Monitoring Boundary
-
-The Monitoring workspace can therefore combine:
-
-```text
-Application Health
-Service Status
-Prometheus Metrics
-Grafana Visibility
-Zeek-Style Evidence
-Suricata-Style Evidence
-```
-
-These views do **not** represent fabricated live nuclear-process telemetry.
+If Prometheus or Grafana is unavailable, the interface reports the service as unavailable rather than showing a false success state.
 
 ---
 
-# 🐳 Docker & Deployment Architecture
+# 🌐 Default Services
 
-NuclearShield uses Docker Compose to deploy the application and its supporting observability services.
+When the preferred ports are available:
+
+| Service | URL |
+|---|---|
+| ☢️ NuclearShield | `http://localhost:8000` |
+| 📄 Assurance Report | `http://localhost:8000/api/report` |
+| 📊 Prometheus | `http://localhost:9090` |
+| 🎯 Prometheus Targets | `http://localhost:9090/targets` |
+| 📈 Grafana | `http://localhost:3000` |
+
+If a preferred port is unavailable, the launcher selects another available port.
+
+Selected ports are recorded in:
+
+```text
+.runtime-ports.env
+```
+
+---
+
+# 🐳 Docker Architecture
+
+The complete platform runs as a Docker Compose stack.
 
 ```mermaid
 flowchart LR
 
-    A["BROWSER<br/>Local Access"]
+    BROWSER["Browser"]
 
-    B["NUCLEARSHIELD SERVICE<br/>FastAPI · Port 8000"]
+    subgraph DOCKER["Docker Compose"]
+        NS["NuclearShield<br/>FastAPI"]
+        PROM["Prometheus"]
+        GRAF["Grafana"]
+    end
 
-    C["PERSISTENT DATA<br/>Analyses · Audit"]
+    BROWSER --> NS
+    BROWSER --> PROM
+    BROWSER --> GRAF
 
-    D["PROMETHEUS SERVICE<br/>Metrics · Port 9090"]
-
-    E["GRAFANA SERVICE<br/>Dashboards · Port 3000"]
-
-    A ==>|"application"| B
-    B -->|"persists"| C
-
-    D -->|"scrapes /metrics"| B
-    E -->|"queries"| D
-
-    A -.->|"metrics UI"| D
-    A -.->|"dashboards"| E
+    PROM --> NS
+    GRAF --> PROM
 ```
 
-### Runtime Services
+Start manually:
 
-| Service | Responsibility | Preferred Port |
-|---|---|---:|
-| **NuclearShield** | FastAPI assurance application | `8000` |
-| **Prometheus** | Metrics collection and target monitoring | `9090` |
-| **Grafana** | Monitoring dashboards and visualization | `3000` |
+```powershell
+docker compose up --build -d
+```
 
-The monitoring relationship is:
+Check:
+
+```powershell
+docker compose ps
+```
+
+Logs:
+
+```powershell
+docker compose logs -f
+```
+
+Stop:
+
+```powershell
+docker compose down
+```
+
+Remove demonstration volumes only when intentionally clearing persistent demo data:
+
+```powershell
+docker compose down --volumes
+```
+
+---
+
+# 🔌 Intelligent Port Handling
+
+The Windows launcher checks:
 
 ```text
-NuclearShield /metrics
-        ▲
-        │ scrape
-        │
-   Prometheus
-        ▲
-        │ query
-        │
-     Grafana
+8000 → NuclearShield
+9090 → Prometheus
+3000 → Grafana
 ```
 
-The browser can access each exposed service independently.
+If another application already owns one of these ports, NuclearShield does **not** kill that application.
 
-The Windows launcher handles preferred-port conflicts without terminating unrelated applications.
+Instead:
+
+```text
+Preferred Port
+      ↓
+Availability Check
+      ↓
+Occupied?
+  ↙         ↘
+No           Yes
+↓             ↓
+Use It     Find Next Free Port
+              ↓
+         Save Runtime Port
+```
+
+This helps NuclearShield coexist safely with other local Docker and development environments.
+
+---
+
+# 🧪 Testing
+
+For local development testing with Python 3.12:
+
+```powershell
+py -3.12 -m venv .venv
+```
+
+Activate:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Install:
+
+```powershell
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+```
+
+Run tests:
+
+```powershell
+pytest -q
+```
+
+Lint:
+
+```powershell
+ruff check app tests
+```
+
+Static security analysis:
+
+```powershell
+bandit -q -r app -x app/static
+```
 
 ---
 
 # 🔁 DevSecOps Pipeline
 
-NuclearShield includes automated development, quality, testing, and security-validation stages.
-
 ```mermaid
 flowchart LR
 
-    A["DEVELOPMENT<br/>Code Changes"]
+    CODE["Code Change"]
+        --> GIT["Git / GitHub"]
 
-    B["SOURCE CONTROL<br/>Git · GitHub"]
+    GIT --> CI["GitHub Actions"]
 
-    C["CONTINUOUS INTEGRATION<br/>GitHub Actions"]
+    CI --> RUFF["Ruff"]
+    CI --> BANDIT["Bandit"]
+    CI --> PYTEST["Pytest"]
 
-    D["AUTOMATED VALIDATION<br/>Ruff · Bandit · Pytest"]
+    RUFF --> GATE["Quality Gate"]
+    BANDIT --> GATE
+    PYTEST --> GATE
 
-    E["QUALITY GATE<br/>Lint · Security · Tests"]
-
-    F["REVIEW<br/>Release Decision"]
-
-    G["RELEASE<br/>Versioned Build"]
-
-    A ==> B ==> C ==> D ==> E ==> F ==> G
+    GATE --> REVIEW["Review / Release"]
 ```
 
-The automated workflow is maintained in:
+The workflow is stored in:
 
 ```text
 .github/workflows/ci.yml
 ```
 
-The pipeline provides separate checks for:
+---
 
-| Validation | Purpose |
-|---|---|
-| **Ruff** | Python linting and code-quality validation |
-| **Bandit** | Static Python security analysis |
-| **Pytest** | Automated application and regression testing |
+# ✅ v1.0.8 Final Visual & Platform Audit
 
-A release remains subject to review rather than being represented as automatically production-approved.
+The final v1.0.8 audit included:
+
+- end-to-end platform review;
+- visual hierarchy refinement;
+- landing-page refinement;
+- trust-architecture refinement;
+- report branding;
+- offline report-logo preservation;
+- report print-color preservation;
+- evidence-driven monitoring refinement;
+- Zeek/Suricata console refinement;
+- persistent analysis behavior;
+- audit/history behavior checks;
+- Prometheus/Grafana health behavior;
+- missing-event-ID regression repair;
+- JavaScript syntax validation;
+- Python source syntax validation; and
+- automated regression testing.
+
+### Final Automated Test Result
+
+```text
+25 passed
+```
+
+---
+
+# 📁 Repository Structure
+
+```text
+NuclearShield/
+│
+├── app/
+│   ├── main.py
+│   ├── analyzer.py
+│   ├── store.py
+│   │
+│   └── static/
+│       ├── app.js
+│       ├── styles.css
+│       ├── report.css
+│       └── assets/
+│
+├── data/
+│
+├── docs/
+│
+├── monitoring/
+│   ├── prometheus.yml
+│   └── grafana/
+│
+├── sample-data/
+│
+├── scripts/
+│
+├── tests/
+│
+├── .github/
+│   └── workflows/
+│
+├── .env.example
+├── Dockerfile
+├── docker-compose.yml
+├── START-NUCLEARSHIELD.cmd
+├── start-nuclearshield.ps1
+├── pyproject.toml
+├── SECURITY.md
+├── LICENSE
+└── README.md
+```
+
+---
+
+# 🔒 Security Model
+
+NuclearShield intentionally excludes operational control capability.
+
+The project does **not** provide:
+
+```text
+✗ Plant-control commands
+✗ PLC manipulation
+✗ SCADA write operations
+✗ Exploit logic
+✗ Real nuclear facility credentials
+✗ Real nuclear material records
+✗ Production plant topology
+✗ Real process set points
+✗ Safety-system manipulation
+```
+
+NuclearShield is designed around:
+
+```text
+✓ Passive evidence
+✓ Read-only analysis
+✓ Explainable findings
+✓ Human authorization
+✓ Auditability
+✓ Defensive monitoring
+✓ Synthetic demonstrations
+```
+
+See:
+
+```text
+SECURITY.md
+```
+
+for the repository's safe-use boundary.
+
+---
+
+# 📚 Standards & Compliance Scope
+
+NuclearShield can organize evidence themes relevant to nuclear cybersecurity and assurance frameworks.
+
+The project includes evidence-oriented mappings associated with areas such as:
+
+- IEC 62645
+- NRC RG 5.71
+- IAEA cybersecurity guidance
+
+These mappings are provided for **educational and demonstrative purposes**.
+
+> **Framework mapping does not mean certification.**
+
+NuclearShield does not certify compliance, provide regulatory approval, replace qualified assessment, or establish that a real nuclear facility satisfies a standard.
+
+Real-world cybersecurity, safety, safeguards, and regulatory decisions remain the responsibility of qualified organizations and authorities.
+
+---
+
+# 🤖 Responsible AI Disclosure
+
+AI tools assisted with portions of:
+
+- code development;
+- documentation;
+- testing support; and
+- original visual development.
+
+NuclearShield's analytical behavior remains inspectable.
+
+The platform exposes:
+
+- deterministic rules;
+- statistical methods;
+- correlation logic;
+- confidence;
+- detection reasons; and
+- contributing evidence.
+
+The project does **not** represent a validated nuclear-sector machine-learning model.
+
+AI-supported analysis does not replace human authority.
+
+---
+
+# ⚠️ Responsible Use
+
+NuclearShield is intended for:
+
+- cybersecurity education;
+- defensive demonstrations;
+- evidence-analysis demonstrations;
+- DevSecOps demonstrations;
+- academic presentations;
+- assurance workflow research; and
+- synthetic cybersecurity experimentation.
+
+It must not be connected to operational nuclear or industrial-control environments.
+
+---
+
+# 📄 License
+
+NuclearShield is released under the **MIT License**.
+
+See:
+
+```text
+LICENSE
+```
+
+---
+
+# 👤 Author
+
+### Ruveeha Ashfaq
+
+**Co-Founder — HR Presents**
+
+Focused on defensive cybersecurity, DevOps, cloud, Linux, containerization, and evidence-driven security platforms.
+
+---
+
+<div align="center">
+
+## ☢️ NuclearShield
+
+### Evidence First. Human Authority Preserved.
+
+**Defensive · Read-Only · Explainable · Auditable**
+
+**v1.0.8**
+
+</div>
