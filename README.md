@@ -8,7 +8,7 @@
 
 **Defensive · Read-Only · Evidence-Driven · Explainable · Auditable**
 
-**Version 1.0.1**
+**Version 1.0.0**
 
 NuclearShield is a defensive cybersecurity assurance workstation that transforms passive security evidence into explainable findings, correlations, monitoring intelligence, reports, and auditable human decisions — without sending commands to operational technology.
 
@@ -20,7 +20,7 @@ NuclearShield is a defensive cybersecurity assurance workstation that transforms
 ![Prometheus](https://img.shields.io/badge/Prometheus-Monitoring-E6522C)
 ![Grafana](https://img.shields.io/badge/Grafana-Visualization-F46800)
 ![License](https://img.shields.io/badge/License-MIT-green)
-![Version](https://img.shields.io/badge/Release-v1.0.1-orange)
+![Version](https://img.shields.io/badge/Release-v1.0.0-orange)
 
 </div>
 
@@ -852,6 +852,6 @@ Focused on defensive cybersecurity, DevOps, cloud, Linux, containerization, and 
 
 **Defensive · Read-Only · Explainable · Auditable**
 
-**v1.0.1**
+**v1.0.0**
 
 </div>
