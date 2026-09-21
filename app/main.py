@@ -17,7 +17,7 @@ from .analyzer import analyze, build_summary, digest, finding_dicts, parse_evide
 from .store import append_audit, delete_analysis, get_analysis, list_analyses, recent_audit, save_analysis
 
 ROOT = Path(__file__).resolve().parent
-app = FastAPI(title="NuclearShield", version="1.0.0")
+app = FastAPI(title="NuclearShield", version="1.0.1")
 ingestions = Counter("nuclearshield_ingestions_total", "Evidence files processed", ["result"])
 finding_count = Gauge("nuclearshield_findings", "Findings in the latest analysis", ["severity"])
 engine_count = Gauge(
