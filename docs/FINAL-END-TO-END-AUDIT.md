@@ -1,4 +1,4 @@
-# NuclearShield v1.0.8 — Final End-to-End Audit
+# NuclearShield v1.0.0 — Final End-to-End Audit
 
 This pass focuses on stability and UI/UX consistency without changing the approved Material/Safeguards and AI Detection charts.
 

@@ -1,4 +1,4 @@
-# NuclearShield v1.0.8 — Final UI/UX audit
+# NuclearShield v1.0.0 — Final UI/UX audit
 
 This pass preserves the domain-specific visualizations, Material and AI charts, and the established Monitoring workspace.
 

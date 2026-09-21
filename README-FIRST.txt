@@ -1,11 +1,8 @@
-NUCLEARSHIELD v1.0.8 ENHANCED
+NUCLEARSHIELD v1.0.0
 ============================
 
 EASIEST WINDOWS START
 ---------------------
-You can run START-NUCLEARSHIELD-ONE-CLICK.cmd even if you are viewing the ZIP in Windows Explorer.
-It contains the complete project payload, extracts NuclearShield to your Documents folder, and then starts the real launcher.
-
 NORMAL START
 ------------
 1. Right-click the downloaded ZIP and choose Extract All.

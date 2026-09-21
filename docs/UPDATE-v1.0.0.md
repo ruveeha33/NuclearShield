@@ -1,4 +1,4 @@
-# NuclearShield v1.0.8 UI and workspace update
+# NuclearShield v1.0.0 UI and workspace update
 
 This update preserves the defensive, read-only evidence boundary while improving workspace separation and presentation.
 

@@ -1,4 +1,4 @@
-# NuclearShield v1.0.8 Final Repair
+# NuclearShield v1.0.0 Final Repair
 
 - Restored Integrity and Material/Safeguards workspaces by restoring the shared domain statistics helper.
 - Replaced side alert rails with full-width, vertically scrollable detailed alert streams directly below workspace statistics.
