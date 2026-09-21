@@ -199,56 +199,34 @@ The platform focuses on **defensible evidence**, not autonomous operational resp
 
 # 🏗️ Platform Architecture
 
+NuclearShield uses a layered architecture that separates analyst interaction, application services, evidence processing, assurance analysis, persistence, and outputs.
+
 ```mermaid
-flowchart TB
+flowchart LR
 
-    USER["Analyst / Authorized Reviewer"]
+    A["ANALYST<br/>Evidence Upload · Review"]
 
-    subgraph UI["NUCLEARSHIELD INTERFACE"]
-        DASH["Overview"]
-        ING["Ingestion"]
-        SCADA["SCADA"]
-        INTEGRITYUI["Integrity"]
-        MATERIAL["Material"]
-        AI["AI Detection"]
-        DEV["DevSecOps"]
-        COMP["Compliance"]
-        REP["Reports"]
-        MON["Monitoring"]
-        AUD["Audit"]
-    end
+    B["PRESENTATION<br/>UI · Workspaces · Reports"]
 
-    USER --> UI
+    C["APPLICATION<br/>FastAPI · APIs · Validation"]
 
-    UI --> API["FastAPI Application Layer"]
+    D["ASSURANCE ENGINE<br/>Normalize · Detect<br/>Correlate · Explain"]
 
-    subgraph CORE["ASSURANCE ENGINE"]
-        PARSER["Evidence Parser"]
-        NORMALIZER["Normalizer"]
-        ANALYZER["Detection Engine"]
-        CORRELATOR["Correlation Engine"]
-        EXPLAIN["Explanation Layer"]
-    end
+    E["PERSISTENCE<br/>Analyses · History · Audit"]
 
-    API --> PARSER
-    PARSER --> NORMALIZER
-    NORMALIZER --> ANALYZER
-    ANALYZER --> CORRELATOR
-    CORRELATOR --> EXPLAIN
+    F["OUTPUTS<br/>Findings · Reports · Monitoring"]
 
-    EXPLAIN --> STORE["Persistent Analysis Store"]
-    STORE --> REPORTING["Report Engine"]
-    STORE --> AUDITSTORE["Audit History"]
-
-    API --> METRICS["/metrics"]
-
-    METRICS --> PROM["Prometheus"]
-    PROM --> GRAFANA["Grafana"]
-
-    REPORTING --> USER
-    AUDITSTORE --> USER
-    GRAFANA --> USER
+    A ==> B
+    B ==> C
+    C ==> D
+    D ==> E
+    E ==> F
+    F --> A
 ```
+
+The architecture maintains a clear separation between the user interface, application layer, assurance processing, persistent analysis records, and reviewable outputs.
+
+**Human authority remains outside the automated analytical pipeline.**
 
 ---
 
