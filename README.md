@@ -8,7 +8,7 @@
 
 **Defensive · Read-Only · Evidence-Driven · Explainable · Auditable**
 
-**Version 1.0.8 — Final Visual & Platform Audit**
+**Version 1.0.0**
 
 NuclearShield is a defensive cybersecurity assurance workstation that transforms passive security evidence into explainable findings, correlations, monitoring intelligence, reports, and auditable human decisions — without sending commands to operational technology.
 
@@ -20,11 +20,9 @@ NuclearShield is a defensive cybersecurity assurance workstation that transforms
 ![Prometheus](https://img.shields.io/badge/Prometheus-Monitoring-E6522C)
 ![Grafana](https://img.shields.io/badge/Grafana-Visualization-F46800)
 ![License](https://img.shields.io/badge/License-MIT-green)
-![Version](https://img.shields.io/badge/Release-v1.0.8-orange)
+![Version](https://img.shields.io/badge/Release-v1.0.0-orange)
 
 </div>
-
----
 
 ## 🛡️ Safety Authority
 
@@ -39,8 +37,6 @@ NuclearShield is a defensive cybersecurity assurance workstation that transforms
 **Observe → Verify → Analyze → Explain → Report**
 
 **Human authority remains the final decision boundary.**
-
----
 
 # 🚀 Quick Start
 
@@ -90,8 +86,6 @@ The launcher automatically:
 
 No unrelated process is terminated just to reclaim a preferred port.
 
----
-
 # 🔄 NuclearShield Workflow
 
 NuclearShield follows an **evidence-to-decision** model.
@@ -117,8 +111,6 @@ NuclearShield does not turn a detection directly into an operational action.
 Instead, it preserves the separation between:
 
 **machine-assisted analysis** and **human authority**.
-
----
 
 # 🧠 How NuclearShield Works
 
@@ -171,8 +163,6 @@ flowchart TD
     MONITOR --> SURI["Suricata-Style Evidence"]
 ```
 
----
-
 # 🎯 What NuclearShield Does
 
 NuclearShield turns passive defensive evidence into a structured assurance workflow.
@@ -194,8 +184,6 @@ It is designed to answer:
 > **Who retains decision authority?**
 
 The platform focuses on **defensible evidence**, not autonomous operational response.
-
----
 
 # 🏗️ Platform Architecture
 
@@ -250,8 +238,6 @@ flowchart TB
     GRAFANA --> USER
 ```
 
----
-
 # 📥 Evidence Ingestion
 
 NuclearShield accepts passive defensive evidence in:
@@ -293,8 +279,6 @@ Maximum file size : 10 MB
 Maximum records   : 50,000
 ```
 
----
-
 # 🧩 Flexible Evidence Schema
 
 NuclearShield recognizes common field alternatives rather than requiring every source to use exactly the same schema.
@@ -328,8 +312,6 @@ change
 Evidence is treated as **untrusted input**.
 
 A finding represents an analytical result — not proof that a real-world nuclear or industrial event occurred.
-
----
 
 # 🔎 Explainable Detection Engine
 
@@ -372,8 +354,6 @@ The platform uses statistical analysis as **decision-support evidence**, not as 
 
 Related records can be associated through shared evidence characteristics such as actors, assets, and event relationships.
 
----
-
 # 🌐 Zeek & Suricata Evidence
 
 NuclearShield includes passive network-security evidence support inspired by common Zeek and Suricata evidence formats.
@@ -396,8 +376,6 @@ These consoles do **not** claim to represent live nuclear-facility telemetry.
 
 They display uploaded or synthetic defensive evidence only.
 
----
-
 # 🖥️ NuclearShield Workspaces
 
 ## 📊 Overview
@@ -411,8 +389,6 @@ Provides the high-level assurance picture:
 - recent analyses; and
 - platform status.
 
----
-
 ## 📥 Ingestion
 
 The entry point for evidence analysis.
@@ -423,8 +399,6 @@ Users can:
 - inspect ingestion results;
 - use the built-in synthetic demonstration; and
 - create a persistent analysis record.
-
----
 
 ## ⚙️ SCADA
 
@@ -440,23 +414,17 @@ It does not:
 - manipulate field devices; or
 - control physical processes.
 
----
-
 ## 🔐 Integrity
 
 Surfaces integrity-oriented evidence and associated detection results.
 
 The purpose is to support review of declared integrity state rather than automatically change system configuration.
 
----
-
 ## ☢️ Material
 
 Provides synthetic safeguards-oriented evidence views for educational analysis.
 
 No real nuclear-material records are included.
-
----
 
 ## 🧠 AI Detection
 
@@ -465,8 +433,6 @@ Displays explainable findings and their analytical context.
 The emphasis is:
 
 **why the finding exists**, not simply that an alert was generated.
-
----
 
 ## 🛠️ DevSecOps
 
@@ -479,8 +445,6 @@ The repository includes:
 - static security analysis; and
 - GitHub Actions CI.
 
----
-
 ## 📋 Compliance
 
 Provides evidence-oriented framework mappings.
@@ -488,8 +452,6 @@ Provides evidence-oriented framework mappings.
 These mappings help demonstrate how collected evidence may be organized against assurance themes.
 
 They are **not certification or compliance attestation**.
-
----
 
 ## 📄 Reports
 
@@ -516,8 +478,6 @@ Reports can be:
 
 The downloaded report embeds NuclearShield branding for offline viewing.
 
----
-
 ## 📡 Monitoring
 
 Provides platform and passive security-monitoring visibility through:
@@ -529,15 +489,11 @@ Provides platform and passive security-monitoring visibility through:
 - Suricata-style evidence
 - platform health information
 
----
-
 ## 📜 Audit
 
 Maintains traceable platform activity.
 
 The audit system is designed so that deleting an analyzed-file record does not silently erase the associated audit history.
-
----
 
 # 📊 Monitoring Architecture
 
@@ -563,8 +519,6 @@ NuclearShield checks actual service health.
 
 If Prometheus or Grafana is unavailable, the interface reports the service as unavailable rather than showing a false success state.
 
----
-
 # 🌐 Default Services
 
 When the preferred ports are available:
@@ -584,8 +538,6 @@ Selected ports are recorded in:
 ```text
 .runtime-ports.env
 ```
-
----
 
 # 🐳 Docker Architecture
 
@@ -640,8 +592,6 @@ Remove demonstration volumes only when intentionally clearing persistent demo da
 docker compose down --volumes
 ```
 
----
-
 # 🔌 Intelligent Port Handling
 
 The Windows launcher checks:
@@ -671,8 +621,6 @@ Use It     Find Next Free Port
 ```
 
 This helps NuclearShield coexist safely with other local Docker and development environments.
-
----
 
 # 🧪 Testing
 
@@ -713,8 +661,6 @@ Static security analysis:
 bandit -q -r app -x app/static
 ```
 
----
-
 # 🔁 DevSecOps Pipeline
 
 ```mermaid
@@ -741,37 +687,6 @@ The workflow is stored in:
 ```text
 .github/workflows/ci.yml
 ```
-
----
-
-# ✅ v1.0.8 Final Visual & Platform Audit
-
-The final v1.0.8 audit included:
-
-- end-to-end platform review;
-- visual hierarchy refinement;
-- landing-page refinement;
-- trust-architecture refinement;
-- report branding;
-- offline report-logo preservation;
-- report print-color preservation;
-- evidence-driven monitoring refinement;
-- Zeek/Suricata console refinement;
-- persistent analysis behavior;
-- audit/history behavior checks;
-- Prometheus/Grafana health behavior;
-- missing-event-ID regression repair;
-- JavaScript syntax validation;
-- Python source syntax validation; and
-- automated regression testing.
-
-### Final Automated Test Result
-
-```text
-25 passed
-```
-
----
 
 # 📁 Repository Structure
 
@@ -817,8 +732,6 @@ NuclearShield/
 └── README.md
 ```
 
----
-
 # 🔒 Security Model
 
 NuclearShield intentionally excludes operational control capability.
@@ -857,8 +770,6 @@ SECURITY.md
 
 for the repository's safe-use boundary.
 
----
-
 # 📚 Standards & Compliance Scope
 
 NuclearShield can organize evidence themes relevant to nuclear cybersecurity and assurance frameworks.
@@ -876,8 +787,6 @@ These mappings are provided for **educational and demonstrative purposes**.
 NuclearShield does not certify compliance, provide regulatory approval, replace qualified assessment, or establish that a real nuclear facility satisfies a standard.
 
 Real-world cybersecurity, safety, safeguards, and regulatory decisions remain the responsibility of qualified organizations and authorities.
-
----
 
 # 🤖 Responsible AI Disclosure
 
@@ -903,8 +812,6 @@ The project does **not** represent a validated nuclear-sector machine-learning m
 
 AI-supported analysis does not replace human authority.
 
----
-
 # ⚠️ Responsible Use
 
 NuclearShield is intended for:
@@ -919,8 +826,6 @@ NuclearShield is intended for:
 
 It must not be connected to operational nuclear or industrial-control environments.
 
----
-
 # 📄 License
 
 NuclearShield is released under the **MIT License**.
@@ -931,17 +836,13 @@ See:
 LICENSE
 ```
 
----
-
 # 👤 Author
 
 ### Ruveeha Ashfaq
 
-**Co-Founder — HR Presents**
+**Co-Founder, HR Presents**
 
 Focused on defensive cybersecurity, DevOps, cloud, Linux, containerization, and evidence-driven security platforms.
-
----
 
 <div align="center">
 
@@ -951,6 +852,6 @@ Focused on defensive cybersecurity, DevOps, cloud, Linux, containerization, and 
 
 **Defensive · Read-Only · Explainable · Auditable**
 
-**v1.0.8**
+**v1.0.0**
 
 </div>
