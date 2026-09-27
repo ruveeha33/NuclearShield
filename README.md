@@ -8,7 +8,7 @@
 
 <p align="center">
   <strong>Defensive · Read-Only · Evidence-Driven · Explainable · Observable</strong>
-</p>
+</p> 
 
 <p align="center">
   <a href="#overview">Overview</a> ·
