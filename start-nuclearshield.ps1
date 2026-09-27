@@ -77,7 +77,7 @@ function Select-RuntimePorts([int]$AppStart = 8000, [int]$PromStart = 9090, [int
 }
 
 try {
-    Write-Host "[1/7] Checking Docker..."
+    Write-Host "Checking Docker..."
     if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
         Fail "Docker CLI was not found. Install/start Docker Desktop and retry."
     }
@@ -92,7 +92,7 @@ try {
         if (-not (Test-DockerEngine)) { Fail "Docker Desktop did not become ready within two minutes." }
     }
 
-    Write-Host "[2/7] Checking Docker Compose..."
+    Write-Host "Checking Docker Compose..."
     docker compose version | Out-Host
     if ($LASTEXITCODE -ne 0) { Fail "Docker Compose v2 is unavailable." }
 
@@ -102,34 +102,50 @@ try {
     docker compose down --remove-orphans 2>$null | Out-Null
     Select-RuntimePorts 8000 9090 3000
 
-    Write-Host "[3/7] Validating configuration..."
+    Write-Host "Validating configuration..."
     docker compose config --quiet
     if ($LASTEXITCODE -ne 0) { Fail "docker-compose.yml validation failed." }
 
-    Write-Host "[4/7] Preparing monitoring images..."
+    Write-Host "Preparing monitoring images..."
     $requiredImages = @("prom/prometheus:latest", "grafana/grafana:latest")
     $missingImages = @()
     foreach ($image in $requiredImages) {
-        docker image inspect $image *> $null
-        if ($LASTEXITCODE -ne 0) { $missingImages += $image }
+        $imageId = docker image ls --quiet --filter "reference=$image"
+        if ($LASTEXITCODE -ne 0) { Fail "Cannot inspect local Docker images. Check Docker Desktop and retry." }
+        if (-not $imageId) { $missingImages += $image }
     }
     $env:MONITORING_PULL_POLICY = if ($missingImages.Count -gt 0) { "missing" } else { "never" }
     if ($missingImages.Count -gt 0) {
         Write-Host "  First run requires monitoring images: $($missingImages -join ', ')"
     }
 
-    Write-Host "[5/7] Building and starting services..."
+    Write-Host "Starting services..."
+    # Rebuild on source changes; reuse the same image on subsequent exam starts.
+    $sourceFiles = @(Get-Item Dockerfile, pyproject.toml) + @(Get-ChildItem app -Recurse -File)
+    $fingerprintText = ($sourceFiles | Sort-Object FullName | ForEach-Object { $_.FullName.Substring($PSScriptRoot.Length) + ':' + (Get-FileHash $_.FullName -Algorithm SHA256).Hash }) -join "`n"
+    $hashAlgorithm = [Security.Cryptography.SHA256]::Create()
+    try { $fingerprint = [BitConverter]::ToString($hashAlgorithm.ComputeHash([Text.Encoding]::UTF8.GetBytes($fingerprintText))).Replace('-', '') }
+    finally { $hashAlgorithm.Dispose() }
+    $fingerprintPath = Join-Path $PSScriptRoot '.runtime-build-hash'
+    $appImageId = docker image ls --quiet --filter 'reference=nuclearshield:exam-ml-v2'
+    if ($LASTEXITCODE -ne 0) { Fail "Cannot inspect local Docker images. Check Docker Desktop and retry." }
+    $hasImage = [bool]$appImageId
+    $needsBuild = (-not $hasImage) -or (-not (Test-Path $fingerprintPath)) -or ((Get-Content $fingerprintPath -Raw).Trim() -ne $fingerprint)
+    if ($needsBuild) { Write-Host 'Application source changed or first start: building image.' }
+    else { Write-Host 'Using cached application image for a faster start.' }
     $startedStack = $false
     $maxPortAttempts = 20
     for ($attempt = 1; $attempt -le $maxPortAttempts; $attempt++) {
-        Write-Host "  Port set $attempt/$maxPortAttempts"
+        Write-Host "  Checking available port set ($attempt/$maxPortAttempts)"
         Write-Host "  App        : http://localhost:$($env:APP_PORT)"
         Write-Host "  Prometheus : http://localhost:$($env:PROMETHEUS_PORT)"
         Write-Host "  Grafana    : http://localhost:$($env:GRAFANA_PORT)"
 
-        docker compose up --build -d --remove-orphans
+        if ($needsBuild) { docker compose up --build -d --remove-orphans }
+        else { docker compose up -d --remove-orphans }
         if ($LASTEXITCODE -eq 0) {
             $startedStack = $true
+            if ($needsBuild) { Set-Content -Path $fingerprintPath -Value $fingerprint }
             break
         }
 
@@ -145,7 +161,7 @@ try {
     }
     if (-not $startedStack) { Fail "Docker Compose could not start after $maxPortAttempts automatic port selections." }
 
-    Write-Host "[6/7] Waiting for NuclearShield health check..."
+    Write-Host "Waiting for NuclearShield health check..."
     $deadline = (Get-Date).AddMinutes(3)
     $ready = $false
     do {
@@ -164,7 +180,7 @@ try {
         Fail "The web application did not become healthy. Container logs are shown above."
     }
 
-    Write-Host "[7/7] Verifying services..."
+    Write-Host "Verifying services..."
     docker compose ps | Out-Host
     Write-Host ""
     Write-Host "NuclearShield is READY." -ForegroundColor Green
@@ -173,6 +189,11 @@ try {
     Write-Host "Grafana    : http://localhost:$($env:GRAFANA_PORT)  (admin / nuclearshield-demo)"
     Start-Process "http://localhost:$($env:APP_PORT)"
     Stop-Transcript | Out-Null
+    Write-Host ""
+    Write-Host "LIVE NUCLEARSHIELD ACTIVITY" -ForegroundColor Cyan
+    Write-Host "Browser navigation and hover context appear here; API lines show actual backend requests." -ForegroundColor Gray
+    Write-Host "Press Ctrl+C to stop viewing the stream. Docker services continue running." -ForegroundColor Gray
+    docker compose logs --follow --tail 8 nuclearshield
     exit 0
 } catch {
     Write-Host ""

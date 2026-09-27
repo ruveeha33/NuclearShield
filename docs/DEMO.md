@@ -1,23 +1,26 @@
-# Oral demonstration runbook
+# NuclearShield 20-minute oral demonstration
 
-This sequence fits a 15 to 20 minute presentation and leaves the deeper trade-offs for the interview.
+Allow about 9 minutes for the slides, 9.5 minutes for the live platform, and 1.5 minutes for transitions. Extract the ZIP first, start Docker Desktop, and double-click `START-NUCLEARSHIELD.cmd` from the extracted folder. Run `powershell -ExecutionPolicy Bypass -File .\scripts\pre-exam-check.ps1` before presenting. The launcher may select different free ports; use the URLs it prints.
 
-1. Open `http://localhost:8000` and point to the synthetic/read-only banner.
-2. Explain the five trust zones. Emphasize that safety evidence crosses a conceptual data diode outward and no command path returns.
-3. Select **Load included demo file**. Explain schema validation and SHA-256 evidence hashing.
-4. Walk through three findings: a passive network burst, a safety-integrity mismatch, and access without work authorization.
-5. Explain that scores prioritize review. They never cause automatic plant action.
-6. Open the HTML report. Show the evidence digest, findings, authorization note and audit entries.
-7. Open Prometheus, query `nuclearshield_ingestions_total`, then open the provisioned Grafana dashboard.
-8. Stop the application container with `docker compose stop nuclearshield`; show that Prometheus marks the target unavailable.
-9. Recover with `docker compose start nuclearshield`; show `/api/health` and the target returning to healthy.
-10. Close with the compliance map and the trade-offs in `DECISIONS.md`.
+## Live sequence
 
-## Interview defense prompts
+| Time | Action | Explain |
+| --- | --- | --- |
+| 0:00–1:00 | Open the landing page and Ingestion. | Fictional, read-only evidence enters an assurance workstation; no OT control connection exists. |
+| 1:00–2:30 | Upload `sample-data/NuclearShield-Full-Platform-100-Records.jsonl`. Open Overview and SCADA. | Show accepted records, SHA-256 provenance and explainable network findings. |
+| 2:30–3:30 | Open Integrity and Material. | Discuss safety integrity, offline access/material joins and human review of safeguards evidence. |
+| 3:30–4:45 | Open Assurance Lab, use Policy & evidence, and run the included training indicator catalog. | Show bounded gateway/review checks and fictional indicator matches; these are not verified threat intelligence or autonomous containment. |
+| 4:45–6:00 | Open Compliance and Reports, then use Assurance Lab → Audit history; download the evidence packet JSON. | Show traceable references, framework mappings and retained uploads. The packet is not a regulatory submission or certification. |
+| 6:00–7:00 | Upload `sample-data/08-later-integrity-snapshot.csv` and inspect Assurance Lab. | Show one changed fictional asset across offline uploads; this is not continuous plant monitoring. |
+| 7:00–8:30 | Upload `sample-data/NuclearShield-IsolationForest-80-Network-Records.csv` and open AI Detection. | scikit-learn Isolation Forest scores uploaded network observations, flags outliers for review and cannot order plant actions. |
+| 8:30–9:30 | Open Monitoring, Prometheus and Grafana via the displayed local links. | Application metrics and dashboards observe this demonstration stack; the ports may differ on the exam machine. |
 
-- Why passive monitoring? It reduces the chance that monitoring changes deterministic OT behavior, but visibility depends on reliable mirror points and evidence quality.
-- Why a data diode? It provides a strong one-way property for safety evidence, but acknowledgements and interactive troubleshooting need separate approved procedures.
-- Why simple explainable scoring? The demonstrator makes the reason for every finding visible. A production model would need validated training data, drift controls, independent testing and safety governance.
-- Why no automated isolation? A generic cyber response may harm safety or availability. Qualified operators must apply approved, state-aware procedures.
-- What fails safely? Invalid files are rejected, the app has no control channel, monitoring failure cannot affect safety functions, and evidence remains attributable by digest.
+The full-platform file should accept 100 records, produce findings, and complete Isolation Forest scoring for suitable network evidence. The focused ML file contains 80 network observations. Counts can depend on the selected upload and analysis state; show the actual interface results rather than promising an exact number of alerts.
 
+## Interview boundaries
+
+- The data diode is an architectural concept here, not physical diode hardware. No commands return to safety systems.
+- PACS and MC&A joins operate on offline synthetic records, not live facility integrations.
+- Scores and indicator matches are leads for an authorized human reviewer, not confirmed attacks or automated response.
+- Regulatory mapping and audit references support a classroom demonstration; they do not establish IEC, NRC or IAEA certification.
+- A production deployment would require validated operational data, independent safety review, approved architecture and site-specific authority.

@@ -17,5 +17,5 @@ def test_landing_lifecycle_card_is_compact():
 
 def test_audit_can_delete_linked_analysis_without_deleting_audit_history():
     assert "Delete analyzed file" in JS
-    assert 'state.analyses.find(x=>x.digest===a.evidence_digest)' in JS
+    assert 'state.analyses.find(x=>x.id===id)' in JS
     assert '"analysis_id": saved["id"]' in MAIN

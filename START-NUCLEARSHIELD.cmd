@@ -4,7 +4,10 @@ cd /d "%~dp0"
 title NuclearShield Launcher
 cls
 echo ============================================================
-echo  NuclearShield v1.0.0 Launcher
+echo    N U C L E A R S H I E L D
+echo    Nuclear Cybersecurity Evidence Workstation
+echo    Read-only analysis  ^|  Live terminal activity
+echo    EXAM ML BUILD - Isolation Forest enabled
 echo ============================================================
 echo.
 if not exist "%~dp0start-nuclearshield.ps1" (
@@ -13,8 +16,7 @@ if not exist "%~dp0start-nuclearshield.ps1" (
   echo Windows is running this launcher from a temporary ZIP folder:
   echo   %~dp0
   echo.
-  echo If you opened this file inside the ZIP, close this window.
-  echo Right-click the ZIP ^> Extract All, then run START-NUCLEARSHIELD.cmd.
+  echo Extract the full ZIP folder, then run START-NUCLEARSHIELD.cmd.
   echo.
   echo The normal launcher intentionally will not continue with missing project files.
   echo ============================================================

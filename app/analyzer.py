@@ -9,8 +9,12 @@ import statistics
 from dataclasses import asdict, dataclass
 from typing import Any
 
+from sklearn.ensemble import IsolationForest
+
 ALLOWED_TYPES = {"network", "integrity", "access", "material", "radiation", "change"}
 MAX_BYTES, MAX_RECORDS = 10_000_000, 50_000
+ML_MIN_ROWS = 20
+ML_FIELDS = ("value", "orig_bytes", "resp_bytes", "duration")
 
 
 @dataclass(frozen=True)
@@ -173,10 +177,53 @@ def _profiles(events: list[dict[str, Any]]) -> dict[str, tuple[float, float]]:
     return profiles
 
 
-def analyze(events: list[dict[str, Any]]) -> list[Finding]:
+def network_model(events: list[dict[str, Any]]) -> dict[str, Any]:
+    """Exploratory, per-upload network outlier screening; no plant-trained model."""
+    network = [(index, event) for index, event in enumerate(events) if event["event_type"] == "network"]
+    result: dict[str, Any] = {
+        "status": "insufficient_data", "method": "scikit-learn IsolationForest",
+        "minimum_rows": ML_MIN_ROWS, "network_rows": len(network), "eligible_rows": 0,
+        "features": [], "outliers": [], "scores": [],
+        "use_case": "Prioritize unusual numeric network evidence for human review; outliers are not confirmed attacks.",
+        "training_scope": "Fits and scores only the current uploaded network evidence, with no external plant data.",
+    }
+    if len(network) < ML_MIN_ROWS:
+        return result
+    # Use real supplied numeric fields only; never invent telemetry or fill missing values.
+    fields = [field for field in ML_FIELDS if sum(_number(event.get(field)) is not None for _, event in network) >= max(ML_MIN_ROWS, math.ceil(len(network) * 0.8))]
+    if not fields:
+        return result
+    for field in fields[:]:
+        values = [_number(event.get(field)) for _, event in network]
+        if len({v for v in values if v is not None}) < 5:
+            fields.remove(field)
+    if not fields:
+        return result
+    eligible = [(index, event) for index, event in network if all(_number(event.get(field)) is not None for field in fields)]
+    result["eligible_rows"] = len(eligible)
+    result["features"] = fields
+    if len(eligible) < ML_MIN_ROWS:
+        return result
+    matrix = [[_number(event[field]) for field in fields] for _, event in eligible]
+    model = IsolationForest(n_estimators=100, contamination=0.05, random_state=42, n_jobs=1)
+    model.fit(matrix)
+    scores = model.decision_function(matrix)
+    result["status"] = "completed"
+    result["scores"] = [
+        {"row_index": index, "event_id": event["event_id"], "decision_score": round(float(score), 5),
+         "outlier": bool(score < 0), "values": {field: _number(event[field]) for field in fields}}
+        for (index, event), score in zip(eligible, scores)
+    ]
+    result["outliers"] = [row for row in result["scores"] if row["outlier"]]
+    return result
+
+
+def analyze(events: list[dict[str, Any]], model_result: dict[str, Any] | None = None) -> list[Finding]:
     profiles, findings = _profiles(events), []
+    model_result = model_result if model_result is not None else network_model(events)
+    model_flags = {row["row_index"]: row for row in model_result["outliers"]}
     suspicious_access = [e for e in events if e["event_type"] == "access" and not e["authorized"]]
-    for event in events:
+    for index, event in enumerate(events):
         score, reasons, contributors, engines = 0, [], [], []
         value, baseline = _number(event.get("value")), _number(event.get("baseline"))
         if value is not None and baseline is not None:
@@ -215,10 +262,16 @@ def analyze(events: list[dict[str, Any]]) -> list[Finding]:
             if robust_z >= 3.5:
                 score += min(35, round(robust_z * 4))
                 reasons.append(
-                    "ML-assisted robust outlier model identified unusual peer-group behavior"
+                    "median/MAD statistical check identified unusual peer-group behavior"
                 )
                 contributors.append(f"robust z-score {robust_z:.2f}")
                 engines.append("robust-anomaly-model")
+        if index in model_flags:
+            flag = model_flags[index]
+            score += 25
+            reasons.append("Isolation Forest flagged this uploaded network observation as an outlier for human review")
+            contributors.append(f"Isolation Forest decision score {flag['decision_score']:.5f} (negative means outlier)")
+            engines.append("isolation-forest")
         related = []
         if event["event_type"] in {"network", "material", "radiation", "change"}:
             related = [
@@ -262,7 +315,8 @@ def analyze(events: list[dict[str, Any]]) -> list[Finding]:
 
 
 def build_summary(
-    events: list[dict[str, Any]], findings: list[Finding], rejected: list[dict[str, Any]]
+    events: list[dict[str, Any]], findings: list[Finding], rejected: list[dict[str, Any]],
+    model_result: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     total = len(events) + len(rejected)
     return {
@@ -285,10 +339,12 @@ def build_summary(
                 "integrity-rule",
                 "authorization-rule",
                 "robust-anomaly-model",
+                "isolation-forest",
                 "correlation-engine",
             )
         },
-        "ai_statement": "Explainable hybrid inference; no autonomous action and no claim of a reactor-trained model.",
+        "network_ml": model_result if model_result is not None else network_model(events),
+        "ai_statement": "Current-file Isolation Forest screening plus explainable rules and median/MAD; no autonomous action or reactor-trained model.",
     }
 
 

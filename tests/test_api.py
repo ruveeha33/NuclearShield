@@ -44,6 +44,47 @@ def test_upload_persists_analysis_and_populates_dynamic_views(tmp_path, monkeypa
     assert "Zeek/Suricata-style passive network evidence" in report.text
 
 
+def test_network_model_result_is_persisted_and_visible_to_ai_view(tmp_path, monkeypatch):
+    from pathlib import Path
+
+    monkeypatch.setenv("NUCLEARSHIELD_DATA_DIR", str(tmp_path))
+    raw = (Path(__file__).resolve().parents[1] / "sample-data" / "isolation-forest-network-synthetic.csv").read_bytes()
+    created = client.post("/api/ingest", files={"file": ("synthetic-network.csv", raw, "text/csv")})
+    assert created.status_code == 200
+    analysis_id = created.json()["analysis_id"]
+    detail = client.get(f"/api/analyses/{analysis_id}").json()
+    ml = detail["summary"]["network_ml"]
+    assert ml["status"] == "completed"
+    assert ml["features"] == ["value", "duration"]
+    assert any(row["event_id"] == "SYN-NET-037" for row in ml["outliers"])
+    detections = client.get(f"/api/detections?analysis_id={analysis_id}").json()
+    assert any("isolation-forest" in finding["engine"] for finding in detections["findings"])
+
+
+def test_target_browser_urls_use_published_ports_not_docker_names(monkeypatch):
+    import io
+    import json
+    from unittest.mock import patch
+
+    monkeypatch.setenv("PUBLIC_APP_PORT", "8007")
+    monkeypatch.setenv("PUBLIC_PROMETHEUS_PORT", "9097")
+    data = {"status": "success", "data": {"activeTargets": [
+        {"labels": {"job": "nuclearshield"}, "health": "up", "scrapeUrl": "http://nuclearshield:8000/metrics"},
+        {"labels": {"job": "prometheus"}, "health": "up", "scrapeUrl": "http://localhost:9090/metrics"},
+    ]}}
+    class Stream(io.BytesIO):
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            self.close()
+    with patch("app.main.urlopen", return_value=Stream(json.dumps(data).encode())):
+        response = client.get("/api/prometheus-targets")
+    assert response.status_code == 200
+    targets = response.json()["targets"]
+    assert targets[0]["browser_url"] == "http://localhost:8007/metrics"
+    assert targets[1]["browser_url"] == "http://localhost:9097/metrics"
+
+
 def test_analysis_can_be_deleted_while_audit_is_retained(tmp_path, monkeypatch):
     monkeypatch.setenv("NUCLEARSHIELD_DATA_DIR", str(tmp_path))
     raw = b"event_id,event_type,value,baseline\nDELETE-1,network,50,10\n"

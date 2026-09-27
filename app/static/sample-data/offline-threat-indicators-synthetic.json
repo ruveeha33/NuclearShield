@@ -1,0 +1,16 @@
+{
+  "indicators": [
+    {
+      "id": "TRAINING-SOURCE-01",
+      "kind": "source_ip",
+      "value": "192.0.2.4",
+      "description": "Fictional exercise indicator using a documentation IP address; no real threat claim"
+    },
+    {
+      "id": "TRAINING-SOURCE-02",
+      "kind": "source_ip",
+      "value": "203.0.113.77",
+      "description": "Fictional comparison indicator expected not to match the full-platform exercise"
+    }
+  ]
+}

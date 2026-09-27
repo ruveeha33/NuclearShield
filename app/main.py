@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import json
+import logging
 import os
 import time
 from pathlib import Path
@@ -13,11 +14,16 @@ from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, Gauge, Histogram, generate_latest
 
-from .analyzer import analyze, build_summary, digest, finding_dicts, parse_evidence
-from .store import append_audit, delete_analysis, get_analysis, list_analyses, recent_audit, save_analysis
+from .analyzer import analyze, build_summary, digest, finding_dicts, network_model, parse_evidence
+from .assurance import check_change_review_policy, check_gateway_policy, integrity_snapshots, offline_safeguards
+from .compliance_packet import build_packet
+from .intelligence import REVIEW_STEPS, read_catalog, review_indicators
+from .store import append_audit, audit_for_analysis, delete_analysis, get_analysis, list_analyses, recent_audit, save_analysis
 
 ROOT = Path(__file__).resolve().parent
-app = FastAPI(title="NuclearShield", version="1.0.0")
+app = FastAPI(title="NuclearShield", version="1.0.8")
+console_log = logging.getLogger("nuclearshield.console")
+CONSOLE_AREAS = frozenset({"home", "upload", "dashboard", "scada", "integrity", "safeguards", "ai", "devsecops", "compliance", "reports", "monitoring", "audit", "evidence", "detections", "assurance"})
 ingestions = Counter("nuclearshield_ingestions_total", "Evidence files processed", ["result"])
 finding_count = Gauge("nuclearshield_findings", "Findings in the latest analysis", ["severity"])
 engine_count = Gauge(
@@ -121,11 +127,31 @@ REPORT_FIX_CSS = (ROOT / "static" / "report.css").read_text(encoding="utf-8")
 @app.middleware("http")
 async def instrument(request: Request, call_next):
     started = time.perf_counter()
-    response = await call_next(request)
+    try:
+        response = await call_next(request)
+    except Exception:
+        console_log.exception("Backend failure: %s %s", request.method, request.url.path)
+        raise
     path = request.url.path if request.url.path.startswith("/api/") else "other"
     http_requests.labels(request.method, path, str(response.status_code)).inc()
     http_seconds.labels(path).observe(time.perf_counter() - started)
+    if path.startswith("/api/") and path not in {"/api/health", "/api/console-interaction"}:
+        console_log.warning("Backend %s %s → %s (%.0f ms)", request.method, path, response.status_code, (time.perf_counter() - started) * 1000)
     return response
+
+
+@app.post("/api/console-interaction")
+async def console_interaction(request: Request) -> dict:
+    """Live interface context for the terminal; never claims that hover ran analysis."""
+    if int(request.headers.get("content-length", "0") or "0") > 512:
+        raise HTTPException(status_code=413, detail="Interaction too large")
+    data = await request.json()
+    area = data.get("area") if isinstance(data, dict) else None
+    action = data.get("action") if isinstance(data, dict) else None
+    if area not in CONSOLE_AREAS or action not in {"view", "hover"}:
+        raise HTTPException(status_code=400, detail="Unknown console interaction")
+    console_log.warning("Web %s: %s", action, area)
+    return {"status": "observed"}
 
 
 @app.get("/api/health")
@@ -154,8 +180,8 @@ def overview() -> dict:
 
 
 @app.get("/api/analyses")
-def analyses() -> list[dict]:
-    return list_analyses()
+def analyses(limit: int = 500) -> list[dict]:
+    return list_analyses(min(max(limit, 1), 500))
 
 
 @app.get("/api/analyses/{analysis_id}")
@@ -164,6 +190,51 @@ def analysis_detail(analysis_id: str) -> dict:
     if not analysis:
         raise HTTPException(status_code=404, detail="Analysis not found")
     return analysis
+
+
+@app.get("/api/compliance-packet")
+def compliance_packet(analysis_id: str | None = None) -> Response:
+    selected = get_analysis(analysis_id)
+    if selected is None:
+        raise HTTPException(status_code=404, detail="No retained analysis for a packet")
+    packet = build_packet(selected, audit_for_analysis(selected["id"]))
+    return Response(content=json.dumps(packet, indent=2, ensure_ascii=False),
+                    media_type="application/json",
+                    headers={"Content-Disposition": 'attachment; filename="nuclearshield-training-evidence-packet.json"'})
+
+
+@app.get("/api/assurance-lab")
+def assurance_lab(analysis_id: str | None = None) -> dict:
+    """Recompute bounded policy checks over stored, offline evidence snapshots."""
+    selected = get_analysis(analysis_id)
+    if analysis_id and selected is None:
+        raise HTTPException(status_code=404, detail="Analysis not found")
+    history = [get_analysis(row["id"]) for row in list_analyses(50)]
+    return {
+        "analysis_id": selected["id"] if selected else None,
+        "gateway": check_gateway_policy(),
+        "review_gate": check_change_review_policy(),
+        "safeguards": offline_safeguards(selected["events"] if selected else []),
+        "integrity": integrity_snapshots([row for row in history if row]),
+        "read_only": True,
+        "live_facility_connection": False,
+    }
+
+
+@app.post("/api/indicator-review")
+async def indicator_review(file: UploadFile = File(...), analysis_id: str | None = None) -> dict:
+    """Read-only review of a supplied offline catalog against one analysis."""
+    selected = get_analysis(analysis_id)
+    if selected is None:
+        raise HTTPException(status_code=404, detail="Upload evidence before reviewing indicators")
+    try:
+        indicators = read_catalog(await file.read(128_001))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    result = review_indicators(selected["events"], indicators)
+    return {"analysis_id": selected["id"], "catalog_filename": file.filename,
+            **result, "review_steps": REVIEW_STEPS,
+            "autonomous_containment": False, "facility_connection": False}
 
 
 @app.delete("/api/analyses/{analysis_id}")
@@ -246,7 +317,7 @@ def ai_insights(analysis_id: str | None = None) -> dict:
         "governance": {
             "autonomous_action": False,
             "human_authorization": True,
-            "model_claim": "Hybrid explainable statistical inference over uploaded synthetic evidence",
+            "model_claim": "Per-upload exploratory Isolation Forest network outlier screening plus explainable rules and statistical checks",
         },
     }
 
@@ -281,6 +352,35 @@ def platform_status() -> dict:
             "grafana": f"http://localhost:{grafana_port}",
         },
     }
+
+
+@app.get("/api/prometheus-targets")
+def prometheus_targets() -> dict:
+    """Read only live scrape status, fetched from the internal Prometheus service."""
+    endpoint = os.getenv("PROMETHEUS_URL", "http://127.0.0.1:9090").rstrip("/") + "/api/v1/targets?state=active"
+    try:
+        with urlopen(endpoint, timeout=3) as response:  # nosec B310
+            payload = json.load(response)
+        if payload.get("status") != "success":
+            raise ValueError("Prometheus returned an unsuccessful response")
+    except (URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as exc:
+        raise HTTPException(status_code=503, detail="Prometheus targets are unavailable; check Monitoring service status.") from exc
+    targets = payload.get("data", {}).get("activeTargets", [])
+    app_port = os.getenv("PUBLIC_APP_PORT", "8000")
+    prom_port = os.getenv("PUBLIC_PROMETHEUS_PORT", "9090")
+    return {"targets": [
+        {"job": t.get("labels", {}).get("job", "unknown"),
+         "health": t.get("health", "unknown"),
+         "scrape_url": t.get("scrapeUrl", ""),
+         "browser_url": (
+             f"http://localhost:{app_port}/metrics" if t.get("labels", {}).get("job") == "nuclearshield"
+             else f"http://localhost:{prom_port}/metrics" if t.get("labels", {}).get("job") == "prometheus"
+             else None
+         ),
+         "last_scrape": t.get("lastScrape", ""),
+         "last_error": t.get("lastError", "")}
+        for t in targets
+    ]}
 
 
 @app.get("/api/monitoring-summary")
@@ -415,9 +515,10 @@ async def ingest(file: UploadFile = File(...)) -> dict:
     try:
         raw = await file.read()
         events, rejected = parse_evidence(file.filename or "evidence", raw)
-        analyzed = analyze(events)
+        ml_result = network_model(events)
+        analyzed = analyze(events, ml_result)
         findings = finding_dicts(analyzed)
-        summary = build_summary(events, analyzed, rejected)
+        summary = build_summary(events, analyzed, rejected, ml_result)
     except (UnicodeError, ValueError, json.JSONDecodeError) as exc:
         ingestions.labels(result="rejected").inc()
         raise HTTPException(status_code=400, detail=str(exc)) from exc
@@ -435,6 +536,7 @@ async def ingest(file: UploadFile = File(...)) -> dict:
         "integrity-rule",
         "authorization-rule",
         "robust-anomaly-model",
+        "isolation-forest",
         "correlation-engine",
     ):
         engine_count.labels(engine=engine).set(
@@ -558,7 +660,7 @@ def report(analysis_id: str | None = None, print_view: bool = False) -> str:
     <h2>3. Platform capability coverage</h2><div class='cap-grid'><article><b>SCADA protection</b><p>Passive OT/network evidence, asset visibility, source distribution, baseline deviation and evidence-linked anomaly review.</p></article><article><b>Safety-system integrity</b><p>Approved-state, authorization and integrity evidence are evaluated without any write-back capability.</p></article><article><b>Material safeguards</b><p>PACS/IAM, MC&amp;A and radiation evidence are correlated by shared actor and asset context.</p></article><article><b>AI threat detection</b><p>Rule, robust-anomaly and correlation findings are explained with confidence, contributors, reasons and human-gated alert review.</p></article><article><b>Monitoring</b><p>Zeek-style and Suricata-style evidence feeds are combined with application metrics, Prometheus targets/queries and Grafana telemetry.</p></article><article><b>DevSecOps & governance</b><p>Change/integrity evidence, controlled delivery gates, report history, deletion controls, audit evidence and framework mappings support traceable review.</p></article></div>
     <h2>4. Detection register</h2><div class='table-wrap'><table><thead><tr><th>Finding</th><th>Event</th><th>Severity</th><th>Score</th><th>What was detected</th><th>Detected using</th></tr></thead><tbody>{rows}</tbody></table></div>
     <h2>5. Detailed findings and measures</h2>{details}
-    <h2>6. Detection methodology</h2><div class='method-grid'><article><h3>Passive network evidence</h3><p>Zeek/Suricata-style records represent mirrored metadata. The platform compares declared values with baselines without injecting traffic.</p></article><article><h3>Safety integrity evidence</h3><p>Logic, firmware and configuration states compare with an approved baseline represented in the evidence file. Evidence crosses outward conceptually through a data diode.</p></article><article><h3>Physical-cyber and MC&A correlation</h3><p>Access authorization, device identity, material accounting and radiation records are correlated by shared actor or asset. The demo does not infer real material movement.</p></article><article><h3>AI-assisted anomaly analysis</h3><p>A robust median and median-absolute-deviation model identifies peer-group outliers when at least five comparable numeric records exist. Results include confidence and contributors, cannot take action, and require human and safety authorization.</p></article></div>
+    <h2>6. Detection methodology</h2><div class='method-grid'><article><h3>Passive network evidence</h3><p>Zeek/Suricata-style records represent mirrored metadata. The platform compares declared values with baselines without injecting traffic.</p></article><article><h3>Safety integrity evidence</h3><p>Logic, firmware and configuration states compare with an approved baseline represented in the evidence file. Evidence crosses outward conceptually through a data diode.</p></article><article><h3>Physical-cyber and MC&A correlation</h3><p>Access authorization, device identity, material accounting and radiation records are correlated by shared actor or asset. The demo does not infer real material movement.</p></article><article><h3>AI-assisted anomaly analysis</h3><p>A robust median and median-absolute-deviation model identifies peer-group outliers when at least five comparable numeric records exist. Results include confidence and contributors. For at least 20 comparable numeric network observations, scikit-learn Isolation Forest fits on the current upload and produces per-record decision scores and outliers; an outlier is not a confirmed attack. Neither model can take action, and human and safety authorization are required.</p></article></div>
     <h2>7. Defense measures</h2><ol><li><strong>Preserve independence:</strong> keep monitoring outside safety functions and export safety evidence in one direction.</li><li><strong>Validate before escalation:</strong> confirm evidence quality, sensor health, plant state and authorized work context.</li><li><strong>Protect provenance:</strong> retain hashes, trusted timestamps, access records and an attributable chain of custody.</li><li><strong>Authorize narrowly:</strong> require qualified cyber, operations, safety and safeguards roles according to the event.</li><li><strong>Recover predictably:</strong> use approved procedures, signed baselines, tested rollback and post-event effectiveness review.</li></ol>
     <h2>8. Framework evidence mapping</h2><div class='table-wrap'><table><thead><tr><th>Control domain</th><th>IEC 62645 theme</th><th>NRC RG 5.71 theme</th><th>IAEA theme</th><th>Demonstration evidence</th></tr></thead><tbody>{controls}</tbody></table></div><p><small>This mapping supports learning and design discussion only. It does not establish compliance.</small></p>
     <h2>9. Audit trail</h2><div class='table-wrap'><table><thead><tr><th>Timestamp</th><th>Action</th><th>Evidence digest</th><th>Actor</th></tr></thead><tbody>{audit_rows}</tbody></table></div>

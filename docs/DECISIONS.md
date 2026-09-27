@@ -6,7 +6,7 @@ NuclearShield accepts offline evidence files and exposes no control endpoint. Th
 
 ## Explainable anomaly rules
 
-The analyzer compares numeric or categorical values with declared baselines and adds authorization/integrity signals. This is transparent enough to defend in an oral exam. It is not a trained nuclear process model and must never be presented as one.
+The analyzer compares numeric or categorical values with declared baselines and adds authorization/integrity signals. Median/MAD is a statistical peer check. For uploaded network evidence with at least 20 suitable numeric rows, scikit-learn Isolation Forest fits and scores the same file with a fixed random seed. It is exploratory outlier screening, not a trained nuclear process model or a validated threat classifier. A negative decision score is a prompt for human review. The small demo file intentionally skips the model rather than generating artificial telemetry.
 
 ## Single-process student build
 
@@ -19,4 +19,3 @@ SQLite gives a durable, inspectable demo audit trail. Production systems would r
 ## Standards mapping
 
 The controls view maps demonstrator evidence to themes from IEC 62645, NRC RG 5.71 and IAEA guidance. It supports learning and design discussion; it does not claim compliance, certification or regulatory approval.
-

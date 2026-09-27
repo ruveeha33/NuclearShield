@@ -55,6 +55,14 @@ def recent_audit(limit: int = 50) -> list[dict]:
     return [{**dict(row), "details": json.loads(row["details"])} for row in rows]
 
 
+def audit_for_analysis(analysis_id: str) -> list[dict]:
+    """Find audit entries by stored analysis ID, including older than UI's page limit."""
+    with connect() as connection:
+        rows = connection.execute("SELECT * FROM audit ORDER BY timestamp DESC").fetchall()
+    return [{**dict(row), "details": details}
+            for row in rows if (details := json.loads(row["details"])).get("analysis_id") == analysis_id]
+
+
 def save_analysis(
     filename: str,
     evidence_digest: str,

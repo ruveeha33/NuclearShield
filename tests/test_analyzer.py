@@ -1,4 +1,6 @@
-from app.analyzer import analyze, parse_evidence
+from pathlib import Path
+
+from app.analyzer import analyze, network_model, parse_evidence
 
 
 def test_csv_parsing_and_anomaly_explanation():
@@ -31,3 +33,24 @@ def test_flexible_schema_and_robust_outlier():
     assert not rejected
     assert len(events) == 6
     assert any("robust-anomaly-model" in finding.engine for finding in findings)
+
+
+def test_network_isolation_forest_uses_uploaded_values_and_explains_outlier():
+    raw = (Path(__file__).resolve().parents[1] / "sample-data" / "isolation-forest-network-synthetic.csv").read_bytes()
+    events, _ = parse_evidence("synthetic.csv", raw)
+    result = network_model(events)
+    assert result["status"] == "completed"
+    assert result["eligible_rows"] == 40
+    assert result["features"] == ["value", "duration"]
+    assert any(row["event_id"] == "SYN-NET-037" for row in result["outliers"])
+    findings = analyze(events, result)
+    assert any(f.event_id == "SYN-NET-037" and "isolation-forest" in f.engine for f in findings)
+    assert all(f.requires_human_authorization for f in findings)
+
+
+def test_network_model_reports_insufficient_data_without_fabrication():
+    events, _ = parse_evidence("few.csv", b"event_id,event_type,value\nA,network,1\nB,network,200\n")
+    result = network_model(events)
+    assert result["status"] == "insufficient_data"
+    assert result["outliers"] == []
+    assert not any("isolation-forest" in finding.engine for finding in analyze(events, result))
