@@ -29,7 +29,7 @@ def check_gateway_policy() -> dict[str, Any]:
     violations = [case for case in cases if case["permitted"] and
                   (case["kind"] != "evidence" or case["destination"] != "analytics"
                    or case["source"] == "analytics")]
-        if len(cases) != 48:
+    if len(cases) != 48:
             raise RuntimeError("Gateway policy enumeration must cover all 48 states")
     return {"status": "pass" if not violations else "fail", "states_checked": len(cases),
             "outbound_evidence_paths": sum(case["permitted"] for case in cases),
